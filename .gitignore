@@ -26,3 +26,6 @@ yarn-error.log*
 
 # Million Lint
 .million
+
+#Tinybird
+/tinybird

@@ -52,9 +52,9 @@ export default async function WritingSlug(props) {
     dateModified,
     author: {
       '@type': 'Person',
-      name: 'Onur Şuyalçınkaya'
+      name: '熊布朗 (Peng.G)'
     },
-    url: `https://onur.dev/writing/${slug}`
+    url: `https://me.deeptoai.com/writing/${slug}`
   }
 
   return (

@@ -9,10 +9,10 @@ export async function GET() {
   const allPosts = await getAllPosts()
   const sortedPosts = getSortedPosts(allPosts)
   const date = new Date()
-  const siteURL = 'https://onur.dev'
+  const siteURL = 'https://me.deeptoai.com'
   const author = {
-    name: 'Onur Şuyalçınkaya',
-    link: 'https://onur.dev'
+    name: '熊布朗 (Peng.G)',
+    link: 'https://me.deeptoai.com'
   }
 
   const feed = new Feed({

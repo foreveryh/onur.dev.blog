@@ -1,7 +1,7 @@
 export const sharedMetadata = {
-  title: 'Onur Şuyalçınkaya',
-  description: 'Software Engineer, DJ, writer, and minimalist, based in Amsterdam, The Netherlands',
-  url: 'https://onur.dev',
+  title: '熊布朗（Peng.G）',
+  description: 'Paris-based AI Product Manager & vibecoder, shipping AI products and open-source projects with a maker’s spirit.',
+  url: 'https://me.deeptoai.com',
   ogImage: {
     width: 1200,
     height: 630,

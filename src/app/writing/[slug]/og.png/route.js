@@ -37,7 +37,7 @@ export async function GET(_, props) {
     (
       <OpenGraphImage
         title={ogImageTitle || title}
-        description={ogImageSubtitle || 'by Onur Şuyalçınkaya'}
+        description={ogImageSubtitle || 'by 熊布朗 (Peng.G)'}
         url="writing"
       />
     ),

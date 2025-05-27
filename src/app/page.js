@@ -22,18 +22,17 @@ export default async function Home() {
 
   return (
     <ScrollArea useScrollAreaId>
-      <FloatingHeader scrollTitle="Onur Şuyalçınkaya" />
+      <FloatingHeader scrollTitle="熊布朗 (Peng.G)" />
       <div className="content-wrapper">
         <div className="content">
           <PageTitle title="Home" className="lg:hidden" />
           <p>
-            Hi 👋 I'm Onur (meaning "Honour" in English), a software engineer, dj, writer, and minimalist based in
-            Amsterdam, The Netherlands.
-          </p>
-          <p>
-            I develop things as a Senior Frontend Software Engineer at Bitvavo. Previously, I worked as a Senior
-            Frontend Software Engineer at heycar, Frontend Software Engineer at Yemeksepeti, Fullstack Software Engineer
-            at Sistas, Mobile Developer at Tanbula, and Specialist at Apple.
+            Hi, I am Peng.G (熊布朗)
+            <br/>
+            AI Product Manager & Code-first PM 👋 <br/>
+            Shipping AI-native products—RAG platforms, autonomous agents & LLM infra.<br/>
+            Born in China, shaped in Seoul, now building from Paris.<br/>
+            Exploring GenAI × productivity; writing about it every week—let’s chat!
           </p>
           <Button asChild variant="link" className="inline px-0">
             <Link href="/writing">

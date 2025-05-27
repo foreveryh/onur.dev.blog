@@ -49,7 +49,7 @@ export default async function RootLayout({ children }) {
         <SpeedInsights />
         <Script
           src="https://unpkg.com/@tinybirdco/flock.js"
-          data-host="https://api.tinybird.co"
+          data-host={process.env.NEXT_PUBLIC_TINYBIRD_TRACKER_HOST}
           data-token={process.env.NEXT_PUBLIC_TINYBIRD_TOKEN}
           strategy="lazyOnload"
         />
@@ -59,7 +59,7 @@ export default async function RootLayout({ children }) {
 }
 
 export const metadata = {
-  metadataBase: new URL('https://onur.dev'),
+  metadataBase: new URL('https://me.deeptoai.com'),
   robots: {
     index: true,
     follow: true
@@ -69,7 +69,7 @@ export const metadata = {
     template: `%s — ${sharedMetadata.title}`
   },
   description: sharedMetadata.description,
-  keywords: ['Onur Şuyalçınkaya', 'Onur Suyalcinkaya', 'onur dev', 'onur.dev'],
+  keywords: ['熊布朗', 'Peng.G', 'me.deeptoai.com'],
   openGraph: {
     title: {
       default: sharedMetadata.title,
@@ -78,7 +78,7 @@ export const metadata = {
     description: sharedMetadata.description,
     alt: sharedMetadata.title,
     type: 'website',
-    url: 'https://onur.dev',
+    url: 'https://me.deeptoai.com',
     siteName: sharedMetadata.title,
     locale: 'en_IE'
   },

@@ -8,7 +8,7 @@ export default async function sitemap() {
   const sortedWritings = getSortedPosts(allPosts)
   const writings = sortedWritings.map((post) => {
     return {
-      url: `https://onur.dev/writing/${post.slug}`,
+      url: `https://me.deeptoai.com/writing/${post.slug}`,
       lastModified: post.sys.publishedAt,
       changeFrequency: 'yearly',
       priority: 0.5
@@ -17,7 +17,7 @@ export default async function sitemap() {
 
   const mappedBookmarks = bookmarks.map((bookmark) => {
     return {
-      url: `https://onur.dev/bookmarks/${bookmark.slug}`,
+      url: `https://me.deeptoai.com/bookmarks/${bookmark.slug}`,
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 1
@@ -37,7 +37,7 @@ export default async function sitemap() {
     if (['bookmarks'].includes(page.slug)) priority = 1
 
     return {
-      url: `https://onur.dev/${page.slug}`,
+      url: `https://me.deeptoai.com/${page.slug}`,
       lastModified,
       changeFrequency,
       priority
@@ -46,7 +46,7 @@ export default async function sitemap() {
 
   return [
     {
-      url: 'https://onur.dev',
+      url: 'https://me.deeptoai.com',
       lastModified: new Date(),
       changeFrequency: 'yearly',
       priority: 1

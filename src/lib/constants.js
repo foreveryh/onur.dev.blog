@@ -2,20 +2,18 @@ import {
   ArmchairIcon,
   BookmarkIcon,
   GithubIcon,
-  InstagramIcon,
   LinkedinIcon,
   NavigationIcon,
   PencilLineIcon,
   SparklesIcon,
-  Wand2Icon,
-  YoutubeIcon
+  Wand2Icon
 } from 'lucide-react'
 
 export const PROFILES = {
   twitter: {
     title: 'X (Twitter)',
-    username: 'onurschu',
-    url: 'https://twitter.com/intent/user?screen_name=onurschu',
+    username: '熊布朗', // 请替换为您的 Twitter 用户名
+    url: 'https://x.com/Stephen4171127', // 请替换为您的 Twitter 个人资料 URL
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -37,62 +35,52 @@ export const PROFILES = {
   },
   github: {
     title: 'GitHub',
-    url: 'https://github.com/suyalcinkaya',
+    url: 'https://github.com/foreveryh',
     icon: <GithubIcon size={16} />
   },
   linkedin: {
     title: 'LinkedIn',
-    url: 'https://www.linkedin.com/in/suyalcinkaya',
+    url: 'https://www.linkedin.com/in/peng-g', // 请替换为您的 LinkedIn 个人资料 URL
     icon: <LinkedinIcon size={16} />
-  },
-  medium: {
+  }
+  /* medium: {
     title: 'Medium',
     url: 'https://suyalcinkaya.medium.com'
-  },
-  instagram: {
+  }, */
+  /* instagram: {
     title: 'Instagram',
     url: 'https://www.instagram.com/jgrmn',
     icon: <InstagramIcon size={16} />
-  },
-  soundcloud: {
+  }, */
+  /* soundcloud: {
     title: 'Soundcloud',
     url: 'https://soundcloud.com/jagerman'
-  },
-  youtube: {
+  }, */
+  /* youtube: {
     title: 'YouTube',
     url: 'https://www.youtube.com/c/jagermanmusic',
     icon: <YoutubeIcon size={16} />
-  },
-  bluesky: {
+  }, */
+  /* bluesky: {
     title: 'Bluesky',
     url: 'https://staging.bsky.app/profile/onur.dev'
-  },
-  readcv: {
+  }, */
+  /* readcv: {
     title: 'Read.cv',
     url: 'https://read.cv/onur'
-  },
-  pinterest: {
+  }, */
+  /* pinterest: {
     title: 'Pinterest',
     url: 'https://nl.pinterest.com/onurschu'
-  }
+  } */
 }
 
 export const TWEETS_COLLECTION_ID = 15896982
 
 export const COLLECTION_IDS = [
-  18259129,
-  15968768,
-  23598938,
-  16949672,
-  15807896,
-  15807897,
-  15969648,
-  16338467,
-  TWEETS_COLLECTION_ID,
-  25589709,
-  17139082,
-  22029101,
-  39696243
+  55349123,
+  55351618,
+  55351620,
 ]
 
 export const LINKS = [
@@ -118,7 +106,7 @@ export const LINKS = [
   },
   {
     href: '/workspace',
-    label: 'Workspace',
+    label: '我的空间',
     icon: <ArmchairIcon size={16} />
   },
   {
@@ -128,83 +116,152 @@ export const LINKS = [
   }
 ]
 
-export const WORKSPACE_ITEMS = [
-  {
-    title: 'Richard Lampert Eiermann 2 Desk',
-    url: 'https://www.richard-lampert.de/en/furniture/eiermann-2-desk-en/',
-    specs: 'White, 80x160cm'
+// 个人空间数据结构
+export const PERSONAL_SPACE_SECTIONS = {
+  books: {
+    title: '📚 阅读清单',
+    description: '我读过的好书推荐',
+    items: [
+      {
+        title: '《思考，快与慢》',
+        author: '丹尼尔·卡尼曼',
+        year: '2023',
+        rating: '⭐⭐⭐⭐⭐',
+        notes: '关于认知偏见和决策心理学的经典之作'
+      },
+      {
+        title: '《原则》',
+        author: '瑞·达利欧',
+        year: '2023',
+        rating: '⭐⭐⭐⭐⭐',
+        notes: '系统性思维和原则导向的人生哲学'
+      },
+      {
+        title: '《人工智能时代》',
+        author: '亨利·基辛格',
+        year: '2023',
+        rating: '⭐⭐⭐⭐',
+        notes: 'AI对人类社会影响的深度思考'
+      },
+      {
+        title: '《零到一》',
+        author: '彼得·蒂尔',
+        year: '2022',
+        rating: '⭐⭐⭐⭐⭐',
+        notes: '创新和垄断思维的商业洞察'
+      }
+    ]
   },
-  {
-    title: 'Herman Miller Aeron Remastered',
-    url: 'https://store.hermanmiller.com/office-chairs-aeron/aeron-chair/2195348.html',
-    specs: 'Graphite, Size C'
+  movies: {
+    title: '🎬 电影清单',
+    description: '值得推荐的电影作品',
+    items: [
+      {
+        title: '《奥本海默》',
+        director: '克里斯托弗·诺兰',
+        year: '2023',
+        rating: '⭐⭐⭐⭐⭐',
+        notes: '科学、道德与历史的深度交织'
+      },
+      {
+        title: '《瞬息全宇宙》',
+        director: '关家永',
+        year: '2022',
+        rating: '⭐⭐⭐⭐⭐',
+        notes: '创意无限的多元宇宙奇幻之旅'
+      },
+      {
+        title: '《沙丘》',
+        director: '丹尼斯·维伦纽瓦',
+        year: '2021',
+        rating: '⭐⭐⭐⭐',
+        notes: '视觉震撼的科幻史诗巨作'
+      },
+      {
+        title: '《银翼杀手2049》',
+        director: '丹尼斯·维伦纽瓦',
+        year: '2017',
+        rating: '⭐⭐⭐⭐⭐',
+        notes: '关于人性和AI的哲学思辨'
+      }
+    ]
   },
-  {
-    title: 'Apple Studio Display',
-    url: 'https://www.apple.com/nl/studio-display/',
-    specs: 'Tilt- and height-adjustable stand'
+  travels: {
+    title: '✈️ 旅行足迹',
+    description: '我去过的有趣地方',
+    items: [
+      {
+        title: '巴黎',
+        country: '法国',
+        year: '2024',
+        rating: '⭐⭐⭐⭐⭐',
+        notes: '艺术与浪漫的完美结合，现在的居住地'
+      },
+      {
+        title: '首尔',
+        country: '韩国',
+        year: '2020-2023',
+        rating: '⭐⭐⭐⭐⭐',
+        notes: '科技与传统文化的和谐共存'
+      },
+      {
+        title: '东京',
+        country: '日本',
+        year: '2023',
+        rating: '⭐⭐⭐⭐⭐',
+        notes: '细节完美主义和创新精神的体现'
+      },
+      {
+        title: '新加坡',
+        country: '新加坡',
+        year: '2022',
+        rating: '⭐⭐⭐⭐',
+        notes: '多元文化融合的现代都市'
+      },
+      {
+        title: '上海',
+        country: '中国',
+        year: '2022',
+        rating: '⭐⭐⭐⭐⭐',
+        notes: '东西方文化交汇的国际大都市'
+      }
+    ]
   },
-  {
-    title: '14" MacBook Pro',
-    url: 'https://www.apple.com/nl/macbook-pro/',
-    specs: 'Space Gray, M2, 16GB RAM, 256GB SSD'
-  },
-  {
-    title: 'TE Computer-1 Mini-IPX PC',
-    url: '/writing/mini-itx-teenage-engineering-computer-1',
-    specs: 'Orange, AMD Ryzen 5 7600, 32GB RAM, 2TB SSD'
-  },
-  {
-    title: 'Apple Magic Trackpad',
-    url: 'https://www.apple.com/nl/shop/product/MK2D3Z/A/magic-trackpad-wit-multi%E2%80%91touch-oppervlak',
-    specs: 'White'
-  },
-  {
-    title: 'Apple Magic Keyboard',
-    url: 'https://www.apple.com/nl/shop/product/MK293N/A/magic-keyboard-met-touch-id-voor-mac-modellen-met-apple-silicon-nederlands',
-    specs: 'White, Touch ID'
-  },
-  {
-    title: 'Logitech MX Master 3S',
-    url: 'https://www.logitech.com/nl-nl/products/mice/mx-master-3s.910-006560.html',
-    specs: 'Pale Gray'
-  },
-  {
-    title: 'Dyson Solarcycle Morph',
-    url: 'https://www.dyson.nl/verlichting/bureaulamp/solarcycle-morph-cd06/wit-zilver',
-    specs: 'White/Silver'
-  },
-  {
-    title: 'Oakywood MagSafe iPhone Stand',
-    url: 'https://oakywood.shop/products/magsafe-iphone-stand',
-    specs: 'Oak'
-  },
-  {
-    title: 'Apple Airpods Max',
-    url: 'https://www.apple.com/nl/airpods-max/',
-    specs: 'Space Gray'
-  },
-  {
-    title: 'Apple Airpods Pro',
-    url: 'https://www.apple.com/nl/airpods-pro/',
-    specs: '2nd generation'
-  },
-  {
-    title: 'Braun Analogue Wall Clock',
-    url: 'https://braun-clocks.com/collections/wall-clocks/products/bc17-classic-large-analogue-wall-clock-white',
-    specs: 'White, BC17 Classic Large'
-  },
-  {
-    title: 'IKEA Alex Drawer Unit',
-    url: 'https://www.ikea.com/nl/en/p/alex-drawer-unit-white-00473546/',
-    specs: 'White, 36x70cm'
-  },
-  {
-    title: 'IKEA Övning Footrest',
-    url: 'https://www.ikea.com/nl/en/p/oevning-multifunctional-ergonomic-footrest-00552020/',
-    specs: 'Gray/Blue'
+  tools: {
+    title: '🛠️ 工具箱',
+    description: '我常用的效率工具',
+    items: [
+      {
+        title: 'Cursor',
+        category: 'AI编程',
+        year: '2024',
+        rating: '⭐⭐⭐⭐⭐',
+        notes: 'AI驱动的代码编辑器，编程效率神器'
+      },
+      {
+        title: 'Claude',
+        category: 'AI助手',
+        year: '2024',
+        rating: '⭐⭐⭐⭐⭐',
+        notes: '最好的AI对话助手，思维清晰'
+      },
+      {
+        title: 'Notion',
+        category: '知识管理',
+        year: '2023',
+        rating: '⭐⭐⭐⭐',
+        notes: '全能的笔记和项目管理工具'
+      },
+      {
+        title: 'Figma',
+        category: '设计工具',
+        year: '2023',
+        rating: '⭐⭐⭐⭐⭐',
+        notes: '协作设计的标准工具'
+      }
+    ]
   }
-]
+}
 
 export const SCROLL_AREA_ID = 'scroll-area'
 export const MOBILE_SCROLL_THRESHOLD = 20
