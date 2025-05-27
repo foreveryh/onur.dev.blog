@@ -18,7 +18,10 @@ export default async function Image() {
     getRegularFont(),
     getBoldFont()
   ])
-  const { seo: { title, description, ogImageTitle, ogImageSubtitle } = {} } = seoData
+  
+  // Safely extract seo data with proper fallbacks
+  const seo = seoData?.seo || {}
+  const { title, description, ogImageTitle, ogImageSubtitle } = seo
 
   return new ImageResponse(
     (

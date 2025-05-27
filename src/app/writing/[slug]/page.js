@@ -12,7 +12,11 @@ import { getDateTimeFormat, isDevelopment } from '@/lib/utils'
 
 export async function generateStaticParams() {
   const allPosts = await getAllPostSlugs()
-  return allPosts.map((post) => ({ slug: post.slug }))
+  if (!allPosts || allPosts.length === 0) {
+    return []
+  }
+  
+  return allPosts.filter((post) => post && post.slug).map((post) => ({ slug: post.slug }))
 }
 
 async function fetchData(slug) {
@@ -20,8 +24,21 @@ async function fetchData(slug) {
   const data = await getPost(slug, isDevelopment ? true : isEnabled)
   if (!data) notFound()
 
+  // Ensure required data structure exists with comprehensive fallbacks
+  const title = data.title || 'Untitled'
+  const safeData = {
+    title,
+    date: data.date || null,
+    seo: data.seo || { title, description: '', ogImageTitle: title, ogImageSubtitle: '' },
+    content: data.content || { json: null },
+    sys: data.sys || { 
+      firstPublishedAt: new Date().toISOString(), 
+      publishedAt: new Date().toISOString() 
+    }
+  }
+
   return {
-    data
+    data: safeData
   }
 }
 
@@ -33,10 +50,13 @@ export default async function WritingSlug(props) {
   const {
     title,
     date,
-    seo: { title: seoTitle, description: seoDescription },
+    seo = {},
     content,
-    sys: { firstPublishedAt, publishedAt: updatedAt }
+    sys = {}
   } = data
+  
+  const { firstPublishedAt, publishedAt: updatedAt } = sys
+  const { title: seoTitle, description: seoDescription } = seo
 
   const postDate = date || firstPublishedAt
   const dateString = getDateTimeFormat(postDate)
@@ -89,13 +109,21 @@ export async function generateMetadata(props) {
   const params = await props.params
   const { slug } = params
   const seoData = await getWritingSeo(slug)
-  if (!seoData) return null
+  if (!seoData) {
+    return {
+      title: 'Blog Post',
+      description: 'A blog post by 熊布朗 (Peng.G)'
+    }
+  }
 
   const {
     date,
-    seo: { title, description, keywords },
-    sys: { firstPublishedAt, publishedAt: updatedAt }
+    seo = {},
+    sys = {}
   } = seoData
+  
+  const { firstPublishedAt, publishedAt: updatedAt } = sys
+  const { title, description, keywords } = seo
 
   const siteUrl = `/writing/${slug}`
   const postDate = date || firstPublishedAt

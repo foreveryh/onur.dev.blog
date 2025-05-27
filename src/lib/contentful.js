@@ -137,7 +137,17 @@ export const getPost = cache(async (slug, preview = isDevelopment) => {
       preview
     )
 
-    return entry?.data?.postCollection?.items?.[0] ?? null
+    const data = entry?.data?.postCollection?.items?.[0]
+    if (!data) return null
+
+    // Ensure the data structure is complete with fallbacks
+    return {
+      ...data,
+      title: data.title || 'Untitled',
+      seo: data.seo || {},
+      content: data.content || { json: null },
+      sys: data.sys || {}
+    }
   } catch (error) {
     console.info(error)
     return null
@@ -168,7 +178,15 @@ export const getWritingSeo = cache(async (slug, preview = isDevelopment) => {
       preview
     )
 
-    return entry?.data?.postCollection?.items?.[0] ?? null
+    const data = entry?.data?.postCollection?.items?.[0]
+    if (!data) return null
+
+    // Ensure the data structure is complete with fallbacks
+    return {
+      ...data,
+      seo: data.seo || {},
+      sys: data.sys || {}
+    }
   } catch (error) {
     console.info(error)
     return null
