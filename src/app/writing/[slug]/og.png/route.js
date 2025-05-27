@@ -23,40 +23,108 @@ export async function GET(_, props) {
   const params = await props.params
   const { isEnabled } = await draftMode()
   const { slug } = params
-  const [seoData, regularFontData, boldFontData] = await Promise.all([
-    getWritingSeo(slug, isDevelopment ? true : isEnabled),
-    getRegularFont(),
-    getBoldFont()
-  ])
-  if (!seoData) return null
-  const {
-    seo: { title, ogImageTitle, ogImageSubtitle }
-  } = seoData
-
-  return new ImageResponse(
-    (
-      <OpenGraphImage
-        title={ogImageTitle || title}
-        description={ogImageSubtitle || 'by 熊布朗 (Peng.G)'}
-        url="writing"
-      />
-    ),
-    {
-      ...size,
-      fonts: [
+  
+  try {
+    const [seoData, regularFontData, boldFontData] = await Promise.all([
+      getWritingSeo(slug, isDevelopment ? true : isEnabled),
+      getRegularFont(),
+      getBoldFont()
+    ])
+    
+    if (!seoData || !seoData.seo) {
+      // Return a default OG image for posts that don't have SEO data
+      return new ImageResponse(
+        (
+          <OpenGraphImage
+            title="Blog Post"
+            description="by 熊布朗 (Peng.G)"
+            url="writing"
+          />
+        ),
         {
-          name: 'Geist Sans',
-          data: regularFontData,
-          style: 'normal',
-          weight: 400
-        },
-        {
-          name: 'Geist Sans',
-          data: boldFontData,
-          style: 'normal',
-          weight: 500
+          ...size,
+          fonts: [
+            {
+              name: 'Geist Sans',
+              data: regularFontData,
+              style: 'normal',
+              weight: 400
+            },
+            {
+              name: 'Geist Sans',
+              data: boldFontData,
+              style: 'normal',
+              weight: 500
+            }
+          ]
         }
-      ]
+      )
     }
-  )
+    
+    const {
+      seo: { title, ogImageTitle, ogImageSubtitle }
+    } = seoData
+
+    return new ImageResponse(
+      (
+        <OpenGraphImage
+          title={ogImageTitle || title}
+          description={ogImageSubtitle || 'by 熊布朗 (Peng.G)'}
+          url="writing"
+        />
+      ),
+      {
+        ...size,
+        fonts: [
+          {
+            name: 'Geist Sans',
+            data: regularFontData,
+            style: 'normal',
+            weight: 400
+          },
+          {
+            name: 'Geist Sans',
+            data: boldFontData,
+            style: 'normal',
+            weight: 500
+          }
+        ]
+      }
+    )
+  } catch (error) {
+    console.error('Error generating OG image for slug:', slug, error)
+    
+    // Return a simple fallback OG image if everything fails
+    const [regularFontData, boldFontData] = await Promise.all([
+      getRegularFont(),
+      getBoldFont()
+    ])
+    
+    return new ImageResponse(
+      (
+        <OpenGraphImage
+          title="Blog Post"
+          description="by 熊布朗 (Peng.G)"
+          url="writing"
+        />
+      ),
+      {
+        ...size,
+        fonts: [
+          {
+            name: 'Geist Sans',
+            data: regularFontData,
+            style: 'normal',
+            weight: 400
+          },
+          {
+            name: 'Geist Sans',
+            data: boldFontData,
+            style: 'normal',
+            weight: 500
+          }
+        ]
+      }
+    )
+  }
 }
