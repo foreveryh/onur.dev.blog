@@ -63,6 +63,7 @@ export async function POST(request) {
       if (slug) {
         revalidatePath(`/writing/${slug}`)
         revalidatePath('/writing')
+        revalidatePath('/') // Also revalidate homepage when blog posts change
       } else {
         return Response.json(
           {
