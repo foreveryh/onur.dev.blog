@@ -22,7 +22,27 @@ export async function POST(request) {
     )
   }
 
-  const { contentTypeId, slug } = payload
+  // Handle both manual API calls and Contentful webhook payload
+  let contentTypeId, slug
+
+  if (payload.contentTypeId) {
+    // Manual API call format
+    contentTypeId = payload.contentTypeId
+    slug = payload.slug
+  } else if (payload.sys && payload.sys.contentType) {
+    // Contentful webhook format
+    contentTypeId = payload.sys.contentType.sys.id
+    slug = payload.fields?.slug?.['en-US'] || payload.fields?.slug
+  } else {
+    return Response.json(
+      {
+        revalidated: false,
+        now: Date.now(),
+        message: 'Invalid payload format'
+      },
+      { status: 400 }
+    )
+  }
 
   switch (contentTypeId) {
     case CONTENT_TYPES.PAGE:

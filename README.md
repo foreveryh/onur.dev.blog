@@ -2,11 +2,25 @@
 
 This project is a fork of [onur.dev](https://github.com/onurschu/onur.dev), adapted for personal use and deployment on Vercel.
 
+## 📖 Documentation
+
+### 🚨 [**Contentful Complete Usage Guide**](./docs/CONTENTFUL_GUIDE.md) 🚨
+
+**Essential reading**: This comprehensive guide covers everything you need to know about using Contentful with this project, including:
+- Content model setup and field configuration
+- Blog writing workflow and best practices  
+- Webhook automation for automatic deployments
+- Multi-layer caching mechanisms
+- SEO optimization strategies
+- Troubleshooting common issues
+
+**Start here before setting up your Contentful space.**
+
 ## Important Notes
 
 ### Contentful Setup
 
-You will need to create your own Contentful space and define the necessary content models and fields. This project relies on specific Contentful structures, so ensure your setup matches the requirements.
+You will need to create your own Contentful space and define the necessary content models and fields. This project relies on specific Contentful structures, so ensure your setup matches the requirements outlined in the [Contentful Usage Guide](./docs/CONTENTFUL_GUIDE.md).
 
 ### Environment Variables
 
