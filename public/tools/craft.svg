@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="logosandtypes_com" data-name="logosandtypes com" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #254078;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        fill-rule: evenodd;
+      }
+
+      .cls-2 {
+        fill: #ff62fd;
+      }
+
+      .cls-3 {
+        fill: #0078ff;
+      }
+
+      .cls-4 {
+        fill: none;
+      }
+    </style>
+  </defs>
+  <g id="Layer_3" data-name="Layer 3">
+    <g id="Layer_3-2" data-name="Layer 3">
+      <g id="Layer_2" data-name="Layer 2">
+        <path id="Layer_3-3" data-name="Layer 3" class="cls-4" d="M0,0H150V150H0V0Z"/>
+      </g>
+    </g>
+  </g>
+  <g id="craft_logopack" data-name="craft logopack">
+    <g id="craft_icon_colour_regular" data-name="craft icon colour regular">
+      <path class="cls-1" d="M78.72,133.75c0,2.02,1.63,3.65,3.65,3.65h50.37c2.02,0,3.66-1.64,3.53-3.65-1.81-28.94-24.96-52.1-53.9-53.9-2.01-.12-3.65,1.52-3.65,3.53,0,0,0,50.37,0,50.37Z"/>
+      <path class="cls-1" d="M70.72,83.5c0-2.02-1.63-3.65-3.65-3.65H16.7c-2.02,0-3.66,1.64-3.53,3.65,1.81,28.94,24.96,52.1,53.9,53.9,2.01,.12,3.65-1.52,3.65-3.53v-50.37Z"/>
+      <path class="cls-2" d="M70.72,68.19c0,2.02-1.63,3.65-3.65,3.65H16.7c-2.02,0-3.66-1.64-3.53-3.65,1.8-28.94,24.96-52.1,53.9-53.91,2.01-.12,3.65,1.52,3.65,3.53v50.37h0Z"/>
+      <path class="cls-3" d="M78.72,17.93c0-2.02,1.63-3.65,3.65-3.65h50.37c2.02,0,3.66,1.64,3.53,3.65-1.81,28.94-24.96,52.1-53.9,53.9-2.01,.12-3.65-1.52-3.65-3.53,0,0,0-50.37,0-50.37Z"/>
+    </g>
+  </g>
+</svg>

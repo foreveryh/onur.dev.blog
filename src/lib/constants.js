@@ -81,6 +81,9 @@ export const COLLECTION_IDS = [
   55349123,
   55351618,
   55351620,
+  55858229,
+  55858636,
+  55858640,
 ]
 
 export const LINKS = [
@@ -106,7 +109,7 @@ export const LINKS = [
   },
   {
     href: '/workspace',
-    label: '我的空间',
+    label: 'Workspace',
     icon: <ArmchairIcon size={16} />
   },
   {

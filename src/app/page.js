@@ -29,7 +29,7 @@ export default async function Home() {
           <p>
             Hi, I am Peng.G (熊布朗)
             <br/>
-            AI Product Manager & Code-first PM 👋 <br/>
+            AI Product Manager & Software Architect👋 <br/>
             Shipping AI-native products—RAG platforms, autonomous agents & LLM infra.<br/>
             Born in China, shaped in Seoul, now building from Paris.<br/>
             Exploring GenAI × productivity; writing about it every week—let’s chat!
