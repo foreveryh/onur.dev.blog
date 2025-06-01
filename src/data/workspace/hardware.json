@@ -1,0 +1,38 @@
+[
+  {
+    "name": "MacBook Pro M2",
+    "detail": "64GB RAM, 2TB SSD, 16-inch",
+    "role": "Main development machine",
+    "category": "laptop"
+  },
+  {
+    "name": "LG UltraFine Display",
+    "detail": "32-inch, 4K UHD, USB-C",
+    "role": "Primary monitor",
+    "category": "display"
+  },
+  {
+    "name": "Apple Magic Trackpad",
+    "detail": "Multi-Touch, Space Gray",
+    "role": "Primary input device",
+    "category": "input"
+  },
+  {
+    "name": "Logitech MX Keys Mini",
+    "detail": "Wireless, backlit, compact layout",
+    "role": "Daily keyboard",
+    "category": "input"
+  },
+  {
+    "name": "B&O Beoplay HX & iFLYBUDS Pro",
+    "detail": "Premium over-ear headphones & wireless earbuds",
+    "role": "Audio monitoring and calls",
+    "category": "audio"
+  },
+  {
+    "name": "Elgato Ring Light",
+    "detail": "12-inch, adjustable brightness",
+    "role": "Video calls lighting",
+    "category": "lighting"
+  }
+] 

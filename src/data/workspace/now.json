@@ -1,0 +1,12 @@
+[
+  {
+    "project": "Building ARA - Autonomous Research Agent",
+    "description": "Advanced AI research agent powered by LangGraph for autonomous information discovery and synthesis",
+    "since": "2025-05-01"
+  },
+  {
+    "project": "Building Latour - Free Image Generation Service",
+    "description": "Web-based platform providing free AI image generation services for everyone",
+    "since": "2025-05-01"
+  }
+] 

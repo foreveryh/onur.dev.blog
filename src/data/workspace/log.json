@@ -1,0 +1,74 @@
+[
+  {
+    "date": "2025-05-15",
+    "title": "ARA project launch - Autonomous Deep Research Agent development",
+    "details": "Started building ARA, a free image generation platform powered by autonomous research agents using LangGraph and Next.js",
+    "category": "research"
+  },
+  {
+    "date": "2025-04-20",
+    "title": "MentisSandbox v1.0 released - Docker-based Agent execution environment",
+    "details": "Successfully deployed secure, persistent sandbox environment with real-time WebSocket feedback for AI Agents, supporting LangGraph and CrewAI frameworks",
+    "category": "deployment"
+  },
+  {
+    "date": "2025-03-10",
+    "title": "Mentis Multi-Agent framework core development",
+    "details": "Completed state-driven planning Supervisor Agent architecture for coordinating specialist agents in complex task automation",
+    "category": "development"
+  },
+  {
+    "date": "2025-02-05",
+    "title": "AI Agent technology research initiative launched",
+    "details": "Began comprehensive research into multi-agent systems, autonomous coordination, and intelligent task planning frameworks",
+    "category": "research"
+  },
+  {
+    "date": "2024-12-15",
+    "title": "Enterprise GPT product deployment completed",
+    "details": "Successfully deployed enterprise-grade GPT solution with Chat, Image Analysis, Compliance Check, and Auto Dashboard features using Milvus vector database",
+    "category": "deployment"
+  },
+  {
+    "date": "2024-11-20",
+    "title": "Auto Dashboard generation system implemented",
+    "details": "Developed automatic data visualization and chart generation capabilities for enterprise GPT platform",
+    "category": "development"
+  },
+  {
+    "date": "2024-10-10",
+    "title": "Image analysis and compliance check modules launched",
+    "details": "Integrated advanced image processing and document compliance verification features into enterprise GPT system",
+    "category": "development"
+  },
+  {
+    "date": "2024-09-01",
+    "title": "Enterprise GPT project initiated with RAG architecture",
+    "details": "Started development of enterprise-grade GPT product, designed RAG architecture with Milvus vector database for embedding-based retrieval",
+    "category": "development"
+  },
+  {
+    "date": "2024-08-15",
+    "title": "ComfyUI character consistency breakthrough with Pulid+Flux",
+    "details": "Mastered advanced ComfyUI workflows, achieved significant improvements in character consistency using Pulid+Flux combination",
+    "category": "research"
+  },
+  {
+    "date": "2024-07-01",
+    "title": "ComfyUI workflow research and experimentation",
+    "details": "Deep dive into ComfyUI ecosystem, exploring various workflows for AI image generation and processing",
+    "category": "research"
+  },
+  {
+    "date": "2024-06-10",
+    "title": "Character AI comprehensive research completed",
+    "details": "Conducted extensive research on Character AI, focusing on prompt engineering for natural character behavior and memory system design",
+    "category": "research"
+  },
+  {
+    "date": "2024-04-15",
+    "title": "RAG (Retrieval-Augmented Generation) exploration started",
+    "details": "Began exploring RAG technology, laying the foundation for future enterprise AI applications",
+    "category": "research"
+  }
+] 

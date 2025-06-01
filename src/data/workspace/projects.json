@@ -1,0 +1,20 @@
+[
+  {
+    "title": "MentisSandbox",
+    "status": "Live",
+    "tagline": "Secure, persistent sandbox environment for AI Agents with real-time feedback",
+    "link": "https://github.com/foreveryh/sandboxai",
+    "stack": ["Docker", "WebSocket", "Python", "LangGraph", "CrewAI"],
+    "startDate": "2025-04-01",
+    "image": null
+  },
+  {
+    "title": "Mentis",
+    "status": "Building",
+    "tagline": "Scalable multi-Agent Development Kit with state-driven planning supervisor",
+    "link": "https://github.com/foreveryh/mentis",
+    "stack": ["LangGraph", "Python", "Multi-Agent Systems", "AI Coordination"],
+    "startDate": "2025-03-01",
+    "image": null
+  }
+] 

@@ -2,105 +2,125 @@ import { FloatingHeader } from '@/components/floating-header'
 import { GradientBg4 } from '@/components/gradient-bg'
 import { PageTitle } from '@/components/page-title'
 import { ScrollArea } from '@/components/scroll-area'
-import { PERSONAL_SPACE_SECTIONS } from '@/lib/constants'
+import { EasterEgg } from '@/components/workspace/easter-egg'
+import { HardwareList } from '@/components/workspace/hardware-list'
+import { NowTag } from '@/components/workspace/now-tag'
+import { ProjectCard } from '@/components/workspace/project-card'
+import { Timeline } from '@/components/workspace/timeline'
+import hardwareData from '@/data/workspace/hardware.json'
+import logData from '@/data/workspace/log.json'
+import nowData from '@/data/workspace/now.json'
+import projectsData from '@/data/workspace/projects.json'
 import { getPageSeo } from '@/lib/contentful'
 
 export default async function Workspace() {
   return (
     <ScrollArea>
       <GradientBg4 />
-      <FloatingHeader title="我的空间" />
+      <FloatingHeader title="Workspace" />
       <div className="content-wrapper">
         <div className="content">
-          <PageTitle title="我的空间" />
+          <PageTitle title="Workspace" />
 
-          <div className="mb-8">
+          {/* Introduction */}
+          <div className="mb-12">
+            <p className="mb-4 text-lg leading-relaxed text-gray-600">
+              Welcome to my digital workspace. This is where I document my journey as a developer, researcher, and builder. Here you'll find insights into my current projects, work philosophy, and the tools that power my daily workflow.
+            </p>
             <p className="leading-relaxed text-gray-600">
-              这里是我的个人空间，记录着我的阅读、观影、旅行和工具使用体验。
-              每一个推荐都经过深思熟虑，希望能给你带来一些启发。
+              I believe in transparency, continuous learning, and sharing knowledge. Every project tells a story, every tool serves a purpose, and every line of code brings us closer to solving meaningful problems.
             </p>
           </div>
 
-          {Object.entries(PERSONAL_SPACE_SECTIONS).map(([sectionKey, section]) => (
-            <div key={sectionKey} className="mb-12">
-              <div className="mb-6">
-                <h2 className="mb-2 text-2xl font-bold">{section.title}</h2>
-                <p className="text-gray-600">{section.description}</p>
-              </div>
+          {/* Current Focus */}
+          <section className="mb-20">
+            <NowTag projects={nowData} />
+          </section>
 
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-1">
-                {section.items.map((item, index) => (
-                  <div key={index} className="rounded-lg border bg-white p-4 transition-shadow hover:shadow-md">
-                    <div className="mb-2 flex items-start justify-between">
-                      <h3 className="text-lg font-semibold">{item.title}</h3>
-                      <span className="text-sm text-gray-500">{item.year}</span>
-                    </div>
-
-                    <div className="mb-2">
-                      {item.author && <p className="text-sm text-gray-600">作者: {item.author}</p>}
-                      {item.director && <p className="text-sm text-gray-600">导演: {item.director}</p>}
-                      {item.country && <p className="text-sm text-gray-600">国家: {item.country}</p>}
-                      {item.category && <p className="text-sm text-gray-600">分类: {item.category}</p>}
-                    </div>
-
-                    <div className="mb-2">
-                      <span className="text-sm">{item.rating}</span>
-                    </div>
-
-                    <p className="text-sm leading-relaxed text-gray-700">{item.notes}</p>
-                  </div>
-                ))}
-              </div>
+          {/* Active Projects */}
+          <section className="mb-20">
+            <h2 className="mb-6 text-3xl font-bold text-gray-900">Active Projects</h2>
+            <p className="mb-8 text-gray-600">
+              A collection of projects I'm currently working on, from research experiments to production applications.
+            </p>
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {projectsData.map((project, index) => (
+                <ProjectCard key={index} {...project} />
+              ))}
             </div>
-          ))}
+          </section>
 
-          <div className="mt-12 rounded-lg bg-gray-50 p-6">
-            <p className="text-center text-gray-600">
-              这些推荐会持续更新，如果你有好的建议，欢迎{' '}
-              <a href="mailto:your-email@example.com" className="text-blue-600 hover:underline">
-                联系我
-              </a>{' '}
-              分享！
+          {/* Work Log */}
+          <section className="mb-20">
+            <h2 className="mb-6 text-3xl font-bold text-gray-900">Work Log</h2>
+            <p className="mb-8 text-gray-600">
+              A chronological record of my recent work, achievements, and milestones. Click on any entry to see more details.
+            </p>
+            <Timeline entries={logData} />
+          </section>
+
+          {/* Desk Setup */}
+          <section className="mb-20">
+            <h2 className="mb-6 text-3xl font-bold text-gray-900">My Desk Setup</h2>
+            <p className="mb-8 text-gray-600">
+              The hardware and tools that make up my daily development environment. Quality tools enable quality work.
+            </p>
+            <HardwareList items={hardwareData} />
+          </section>
+
+          {/* Footer note */}
+          <div className="mt-16 rounded-lg bg-gray-50 p-6 text-center">
+            <p className="text-gray-600">
+              This workspace is constantly evolving. Check back regularly for updates on new projects, tools, and insights from my development journey.
             </p>
           </div>
         </div>
       </div>
+
+      {/* Easter Egg */}
+      <EasterEgg trigger="work hard" />
     </ScrollArea>
   )
 }
 
 export async function generateMetadata() {
   const seoData = await getPageSeo('workspace')
+
+  const defaultMeta = {
+    title: 'Workspace - Developer Portfolio & Projects',
+    description: 'Explore my digital workspace featuring current projects, development workflow, tools, and insights from my journey as a developer and researcher.',
+    openGraph: {
+      title: 'Workspace - Developer Portfolio & Projects',
+      description: 'Explore my digital workspace featuring current projects, development workflow, tools, and insights from my journey as a developer and researcher.',
+      url: '/workspace',
+      type: 'website'
+    },
+    alternates: {
+      canonical: '/workspace'
+    },
+    keywords: ['developer workspace', 'projects', 'development workflow', 'coding tools', 'software development']
+  }
+
   if (!seoData) {
-    return {
-      title: '我的空间',
-      description: '我的个人空间，记录着阅读、观影、旅行和工具使用体验',
-      openGraph: {
-        title: '我的空间',
-        description: '我的个人空间，记录着阅读、观影、旅行和工具使用体验',
-        url: '/workspace'
-      },
-      alternates: {
-        canonical: '/workspace'
-      }
-    }
+    return defaultMeta
   }
 
   const {
     seo: { title, description }
   } = seoData
-  const siteUrl = '/workspace'
 
   return {
-    title: title || '我的空间',
-    description: description || '我的个人空间，记录着阅读、观影、旅行和工具使用体验',
+    title: title || defaultMeta.title,
+    description: description || defaultMeta.description,
     openGraph: {
-      title: title || '我的空间',
-      description: description || '我的个人空间，记录着阅读、观影、旅行和工具使用体验',
-      url: siteUrl
+      title: title || defaultMeta.openGraph.title,
+      description: description || defaultMeta.openGraph.description,
+      url: defaultMeta.openGraph.url,
+      type: defaultMeta.openGraph.type
     },
     alternates: {
-      canonical: siteUrl
-    }
+      canonical: defaultMeta.alternates.canonical
+    },
+    keywords: defaultMeta.keywords
   }
 }
