@@ -16,6 +16,17 @@ This project is a fork of [onur.dev](https://github.com/onurschu/onur.dev), adap
 
 **Start here before setting up your Contentful space.**
 
+### 🎨 [**Visual Explorer Module**](./docs/VISUAL_EXPLORER_README.md) 🎨
+
+**Visual content showcase**: A comprehensive guide for the Visual Explorer module featuring:
+- Sora-inspired waterfall layout with Cloudinary integration
+- Automatic image optimization and video thumbnail generation
+- EXIF metadata extraction and display
+- Complete setup and deployment instructions
+- Real-time media management and responsive design
+
+**Fully deployed and production-ready visual portfolio system.**
+
 ## Important Notes
 
 ### Contentful Setup
@@ -27,14 +38,24 @@ You will need to create your own Contentful space and define the necessary conte
 Before running or deploying the project, you must configure the following environment variables in your `.env` file. Create a `.env` file in the root of the project if it doesn't exist.
 
 ```
+# Contentful CMS Configuration
 CONTENTFUL_SPACE_ID=your_contentful_space_id
 CONTENTFUL_ACCESS_TOKEN=your_contentful_access_token
 CONTENTFUL_PREVIEW_ACCESS_TOKEN=your_contentful_preview_access_token
 CONTENTFUL_PREVIEW_SECRET=your_contentful_preview_secret
+
+# Supabase Database Configuration  
 SUPABASE_URL=your_supabase_project_url
 SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_public_project_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_public_anon_key
+
+# Cloudinary Media Storage (Required for Visual Explorer)
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+
+# Optional Integrations
 NEXT_PUBLIC_RAINDROP_ACCESS_TOKEN=your_raindrop_io_access_token (if using bookmarks feature)
 NEXT_REVALIDATE_SECRET=your_nextjs_revalidation_secret
 NEXT_PUBLIC_TINYBIRD_TOKEN=your_tinybird_analytics_token (if using)
@@ -44,6 +65,21 @@ AIRTABLE_BOOKMARKS_TABLE_ID=your_airtable_bookmarks_table_id (if using Airtable 
 ```
 
 Replace `your_...` placeholders with your actual credentials and IDs.
+
+#### Cloudinary Setup for Visual Explorer
+
+The Visual Explorer module requires Cloudinary for media storage and optimization. To set it up:
+
+1. **Create a Cloudinary Account**: Sign up at [cloudinary.com](https://cloudinary.com)
+2. **Get Your Credentials**: Find them in your Cloudinary dashboard
+   - **Cloud Name**: Found in your dashboard URL and settings
+   - **API Key**: Your unique API identifier  
+   - **API Secret**: Your secret authentication key
+3. **Create Visual Folder**: In Cloudinary, create a folder named `visual` for your media files
+4. **Upload Content**: Drag and drop images/videos into the `visual` folder
+5. **Add Metadata**: Use Cloudinary's context fields to add titles, descriptions, and other metadata
+
+The Visual Explorer will automatically display all media from your `visual` folder with optimized delivery and responsive sizing.
 
 ## Raindrop.io Setup (Bookmarks Feature)
 
