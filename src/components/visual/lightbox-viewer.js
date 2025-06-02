@@ -138,9 +138,22 @@ export function LightboxViewer({ isOpen, media, allMedia, onClose, onNavigate })
             {isVideo && media.duration && <span>Duration: {Math.round(media.duration)}s</span>}
             {media.camera && <span>Camera: {media.camera}</span>}
             {media.location && <span>Location: {media.location}</span>}
-            {media.timestamp && (
+            {media.capturedAt && (
               <span>
-                {new Date(media.timestamp).toLocaleDateString('en-US', {
+                Captured:{' '}
+                {new Date(media.capturedAt).toLocaleDateString('zh-CN', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit'
+                })}
+              </span>
+            )}
+            {media.timestamp && !media.capturedAt && (
+              <span>
+                Uploaded:{' '}
+                {new Date(media.timestamp).toLocaleDateString('zh-CN', {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric'

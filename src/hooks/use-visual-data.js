@@ -43,9 +43,13 @@ export function useVisualData() {
           mediaType: item.mediaType, // 'image' 或 'video'
           sourceType: item.sourceType, // 'photography' 或 'aigc'
           aspectRatio: item.aspect_ratio,
+          // 优先使用用户设置的元数据，fallback到默认值
           title: item.title || `${getMediaTypeLabel(item.mediaType, item.sourceType)} ${index + 1}`,
           description: item.description || `${getMediaTypeDescription(item.mediaType, item.sourceType)}`,
-          tags: generateTags(item.sourceType, item.mediaType),
+          location: item.location || '',
+          camera: item.camera || '',
+          capturedAt: item.capturedAt || null, // 拍摄时间
+          tags: item.tags && item.tags.length > 0 ? item.tags : generateTags(item.sourceType, item.mediaType),
           timestamp: item.created_at,
           duration: item.duration, // 视频时长
           category: item.category, // 原始分类：photograph、video、ai_photo、ai_video
