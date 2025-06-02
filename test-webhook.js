@@ -10,40 +10,40 @@ const contentfulPayload = {
   sys: {
     space: {
       sys: {
-        type: "Link",
-        linkType: "Space",
-        id: "your-space-id"
+        type: 'Link',
+        linkType: 'Space',
+        id: 'your-space-id'
       }
     },
-    id: "test-entry-id",
-    type: "Entry",
-    createdAt: "2024-01-01T00:00:00.000Z",
-    updatedAt: "2024-01-01T00:00:00.000Z",
+    id: 'test-entry-id',
+    type: 'Entry',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-01T00:00:00.000Z',
     environment: {
       sys: {
-        id: "master",
-        type: "Link",
-        linkType: "Environment"
+        id: 'master',
+        type: 'Link',
+        linkType: 'Environment'
       }
     },
     revision: 1,
     contentType: {
       sys: {
-        type: "Link",
-        linkType: "ContentType",
-        id: "post"  // 这里是内容类型ID
+        type: 'Link',
+        linkType: 'ContentType',
+        id: 'post' // 这里是内容类型ID
       }
     }
   },
   fields: {
     title: {
-      "en-US": "Test Blog Post"
+      'en-US': 'Test Blog Post'
     },
     slug: {
-      "en-US": "test-blog-post"  // 这里是slug
+      'en-US': 'test-blog-post' // 这里是slug
     },
     date: {
-      "en-US": "2024-01-01T00:00:00.000Z"
+      'en-US': '2024-01-01T00:00:00.000Z'
     }
   }
 }
@@ -54,7 +54,7 @@ async function testWebhook(baseUrl) {
   console.log(`📤 URL: ${baseUrl}/api/revalidate`)
   console.log(`📋 Payload (Contentful format):`)
   console.log(JSON.stringify(contentfulPayload, null, 2))
-  
+
   try {
     const response = await fetch(`${baseUrl}/api/revalidate`, {
       method: 'POST',
@@ -64,18 +64,17 @@ async function testWebhook(baseUrl) {
       },
       body: JSON.stringify(contentfulPayload)
     })
-    
+
     const result = await response.json()
-    
+
     console.log(`\n📥 Response Status: ${response.status}`)
     console.log(`📥 Response Body: ${JSON.stringify(result, null, 2)}`)
-    
+
     if (response.status === 200) {
       console.log(`✅ Webhook test PASSED - API correctly handled Contentful payload!`)
     } else {
       console.log(`❌ Webhook test FAILED`)
     }
-    
   } catch (error) {
     console.log(`❌ Test FAILED with error: ${error.message}`)
   }
@@ -83,4 +82,4 @@ async function testWebhook(baseUrl) {
 
 // 运行测试
 const baseUrl = process.argv[2] || 'https://me.deeptoai.com'
-testWebhook(baseUrl).catch(console.error) 
+testWebhook(baseUrl).catch(console.error)

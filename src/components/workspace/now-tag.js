@@ -42,4 +42,4 @@ export function NowTag({ projects }) {
       <div className="absolute right-8 bottom-0 h-20 w-20 translate-y-4 rounded-full bg-indigo-100 opacity-40" />
     </div>
   )
-} 
+}

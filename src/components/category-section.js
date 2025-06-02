@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+
 import { ToolCard } from './tool-card'
 
 export const CategorySection = ({ id, name, tools }) => {
@@ -32,14 +33,11 @@ export const CategorySection = ({ id, name, tools }) => {
         <h2 className="mb-2 text-2xl font-bold text-gray-900">{name}</h2>
       </motion.div>
 
-      <motion.div
-        className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-        variants={containerVariants}
-      >
+      <motion.div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" variants={containerVariants}>
         {tools.map((tool, index) => (
           <ToolCard key={tool.slug} tool={tool} index={index} />
         ))}
       </motion.div>
     </motion.section>
   )
-} 
+}

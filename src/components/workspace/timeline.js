@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useState } from 'react'
 
 export function Timeline({ entries }) {
   const [expandedItems, setExpandedItems] = useState(new Set())
@@ -19,10 +19,10 @@ export function Timeline({ entries }) {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString)
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric' 
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
     })
   }
 
@@ -52,13 +52,13 @@ export function Timeline({ entries }) {
   return (
     <div className="relative">
       {/* Timeline line */}
-      <div className="absolute left-6 top-6 bottom-6 w-0.5 bg-gray-200" />
-      
+      <div className="absolute top-6 bottom-6 left-6 w-0.5 bg-gray-200" />
+
       <div className="space-y-4">
         {entries.map((entry, index) => {
           const isExpanded = expandedItems.has(index)
           const hasDetails = entry.details && entry.details.trim().length > 0
-          
+
           return (
             <motion.div
               key={index}
@@ -68,38 +68,34 @@ export function Timeline({ entries }) {
               className="relative pl-16"
             >
               {/* Timeline dot */}
-              <div className="absolute left-4 top-2 h-4 w-4 rounded-full border-4 border-white bg-blue-500 shadow-sm" />
-              
+              <div className="absolute top-2 left-4 h-4 w-4 rounded-full border-4 border-white bg-blue-500 shadow-sm" />
+
               <div className="rounded-lg border bg-white p-4 shadow-sm">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="mb-2 flex items-center gap-2">
-                      <time className="text-sm font-medium text-gray-900">
-                        {formatDate(entry.date)}
-                      </time>
+                      <time className="text-sm font-medium text-gray-900">{formatDate(entry.date)}</time>
                       {entry.category && (
-                        <span className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${getCategoryColor(entry.category)}`}>
+                        <span
+                          className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${getCategoryColor(entry.category)}`}
+                        >
                           {entry.category}
                         </span>
                       )}
                     </div>
                     <h3 className="font-semibold text-gray-900">{entry.title}</h3>
                   </div>
-                  
+
                   {hasDetails && (
                     <button
                       onClick={() => toggleExpanded(index)}
                       className="ml-2 flex h-6 w-6 items-center justify-center rounded-full text-gray-400 hover:bg-gray-100 hover:text-gray-600"
                     >
-                      {isExpanded ? (
-                        <ChevronUpIcon className="h-4 w-4" />
-                      ) : (
-                        <ChevronDownIcon className="h-4 w-4" />
-                      )}
+                      {isExpanded ? <ChevronUpIcon className="h-4 w-4" /> : <ChevronDownIcon className="h-4 w-4" />}
                     </button>
                   )}
                 </div>
-                
+
                 <AnimatePresence>
                   {isExpanded && hasDetails && (
                     <motion.div
@@ -120,4 +116,4 @@ export function Timeline({ entries }) {
       </div>
     </div>
   )
-} 
+}

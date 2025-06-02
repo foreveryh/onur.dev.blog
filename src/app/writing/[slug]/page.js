@@ -15,7 +15,7 @@ export async function generateStaticParams() {
   if (!allPosts || allPosts.length === 0) {
     return []
   }
-  
+
   return allPosts.filter((post) => post && post.slug).map((post) => ({ slug: post.slug }))
 }
 
@@ -31,9 +31,9 @@ async function fetchData(slug) {
     date: data.date || null,
     seo: data.seo || { title, description: '', ogImageTitle: title, ogImageSubtitle: '' },
     content: data.content || { json: null },
-    sys: data.sys || { 
-      firstPublishedAt: new Date().toISOString(), 
-      publishedAt: new Date().toISOString() 
+    sys: data.sys || {
+      firstPublishedAt: new Date().toISOString(),
+      publishedAt: new Date().toISOString()
     }
   }
 
@@ -47,14 +47,8 @@ export default async function WritingSlug(props) {
   const { slug } = params
   const { data } = await fetchData(slug)
 
-  const {
-    title,
-    date,
-    seo = {},
-    content,
-    sys = {}
-  } = data
-  
+  const { title, date, seo = {}, content, sys = {} } = data
+
   const { firstPublishedAt, publishedAt: updatedAt } = sys
   const { title: seoTitle, description: seoDescription } = seo
 
@@ -116,12 +110,8 @@ export async function generateMetadata(props) {
     }
   }
 
-  const {
-    date,
-    seo = {},
-    sys = {}
-  } = seoData
-  
+  const { date, seo = {}, sys = {} } = seoData
+
   const { firstPublishedAt, publishedAt: updatedAt } = sys
   const { title, description, keywords } = seo
 

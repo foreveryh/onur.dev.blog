@@ -8,23 +8,97 @@ cloudinary.config({
 
 export async function GET() {
   try {
-    const result = await cloudinary.search
-      .expression('resource_type:image AND folder:visual')
-      .max_results(20)
-      .execute()
-    
-    const images = result.resources.map((r) => ({
-      public_id: r.public_id,
-      url: r.secure_url,
-      width: r.width,
-      height: r.height,
-      aspect_ratio: r.width && r.height ? r.width / r.height : 1.5,
-      format: r.format,
-      created_at: r.created_at,
-      folder: r.asset_folder
-    }))
-    
-    return new Response(JSON.stringify({ ok: true, images }), {
+    // 搜索图片和视频内容
+    const [imageResult, videoResult] = await Promise.all([
+      cloudinary.search
+        .expression('resource_type:image AND folder:visual')
+        .with_field('context')
+        .with_field('metadata')
+        .max_results(50)
+        .execute(),
+      cloudinary.search
+        .expression('resource_type:video AND folder:visual')
+        .with_field('context')
+        .with_field('metadata')
+        .max_results(50)
+        .execute()
+    ])
+
+    // 处理图片
+    const images = imageResult.resources.map((r) => {
+      // 从元数据或context中获取分类信息
+      const categoryData = r.metadata?.category || r.context?.category || ['photograph']
+      const category = Array.isArray(categoryData) ? categoryData[0] : categoryData
+      
+      // 根据用户的分类系统映射到前端分类
+      let sourceType = 'photography'
+      let mediaType = 'image'
+      
+      if (category === 'ai_photo') {
+        sourceType = 'aigc'
+        mediaType = 'image'
+      } else if (category === 'photograph') {
+        sourceType = 'photography'
+        mediaType = 'image'
+      }
+
+      return {
+        public_id: r.public_id,
+        url: r.secure_url,
+        width: r.width,
+        height: r.height,
+        aspect_ratio: r.width && r.height ? r.width / r.height : 1.5,
+        format: r.format,
+        created_at: r.created_at,
+        folder: r.asset_folder,
+        mediaType,
+        sourceType,
+        category,
+        title: r.metadata?.title || r.context?.title || '',
+        description: r.metadata?.description || r.context?.description || ''
+      }
+    })
+
+    // 处理视频
+    const videos = videoResult.resources.map((r) => {
+      // 从元数据或context中获取分类信息
+      const categoryData = r.metadata?.category || r.context?.category || ['video']
+      const category = Array.isArray(categoryData) ? categoryData[0] : categoryData
+      
+      // 根据用户的分类系统映射到前端分类
+      let sourceType = 'photography'
+      let mediaType = 'video'
+      
+      if (category === 'ai_video') {
+        sourceType = 'aigc'
+        mediaType = 'video'
+      } else if (category === 'video' || category === 'photograph') {
+        sourceType = 'photography'
+        mediaType = 'video'
+      }
+
+      return {
+        public_id: r.public_id,
+        url: r.secure_url,
+        width: r.width,
+        height: r.height,
+        aspect_ratio: r.width && r.height ? r.width / r.height : 16 / 9,
+        format: r.format,
+        created_at: r.created_at,
+        folder: r.asset_folder,
+        mediaType,
+        sourceType,
+        category,
+        duration: r.duration,
+        title: r.metadata?.title || r.context?.title || '',
+        description: r.metadata?.description || r.context?.description || ''
+      }
+    })
+
+    // 合并所有媒体内容
+    const allMedia = [...images, ...videos].sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+
+    return new Response(JSON.stringify({ ok: true, media: allMedia }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
     })

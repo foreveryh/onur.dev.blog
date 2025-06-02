@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { CldImage } from 'next-cloudinary'
 
 export function HardwareList({ items }) {
   const getCategoryIcon = (category) => {
@@ -22,17 +23,21 @@ export function HardwareList({ items }) {
 
   return (
     <div className="space-y-8">
-      {/* Desk Image Placeholder */}
+      {/* Desk Setup Photo */}
       <div className="flex justify-center">
-        <div className="relative aspect-[4/3] w-full max-w-lg overflow-hidden rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 shadow-sm">
-          {/* Placeholder for desk image */}
-          <div className="flex h-full items-center justify-center">
-            <div className="text-center">
-              <div className="mb-2 text-4xl">🏠</div>
-              <p className="text-sm text-gray-500">Desk setup photo</p>
-              <p className="text-xs text-gray-400">Coming soon...</p>
-            </div>
-          </div>
+        <div className="relative aspect-[4/3] w-full max-w-lg overflow-hidden rounded-lg shadow-sm">
+          <CldImage
+            src="1748866677990_ibhgdc"
+            alt="My Desk Setup"
+            width={600}
+            height={450}
+            quality="auto"
+            format="auto"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            className="h-full w-full object-cover"
+            crop="fill"
+            gravity="center"
+          />
 
           {/* Decorative elements */}
           <div className="absolute top-4 right-4 h-8 w-8 rounded-full bg-white/20" />
@@ -65,4 +70,4 @@ export function HardwareList({ items }) {
       </div>
     </div>
   )
-} 
+}

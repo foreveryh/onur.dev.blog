@@ -25,10 +25,13 @@ export default async function Workspace() {
           {/* Introduction */}
           <div className="mb-12">
             <p className="mb-4 text-lg leading-relaxed text-gray-600">
-              Welcome to my digital workspace. This is where I document my journey as a developer, researcher, and builder. Here you'll find insights into my current projects, work philosophy, and the tools that power my daily workflow.
+              Welcome to my digital workspace. This is where I document my journey as a developer, researcher, and
+              builder. Here you'll find insights into my current projects, work philosophy, and the tools that power my
+              daily workflow.
             </p>
             <p className="leading-relaxed text-gray-600">
-              I believe in transparency, continuous learning, and sharing knowledge. Every project tells a story, every tool serves a purpose, and every line of code brings us closer to solving meaningful problems.
+              I believe in transparency, continuous learning, and sharing knowledge. Every project tells a story, every
+              tool serves a purpose, and every line of code brings us closer to solving meaningful problems.
             </p>
           </div>
 
@@ -54,7 +57,8 @@ export default async function Workspace() {
           <section className="mb-20">
             <h2 className="mb-6 text-3xl font-bold text-gray-900">Work Log</h2>
             <p className="mb-8 text-gray-600">
-              A chronological record of my recent work, achievements, and milestones. Click on any entry to see more details.
+              A chronological record of my recent work, achievements, and milestones. Click on any entry to see more
+              details.
             </p>
             <Timeline entries={logData} />
           </section>
@@ -71,7 +75,8 @@ export default async function Workspace() {
           {/* Footer note */}
           <div className="mt-16 rounded-lg bg-gray-50 p-6 text-center">
             <p className="text-gray-600">
-              This workspace is constantly evolving. Check back regularly for updates on new projects, tools, and insights from my development journey.
+              This workspace is constantly evolving. Check back regularly for updates on new projects, tools, and
+              insights from my development journey.
             </p>
           </div>
         </div>
@@ -88,10 +93,12 @@ export async function generateMetadata() {
 
   const defaultMeta = {
     title: 'Workspace - Developer Portfolio & Projects',
-    description: 'Explore my digital workspace featuring current projects, development workflow, tools, and insights from my journey as a developer and researcher.',
+    description:
+      'Explore my digital workspace featuring current projects, development workflow, tools, and insights from my journey as a developer and researcher.',
     openGraph: {
       title: 'Workspace - Developer Portfolio & Projects',
-      description: 'Explore my digital workspace featuring current projects, development workflow, tools, and insights from my journey as a developer and researcher.',
+      description:
+        'Explore my digital workspace featuring current projects, development workflow, tools, and insights from my journey as a developer and researcher.',
       url: '/workspace',
       type: 'website'
     },

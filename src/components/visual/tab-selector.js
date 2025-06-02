@@ -3,44 +3,39 @@
 import { motion } from 'framer-motion'
 import { CameraIcon, GridIcon, ImageIcon, SparklesIcon, VideoIcon } from 'lucide-react'
 
-export function TabSelector({ 
-  mediaType, 
-  sourceType, 
-  showAll, 
-  onFilterChange 
-}) {
+export function TabSelector({ mediaType, sourceType, showAll, onFilterChange }) {
   // 合并标签系统，提供更简洁的选项
   const filterOptions = [
-    { 
-      value: 'all', 
-      label: '全部', 
+    {
+      value: 'all',
+      label: 'All',
       icon: GridIcon,
       showAll: true
     },
-    { 
-      value: 'photography-image', 
-      label: '摄影', 
+    {
+      value: 'photography-image',
+      label: 'Photography',
       icon: CameraIcon,
       mediaType: 'image',
       sourceType: 'photography'
     },
-    { 
-      value: 'aigc-image', 
-      label: 'AI图片', 
+    {
+      value: 'aigc-image',
+      label: 'AI Images',
       icon: SparklesIcon,
       mediaType: 'image',
       sourceType: 'aigc'
     },
-    { 
-      value: 'photography-video', 
-      label: '摄影视频', 
+    {
+      value: 'photography-video',
+      label: 'Video',
       icon: VideoIcon,
       mediaType: 'video',
       sourceType: 'photography'
     },
-    { 
-      value: 'aigc-video', 
-      label: 'AI视频', 
+    {
+      value: 'aigc-video',
+      label: 'AI Video',
       icon: ImageIcon,
       mediaType: 'video',
       sourceType: 'aigc'
@@ -59,7 +54,7 @@ export function TabSelector({
     if (option.showAll) {
       onFilterChange({ showAll: true })
     } else {
-      onFilterChange({ 
+      onFilterChange({
         showAll: false,
         mediaType: option.mediaType,
         sourceType: option.sourceType
@@ -73,15 +68,13 @@ export function TabSelector({
         {filterOptions.map((option) => {
           const isActive = currentFilter === option.value
           const Icon = option.icon
-          
+
           return (
             <button
               key={option.value}
               onClick={() => handleFilterClick(option)}
               className={`relative flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-200 ${
-                isActive
-                  ? 'text-gray-900 shadow-sm'
-                  : 'text-gray-600 hover:text-gray-800'
+                isActive ? 'text-gray-900 shadow-sm' : 'text-gray-600 hover:text-gray-800'
               }`}
             >
               {isActive && (
@@ -89,9 +82,9 @@ export function TabSelector({
                   layoutId="active-filter-bg"
                   className="absolute inset-0 rounded-lg bg-white shadow-sm"
                   initial={false}
-                  transition={{ 
-                    type: 'spring', 
-                    stiffness: 500, 
+                  transition={{
+                    type: 'spring',
+                    stiffness: 500,
                     damping: 30,
                     duration: 0.2
                   }}
@@ -105,4 +98,4 @@ export function TabSelector({
       </div>
     </div>
   )
-} 
+}

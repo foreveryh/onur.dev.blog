@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 
 /**
- * Visual 数据获取 Hook - 只使用 Cloudinary 真实数据
+ * Visual 数据获取 Hook - 支持图片和视频，使用新的分类系统
  * @returns {Object} { data, isLoading, error, refetch }
  */
 export function useVisualData() {
@@ -16,7 +16,7 @@ export function useVisualData() {
       setIsLoading(true)
       setError(null)
 
-      console.info('正在从 Cloudinary 获取您的图片...')
+      console.info('Loading your visual works from Cloudinary...')
 
       const response = await fetch('/api/visual/list', {
         method: 'GET',
@@ -25,41 +25,50 @@ export function useVisualData() {
         }
       })
 
-      console.info('📡 API 响应状态:', response.status, response.statusText)
+      console.info('📡 API Response Status:', response.status, response.statusText)
 
       if (!response.ok) {
-        throw new Error(`API 请求失败: ${response.status} ${response.statusText}`)
+        throw new Error(`API request failed: ${response.status} ${response.statusText}`)
       }
 
       const result = await response.json()
 
-      if (result.ok && result.images && result.images.length > 0) {
+      if (result.ok && result.media && result.media.length > 0) {
         // 转换为前端组件期望的格式
-        const visualData = result.images.map((img, index) => ({
-          id: `cloudinary-${index + 1}`,
-          cloudinaryId: img.public_id,
-          imageUrl: img.url, // 添加这个字段以支持直接 URL 显示
-          mediaType: 'image',
-          sourceType: 'photography',
-          aspectRatio: img.aspect_ratio,
-          title: `摄影作品 ${index + 1}`,
-          description: '来自您的 Cloudinary 账户的精美摄影作品',
-          tags: ['摄影', '个人作品', 'Cloudinary'],
-          timestamp: img.created_at,
+        const visualData = result.media.map((item, index) => ({
+          id: `cloudinary-${item.public_id}`,
+          cloudinaryId: item.public_id,
+          imageUrl: item.url, // 图片URL
+          videoUrl: item.mediaType === 'video' ? item.url : null, // 视频URL
+          mediaType: item.mediaType, // 'image' 或 'video'
+          sourceType: item.sourceType, // 'photography' 或 'aigc'
+          aspectRatio: item.aspect_ratio,
+          title: item.title || `${getMediaTypeLabel(item.mediaType, item.sourceType)} ${index + 1}`,
+          description: item.description || `${getMediaTypeDescription(item.mediaType, item.sourceType)}`,
+          tags: generateTags(item.sourceType, item.mediaType),
+          timestamp: item.created_at,
+          duration: item.duration, // 视频时长
+          category: item.category, // 原始分类：photograph、video、ai_photo、ai_video
           // 保存原始资源信息
-          originalResource: img
+          originalResource: item
         }))
 
-        console.info('✅ 成功加载您的 Cloudinary 图片:', visualData.length, '张')
+        console.info('✅ Successfully loaded your Cloudinary media:', visualData.length, 'items')
+        console.info('📊 Media breakdown:', {
+          images: visualData.filter((item) => item.mediaType === 'image').length,
+          videos: visualData.filter((item) => item.mediaType === 'video').length,
+          photography: visualData.filter((item) => item.sourceType === 'photography').length,
+          ai_generated: visualData.filter((item) => item.sourceType === 'aigc').length
+        })
         setData(visualData)
       } else {
-        console.error('⚠️ 未获取到 Cloudinary 图片')
-        setError('未获取到 Cloudinary 图片')
+        console.error('⚠️ No Cloudinary media found')
+        setError('No visual works found in your Cloudinary account')
         setData([])
       }
     } catch (err) {
-      console.error('获取 Cloudinary 数据失败:', err)
-      setError(`无法连接到 Cloudinary: ${err.message}`)
+      console.error('Failed to fetch Cloudinary data:', err)
+      setError(`Unable to connect to Cloudinary: ${err.message}`)
       setData([])
     } finally {
       setIsLoading(false)
@@ -78,3 +87,45 @@ export function useVisualData() {
   }
 }
 
+// 辅助函数：获取媒体类型标签
+function getMediaTypeLabel(mediaType, sourceType) {
+  if (mediaType === 'image') {
+    return sourceType === 'aigc' ? 'AI Image' : 'Photography'
+  } else {
+    return sourceType === 'aigc' ? 'AI Video' : 'Video'
+  }
+}
+
+// 辅助函数：获取媒体类型描述
+function getMediaTypeDescription(mediaType, sourceType) {
+  if (mediaType === 'image') {
+    return sourceType === 'aigc'
+      ? 'AI-generated visual artwork from your creative collection'
+      : 'Beautiful photography from your personal collection'
+  } else {
+    return sourceType === 'aigc'
+      ? 'AI-generated video content from your creative collection'
+      : 'Video content from your personal collection'
+  }
+}
+
+// 辅助函数：生成标签
+function generateTags(sourceType, mediaType) {
+  const tags = []
+  
+  if (sourceType === 'photography') {
+    tags.push('Photography')
+  } else {
+    tags.push('AI Generated')
+  }
+  
+  if (mediaType === 'image') {
+    tags.push('Image')
+  } else {
+    tags.push('Video')
+  }
+  
+  tags.push('Personal Collection', 'Cloudinary')
+  
+  return tags
+}

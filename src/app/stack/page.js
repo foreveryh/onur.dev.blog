@@ -1,11 +1,11 @@
+import { CategorySection } from '@/components/category-section'
+import { EasterEgg } from '@/components/easter-egg'
 import { FloatingHeader } from '@/components/floating-header'
 import { GradientBg4 } from '@/components/gradient-bg'
 import { PageTitle } from '@/components/page-title'
 import { ScrollArea } from '@/components/scroll-area'
-import { CategorySection } from '@/components/category-section'
-import { EasterEgg } from '@/components/easter-egg'
-import { getPageSeo } from '@/lib/contentful'
 import toolsData from '@/data/tools.json'
+import { getPageSeo } from '@/lib/contentful'
 
 export default async function StackPage() {
   return (
@@ -18,21 +18,14 @@ export default async function StackPage() {
 
           <div className="mb-8">
             <p className="leading-relaxed text-gray-600">
-              Here's my curated collection of daily tools, from development essentials to productivity boosters. 
-              Each tool has been battle-tested in real workflows and genuinely improves my output.
+              Here's my curated collection of daily tools, from development essentials to productivity boosters. Each
+              tool has been battle-tested in real workflows and genuinely improves my output.
             </p>
-            <p className="mt-2 text-sm text-gray-500">
-              💡 Pro tip: Try the ↑ ↑ ↓ ↓ ← → ← → sequence...
-            </p>
+            <p className="mt-2 text-sm text-gray-500">💡 Pro tip: Try the ↑ ↑ ↓ ↓ ← → ← → sequence...</p>
           </div>
 
           {toolsData.categories.map((category) => (
-            <CategorySection
-              key={category.id}
-              id={category.id}
-              name={category.name}
-              tools={category.tools}
-            />
+            <CategorySection key={category.id} id={category.id} name={category.name} tools={category.tools} />
           ))}
 
           <EasterEgg tools={toolsData.categories} />
@@ -76,4 +69,4 @@ export async function generateMetadata() {
       canonical: siteUrl
     }
   }
-} 
+}

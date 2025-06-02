@@ -1,7 +1,7 @@
 'use client'
 
-import { ArrowUpRightIcon } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { ArrowUpRightIcon } from 'lucide-react'
 import Image from 'next/image'
 
 export const ToolCard = ({ tool, index }) => {
@@ -53,8 +53,8 @@ export const ToolCard = ({ tool, index }) => {
       variants={cardVariants}
       initial="hidden"
       animate="visible"
-      whileHover={{ 
-        scale: 1.05, 
+      whileHover={{
+        scale: 1.05,
         boxShadow: '0 8px 24px rgba(0,0,0,.12)',
         height: 'auto'
       }}
@@ -63,8 +63,8 @@ export const ToolCard = ({ tool, index }) => {
     >
       <motion.div className="thumbnail-shadow relative flex h-full min-h-[180px] flex-col overflow-hidden rounded-xl border border-gray-200/60 bg-white/80 p-6 backdrop-blur-sm transition-all duration-300 hover:bg-white/90">
         <div className="mb-3 flex items-start justify-between">
-          <div className="flex items-center gap-3 flex-1 min-w-0">
-            <motion.div 
+          <div className="flex min-w-0 flex-1 items-center gap-3">
+            <motion.div
               className="relative size-10 flex-shrink-0"
               whileHover={{ rotate: 5 }}
               transition={{ duration: 0.2 }}
@@ -84,13 +84,9 @@ export const ToolCard = ({ tool, index }) => {
                 🛠️
               </div>
             </motion.div>
-            <h3 className="font-semibold text-gray-900 leading-tight text-sm">{tool.name}</h3>
+            <h3 className="text-sm leading-tight font-semibold text-gray-900">{tool.name}</h3>
           </div>
-          <motion.div
-            whileHover={{ x: 2, y: -2 }}
-            transition={{ duration: 0.2 }}
-            className="flex-shrink-0"
-          >
+          <motion.div whileHover={{ x: 2, y: -2 }} transition={{ duration: 0.2 }} className="flex-shrink-0">
             <ArrowUpRightIcon
               size={16}
               className="text-gray-400 transition-colors duration-200 group-hover:text-gray-600"
@@ -98,10 +94,10 @@ export const ToolCard = ({ tool, index }) => {
           </motion.div>
         </div>
 
-        <p className="mb-4 text-sm leading-relaxed text-gray-600 flex-1">{tool.desc}</p>
+        <p className="mb-4 flex-1 text-sm leading-relaxed text-gray-600">{tool.desc}</p>
 
-        <motion.div 
-          className="flex flex-wrap gap-1.5 mb-2"
+        <motion.div
+          className="mb-2 flex flex-wrap gap-1.5"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: index * 0.1 + 0.3, duration: 0.3 }}
@@ -112,8 +108,8 @@ export const ToolCard = ({ tool, index }) => {
               className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ${getTagColor(tag)}`}
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{ 
-                delay: index * 0.1 + 0.4 + tagIndex * 0.05, 
+              transition={{
+                delay: index * 0.1 + 0.4 + tagIndex * 0.05,
                 duration: 0.2,
                 type: 'spring',
                 stiffness: 300
@@ -128,14 +124,14 @@ export const ToolCard = ({ tool, index }) => {
         {/* Peel-Up Tip */}
         {tool.tip && (
           <motion.div
-            className="absolute inset-x-0 bottom-0 px-4 py-3 text-xs text-gray-500 bg-gradient-to-t from-white/95 to-transparent backdrop-blur-sm border-t border-gray-100/50 opacity-0"
-            whileHover={{ 
-              opacity: 1 
+            className="absolute inset-x-0 bottom-0 border-t border-gray-100/50 bg-gradient-to-t from-white/95 to-transparent px-4 py-3 text-xs text-gray-500 opacity-0 backdrop-blur-sm"
+            whileHover={{
+              opacity: 1
             }}
-            transition={{ 
-              type: 'spring', 
-              stiffness: 260, 
-              damping: 20 
+            transition={{
+              type: 'spring',
+              stiffness: 260,
+              damping: 20
             }}
           >
             {tool.tip}
@@ -144,4 +140,4 @@ export const ToolCard = ({ tool, index }) => {
       </motion.div>
     </motion.a>
   )
-} 
+}

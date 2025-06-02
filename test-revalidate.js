@@ -7,7 +7,7 @@ async function testRevalidateAPI(baseUrl, testCase) {
   console.log(`\n🧪 Testing: ${testCase.name}`)
   console.log(`📤 Request: ${testCase.method} ${baseUrl}/api/revalidate`)
   console.log(`📋 Payload: ${JSON.stringify(testCase.payload, null, 2)}`)
-  
+
   try {
     const response = await fetch(`${baseUrl}/api/revalidate`, {
       method: 'POST',
@@ -17,18 +17,18 @@ async function testRevalidateAPI(baseUrl, testCase) {
       },
       body: JSON.stringify(testCase.payload)
     })
-    
+
     const result = await response.json()
-    
+
     console.log(`📥 Response Status: ${response.status}`)
     console.log(`📥 Response Body: ${JSON.stringify(result, null, 2)}`)
-    
+
     if (response.status === testCase.expectedStatus) {
       console.log(`✅ Test PASSED`)
     } else {
       console.log(`❌ Test FAILED (expected status ${testCase.expectedStatus}, got ${response.status})`)
     }
-    
+
     return { success: response.status === testCase.expectedStatus, result }
   } catch (error) {
     console.log(`❌ Test FAILED with error: ${error.message}`)
@@ -54,7 +54,7 @@ const testCases = [
     name: 'Post without Slug (should revalidate /writing)',
     payload: { contentTypeId: 'post' },
     useSecret: true,
-    expectedStatus: 400  // API requires slug for posts
+    expectedStatus: 400 // API requires slug for posts
   },
   {
     name: 'Page Revalidation',
@@ -79,23 +79,23 @@ const testCases = [
 // 主测试函数
 async function runTests() {
   const baseUrl = process.argv[2] || 'http://localhost:3000'
-  
+
   console.log(`🚀 Testing Revalidate API at: ${baseUrl}`)
   console.log(`🔑 Using secret: ${SECRET.substring(0, 10)}...`)
-  
+
   let passed = 0
   let total = testCases.length
-  
+
   for (const testCase of testCases) {
     const result = await testRevalidateAPI(baseUrl, testCase)
     if (result.success) passed++
-    
+
     // 等待一下，避免请求过快
-    await new Promise(resolve => setTimeout(resolve, 500))
+    await new Promise((resolve) => setTimeout(resolve, 500))
   }
-  
+
   console.log(`\n📊 Test Results: ${passed}/${total} tests passed`)
-  
+
   if (passed === total) {
     console.log(`🎉 All tests passed! Your revalidate API is working correctly.`)
   } else {
@@ -104,4 +104,4 @@ async function runTests() {
 }
 
 // 运行测试
-runTests().catch(console.error) 
+runTests().catch(console.error)

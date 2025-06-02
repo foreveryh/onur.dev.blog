@@ -49,9 +49,7 @@ export function ProjectCard({ title, tagline, status, stack, link, startDate }) 
         <span className={`inline-flex rounded-full border px-2.5 py-0.5 text-xs font-medium ${getStatusColor(status)}`}>
           {status}
         </span>
-        {startDate && (
-          <span className="text-xs text-gray-500">Started {formatDate(startDate)}</span>
-        )}
+        {startDate && <span className="text-xs text-gray-500">Started {formatDate(startDate)}</span>}
       </div>
 
       <div className="flex flex-wrap gap-1.5">
@@ -69,4 +67,4 @@ export function ProjectCard({ title, tagline, status, stack, link, startDate }) 
       <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-blue-50/0 to-indigo-50/0 opacity-0 transition-opacity duration-200 group-hover:from-blue-50/50 group-hover:to-indigo-50/50 group-hover:opacity-100" />
     </motion.div>
   )
-} 
+}

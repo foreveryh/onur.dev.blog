@@ -29,4 +29,4 @@ export function Gallery({ items, onItemClick }) {
       ))}
     </div>
   )
-} 
+}

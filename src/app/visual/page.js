@@ -12,9 +12,10 @@ export default async function VisualPage() {
       <FloatingHeader title="Visual" />
       <div className="content-wrapper">
         <div className="content">
-          <PageTitle title="Visual Explorer" className="lg:hidden" />
+          <PageTitle title="Visual Portfolio" className="lg:hidden" />
           <p className="mb-8 text-gray-600">
-            探索精心策划的摄影作品和AI生成的视觉内容集合。发现不同媒介和风格的创意作品。
+            Explore a curated collection of visual works including photography and AI-generated art. Discover creative
+            expressions across different mediums and styles.
           </p>
           <VisualExplorer />
         </div>
@@ -27,20 +28,20 @@ export async function generateMetadata() {
   const seoData = await getPageSeo('visual')
 
   const defaultMeta = {
-    title: 'Visual - 摄影与AI生成艺术',
+    title: 'Visual Portfolio - Photography & AI Art',
     description:
-      '探索精心策划的摄影作品和AI生成的视觉内容集合。发现不同媒介和风格的创意作品。',
+      'Explore a curated collection of visual works including photography and AI-generated art. Discover creative expressions across different mediums and styles.',
     openGraph: {
-      title: 'Visual - 摄影与AI生成艺术',
+      title: 'Visual Portfolio - Photography & AI Art',
       description:
-        '探索精心策划的摄影作品和AI生成的视觉内容集合。发现不同媒介和风格的创意作品。',
+        'Explore a curated collection of visual works including photography and AI-generated art. Discover creative expressions across different mediums and styles.',
       url: '/visual',
       type: 'website'
     },
     alternates: {
       canonical: '/visual'
     },
-    keywords: ['摄影', 'AI艺术', '视觉内容', '创意作品', '画廊', '数字艺术']
+    keywords: ['photography', 'AI art', 'visual content', 'creative works', 'gallery', 'digital art', 'portfolio']
   }
 
   if (!seoData) {
@@ -65,4 +66,4 @@ export async function generateMetadata() {
     },
     keywords: defaultMeta.keywords
   }
-} 
+}

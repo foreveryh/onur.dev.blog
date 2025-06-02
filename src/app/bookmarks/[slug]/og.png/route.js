@@ -23,14 +23,14 @@ export async function generateStaticParams() {
 export async function GET(_, props) {
   const params = await props.params
   const { slug } = params
-  
+
   try {
     const [bookmarks, regularFontData, boldFontData] = await Promise.all([
       getBookmarks(),
       getRegularFont(),
       getBoldFont()
     ])
-    
+
     if (!bookmarks || bookmarks.length === 0) {
       // Return default OG image for bookmarks if no data available
       return new ImageResponse(
@@ -75,7 +75,7 @@ export async function GET(_, props) {
         }
       )
     }
-    
+
     const currentBookmark = bookmarks.find((bookmark) => bookmark.slug === slug)
     if (!currentBookmark) {
       // Return default OG image if specific bookmark not found
@@ -165,13 +165,10 @@ export async function GET(_, props) {
     )
   } catch (error) {
     console.error('Error generating bookmark OG image for slug:', slug, error)
-    
+
     // Return a simple fallback OG image if everything fails
-    const [regularFontData, boldFontData] = await Promise.all([
-      getRegularFont(),
-      getBoldFont()
-    ])
-    
+    const [regularFontData, boldFontData] = await Promise.all([getRegularFont(), getBoldFont()])
+
     return new ImageResponse(
       (
         <OpenGraphImage

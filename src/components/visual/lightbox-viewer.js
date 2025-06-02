@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from 'framer-motion'
 import { ChevronLeftIcon, ChevronRightIcon, XIcon } from 'lucide-react'
-import { CldImage, getCldImageUrl } from 'next-cloudinary'
+import { CldImage, getCldVideoUrl } from 'next-cloudinary'
 import { useEffect } from 'react'
 
 export function LightboxViewer({ isOpen, media, allMedia, onClose, onNavigate }) {
@@ -41,14 +41,18 @@ export function LightboxViewer({ isOpen, media, allMedia, onClose, onNavigate })
 
   const isVideo = media.mediaType === 'video'
 
-  // 为视频生成 URL
-  const videoUrl = isVideo
-    ? getCldImageUrl({
+  // 为视频生成正确的URL
+  const getVideoUrl = () => {
+    if (isVideo && media.cloudinaryId) {
+      return getCldVideoUrl({
         src: media.cloudinaryId,
-        format: 'mp4',
         quality: 'auto'
       })
-    : null
+    }
+    return media.videoUrl || media.url
+  }
+
+  const videoUrl = getVideoUrl()
 
   return (
     <AnimatePresence>
@@ -94,26 +98,33 @@ export function LightboxViewer({ isOpen, media, allMedia, onClose, onNavigate })
         {/* Media Content */}
         <div className="max-h-[90vh] max-w-[90vw]" onClick={(e) => e.stopPropagation()}>
           {isVideo ? (
-            <video src={videoUrl} controls autoPlay className="max-h-full max-w-full rounded-lg" />
+            <video
+              src={videoUrl}
+              controls
+              autoPlay
+              className="max-h-full max-w-full rounded-lg"
+              onError={(e) => {
+                console.error('Video load error:', e)
+                console.info('Trying to load video from:', videoUrl)
+              }}
+            />
+          ) : // 支持 Cloudinary 和直接 URL 两种模式
+          media.cloudinaryId ? (
+            <CldImage
+              src={media.cloudinaryId}
+              alt={media.title || 'Image'}
+              width={1200}
+              height={800}
+              quality="auto"
+              format="auto"
+              className="max-h-full max-w-full rounded-lg object-contain"
+            />
           ) : (
-            // 支持 Cloudinary 和直接 URL 两种模式
-            media.cloudinaryId ? (
-              <CldImage
-                src={media.cloudinaryId}
-                alt={media.title || 'Image'}
-                width={1200}
-                height={800}
-                quality="auto"
-                format="auto"
-                className="max-h-full max-w-full rounded-lg object-contain"
-              />
-            ) : (
-              <img
-                src={media.imageUrl}
-                alt={media.title || 'Image'}
-                className="max-h-full max-w-full rounded-lg object-contain"
-              />
-            )
+            <img
+              src={media.imageUrl}
+              alt={media.title || 'Image'}
+              className="max-h-full max-w-full rounded-lg object-contain"
+            />
           )}
         </div>
 
@@ -124,6 +135,7 @@ export function LightboxViewer({ isOpen, media, allMedia, onClose, onNavigate })
           {media.description && <p className="mb-3 text-sm text-gray-600">{media.description}</p>}
 
           <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
+            {isVideo && media.duration && <span>Duration: {Math.round(media.duration)}s</span>}
             {media.camera && <span>Camera: {media.camera}</span>}
             {media.location && <span>Location: {media.location}</span>}
             {media.timestamp && (

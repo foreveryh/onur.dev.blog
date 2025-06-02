@@ -8,15 +8,35 @@ export function MediaCard({ item, isHovered, onClick }) {
   const isVideo = item.mediaType === 'video'
 
   // 使用 API 返回的真实宽高比，或者从原始资源计算
-  const actualAspectRatio = item.originalResource?.aspect_ratio || 
-                           item.aspect_ratio || 
-                           (item.originalResource?.width && item.originalResource?.height 
-                             ? item.originalResource.width / item.originalResource.height 
-                             : 1.33)
+  const actualAspectRatio =
+    item.originalResource?.aspect_ratio ||
+    item.aspect_ratio ||
+    (item.originalResource?.width && item.originalResource?.height
+      ? item.originalResource.width / item.originalResource.height
+      : 1.33)
 
   // 为瀑布流优化的高度计算
   const baseWidth = 400
   const calculatedHeight = Math.round(baseWidth / actualAspectRatio)
+
+  // 为视频生成缩略图URL
+  const getThumbnailUrl = () => {
+    if (isVideo && item.cloudinaryId) {
+      try {
+        // 直接构建视频缩略图URL，确保使用video资源类型
+        const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'dirgr1bkc'
+        const transformations = `w_${baseWidth},h_${calculatedHeight},c_fill,q_auto,f_jpg,so_0s`
+        const thumbnailUrl = `https://res.cloudinary.com/${cloudName}/video/upload/${transformations}/${item.cloudinaryId}.jpg`
+        return thumbnailUrl
+      } catch (error) {
+        console.error('Error generating video thumbnail:', error)
+        return null
+      }
+    }
+    return null
+  }
+
+  const thumbnailUrl = getThumbnailUrl()
 
   return (
     <div
@@ -25,8 +45,36 @@ export function MediaCard({ item, isHovered, onClick }) {
     >
       {/* Main Image/Video */}
       <div className="relative">
-        {/* 支持 Cloudinary 和直接 URL 两种模式 */}
-        {item.cloudinaryId ? (
+        {/* 处理视频缩略图 */}
+        {isVideo ? (
+          <div className="relative" style={{ height: `${calculatedHeight}px` }}>
+            {thumbnailUrl ? (
+              <img
+                src={thumbnailUrl}
+                alt={`${item.sourceType} ${item.mediaType}`}
+                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                loading="lazy"
+                onError={(e) => {
+                  console.error('Video thumbnail failed to load:', thumbnailUrl)
+                  e.target.style.display = 'none'
+                  // 显示fallback
+                  const fallback = e.target.nextElementSibling
+                  if (fallback) fallback.style.display = 'flex'
+                }}
+              />
+            ) : null}
+            {/* Fallback for video */}
+            <div
+              className="absolute inset-0 flex items-center justify-center bg-gray-100"
+              style={{ display: thumbnailUrl ? 'none' : 'flex' }}
+            >
+              <div className="text-center text-gray-500">
+                <PlayIcon className="mx-auto mb-2 h-12 w-12" />
+                <span className="text-sm">Video</span>
+              </div>
+            </div>
+          </div>
+        ) : /* 处理图片 */ item.cloudinaryId ? (
           <CldImage
             src={item.cloudinaryId}
             alt={`${item.sourceType} ${item.mediaType}`}

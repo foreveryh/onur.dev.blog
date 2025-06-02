@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
 
 export function EasterEgg({ trigger = 'work hard' }) {
   const [isActive, setIsActive] = useState(false)
@@ -11,19 +11,19 @@ export function EasterEgg({ trigger = 'work hard' }) {
   useEffect(() => {
     const handleKeyPress = (event) => {
       const key = event.key.toLowerCase()
-      
-      setKeySequence(prev => {
+
+      setKeySequence((prev) => {
         const newSequence = (prev + key).slice(-trigger.length)
-        
+
         if (newSequence === trigger) {
           setIsActive(true)
           // Auto-hide after 5 seconds
           setTimeout(() => setIsActive(false), 5000)
         }
-        
+
         return newSequence
       })
-      
+
       // Clear sequence after 3 seconds of inactivity
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current)
@@ -45,7 +45,7 @@ export function EasterEgg({ trigger = 'work hard' }) {
   const MatrixRain = () => {
     const characters = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン'
     const columns = Math.floor(window.innerWidth / 20)
-    
+
     return (
       <div className="fixed inset-0 z-50 overflow-hidden bg-black">
         {Array.from({ length: columns }).map((_, i) => (
@@ -71,7 +71,7 @@ export function EasterEgg({ trigger = 'work hard' }) {
             ))}
           </div>
         ))}
-        
+
         {/* Central message */}
         <div className="absolute inset-0 flex items-center justify-center">
           <motion.div
@@ -146,4 +146,4 @@ export function EasterEgg({ trigger = 'work hard' }) {
       </AnimatePresence>
     </>
   )
-} 
+}

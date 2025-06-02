@@ -1,5 +1,5 @@
+export { EasterEgg } from './easter-egg'
+export { HardwareList } from './hardware-list'
 export { NowTag } from './now-tag'
 export { ProjectCard } from './project-card'
 export { Timeline } from './timeline'
-export { HardwareList } from './hardware-list'
-export { EasterEgg } from './easter-egg' 

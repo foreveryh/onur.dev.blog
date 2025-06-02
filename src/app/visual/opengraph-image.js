@@ -20,7 +20,8 @@ export default async function Image() {
           alignItems: 'center',
           justifyContent: 'center',
           backgroundColor: '#000',
-          backgroundImage: 'radial-gradient(circle at 25px 25px, #333 2%, transparent 0%), radial-gradient(circle at 75px 75px, #333 2%, transparent 0%)',
+          backgroundImage:
+            'radial-gradient(circle at 25px 25px, #333 2%, transparent 0%), radial-gradient(circle at 75px 75px, #333 2%, transparent 0%)',
           backgroundSize: '100px 100px'
         }}
       >
@@ -63,4 +64,4 @@ export default async function Image() {
       ...size
     }
   )
-} 
+}

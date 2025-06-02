@@ -20,10 +20,10 @@ export default async function OpengraphImage() {
     console.error('Error loading Stack SEO data:', error)
   }
 
-  return OpenGraphImage({ 
-    title, 
-    description, 
+  return OpenGraphImage({
+    title,
+    description,
     icon: <span style={{ fontSize: '3rem' }}>🛠️</span>,
     url: 'stack'
   })
-} 
+}

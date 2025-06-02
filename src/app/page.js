@@ -28,10 +28,12 @@ export default async function Home() {
           <PageTitle title="Home" className="lg:hidden" />
           <p>
             Hi, I am Peng.G (熊布朗)
-            <br/>
-            AI Product Manager & Software Architect👋 <br/>
-            Shipping AI-native products—RAG platforms, autonomous agents & LLM infra.<br/>
-            Born in China, shaped in Seoul, now building from Paris.<br/>
+            <br />
+            AI Product Manager & Software Architect👋 <br />
+            Shipping AI-native products—RAG platforms, autonomous agents & LLM infra.
+            <br />
+            Born in China, shaped in Seoul, now building from Paris.
+            <br />
             Exploring GenAI × productivity; writing about it every week—let’s chat!
           </p>
           <Button asChild variant="link" className="inline px-0">
