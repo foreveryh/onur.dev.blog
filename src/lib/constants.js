@@ -2,6 +2,7 @@ import {
   ArmchairIcon,
   BookmarkIcon,
   GithubIcon,
+  ImageIcon,
   LinkedinIcon,
   NavigationIcon,
   PencilLineIcon,
@@ -104,6 +105,11 @@ export const LINKS = [
     href: '/workspace',
     label: 'Workspace',
     icon: <ArmchairIcon size={16} />
+  },
+  {
+    href: '/visual',
+    label: 'Visual',
+    icon: <ImageIcon size={16} />
   },
   {
     href: '/bookmarks',
