@@ -37,7 +37,9 @@ You will need to create your own Contentful space and define the necessary conte
 
 Before running or deploying the project, you must configure the following environment variables in your `.env` file. Create a `.env` file in the root of the project if it doesn't exist.
 
-```
+# Site Configuration (Required for Open Graph images)
+NEXT_PUBLIC_SITE_URL=https://your-deployed-domain.com
+
 # Contentful CMS Configuration
 CONTENTFUL_SPACE_ID=your_contentful_space_id
 CONTENTFUL_ACCESS_TOKEN=your_contentful_access_token
@@ -62,9 +64,10 @@ NEXT_PUBLIC_TINYBIRD_TOKEN=your_tinybird_analytics_token (if using)
 AIRTABLE_PERSONAL_ACCESS_TOKEN=your_airtable_personal_access_token (if using Airtable integration)
 AIRTABLE_BASE_ID=your_airtable_base_id (if using Airtable integration)
 AIRTABLE_BOOKMARKS_TABLE_ID=your_airtable_bookmarks_table_id (if using Airtable integration)
-```
 
 Replace `your_...` placeholders with your actual credentials and IDs.
+
+**Important for Twitter/Social Media Sharing**: Make sure to set `NEXT_PUBLIC_SITE_URL` to your actual deployed domain (e.g., `https://yourdomain.vercel.app`) for Open Graph images to work correctly on social platforms.
 
 #### Cloudinary Setup for Visual Explorer
 

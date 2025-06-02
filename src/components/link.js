@@ -7,7 +7,7 @@ export const Link = ({ href = '#', ...rest }) => {
   if (isExternal) {
     return (
       <a
-        href={href + '?ref=onur.dev'}
+        href={href + '?ref=me.deeptoai.com'}
         target="_blank"
         rel="noopener noreferrer"
         className="link break-words after:content-['_↗']"

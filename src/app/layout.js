@@ -59,7 +59,7 @@ export default async function RootLayout({ children }) {
 }
 
 export const metadata = {
-  metadataBase: new URL('https://me.deeptoai.com'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://me.deeptoai.com'),
   robots: {
     index: true,
     follow: true
@@ -78,9 +78,17 @@ export const metadata = {
     description: sharedMetadata.description,
     alt: sharedMetadata.title,
     type: 'website',
-    url: 'https://me.deeptoai.com',
+    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://me.deeptoai.com',
     siteName: sharedMetadata.title,
-    locale: 'en_IE'
+    locale: 'en_IE',
+    images: [
+      {
+        url: '/opengraph-image',
+        width: sharedMetadata.ogImage.width,
+        height: sharedMetadata.ogImage.height,
+        alt: sharedMetadata.title
+      }
+    ]
   },
   alternates: {
     canonical: '/'
@@ -88,7 +96,8 @@ export const metadata = {
   twitter: {
     card: 'summary_large_image',
     site: `@${PROFILES.twitter.username}`,
-    creator: `@${PROFILES.twitter.username}`
+    creator: `@${PROFILES.twitter.username}`,
+    images: ['/opengraph-image']
   },
   other: {
     pinterest: 'nopin'

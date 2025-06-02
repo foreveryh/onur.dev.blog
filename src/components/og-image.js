@@ -33,7 +33,7 @@ export const OpenGraphImage = ({ title, description, icon, url }) => {
           borderRadius: 9999
         }}
       >
-        {`onur.dev${url ? `/${url}` : ''}`}
+        {`deeptoai.com${url ? `/${url}` : ''}`}
       </div>
       <span
         style={{
