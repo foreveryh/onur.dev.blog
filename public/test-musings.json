@@ -1,0 +1,52 @@
+[
+  {
+    "id": 1,
+    "number": 1,
+    "title": "2024年1月15日",
+    "body": "今天学习了 Next.js 的 ISR 功能，真的很强大！可以在不重新构建整个应用的情况下更新静态页面。\n\n特别是对于博客这种内容更新频率不高的网站来说，ISR 是完美的解决方案。\n\n```javascript\nexport const revalidate = 86400 // 24小时\n```\n\n这样设置后，页面会在24小时后自动重新生成。",
+    "url": "https://github.com/foreveryh/git-thoughts/issues/1",
+    "created_at": "2024-01-15T10:30:00Z",
+    "updated_at": "2024-01-15T10:30:00Z",
+    "tags": ["Daily", "Tech"]
+  },
+  {
+    "id": 2,
+    "number": 2,
+    "title": "2024年1月16日",
+    "body": "今天在咖啡店工作，突然想到一个产品想法：\n\n**智能笔记助手**\n- 自动整理散乱的想法\n- 基于上下文推荐相关内容\n- 支持多种输入方式（文字、语音、图片）\n\n![咖啡店的照片](https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=500)\n\n需要进一步调研市场需求。",
+    "url": "https://github.com/foreveryh/git-thoughts/issues/2",
+    "created_at": "2024-01-16T14:20:00Z",
+    "updated_at": "2024-01-16T14:20:00Z",
+    "tags": ["Idea", "Product"]
+  },
+  {
+    "id": 3,
+    "number": 3,
+    "title": "2024年1月17日",
+    "body": "工作中遇到一个有趣的技术挑战：如何优雅地处理大量异步请求？\n\n尝试了几种方案：\n1. Promise.all() - 适合并发但数量有限的情况\n2. 分批处理 - 控制并发数量\n3. 队列机制 - 更精细的控制\n\n最终选择了分批处理的方案，既保证了性能又避免了服务器压力。\n\n> 有时候最简单的解决方案就是最好的。",
+    "url": "https://github.com/foreveryh/git-thoughts/issues/3",
+    "created_at": "2024-01-17T09:15:00Z",
+    "updated_at": "2024-01-17T09:15:00Z",
+    "tags": ["Work", "Tech"]
+  },
+  {
+    "id": 4,
+    "number": 4,
+    "title": "2024年1月18日",
+    "body": "周末和朋友们聚餐，聊到了关于工作与生活平衡的话题。\n\n每个人都有不同的看法：\n- 有人认为应该严格分离工作和生活\n- 有人觉得做自己热爱的事情就不存在平衡问题\n- 也有人说平衡是动态的，不同阶段有不同的重点\n\n我觉得关键是要诚实面对自己的需求和价值观。没有标准答案，只有适合自己的答案。",
+    "url": "https://github.com/foreveryh/git-thoughts/issues/4",
+    "created_at": "2024-01-18T19:45:00Z",
+    "updated_at": "2024-01-18T19:45:00Z",
+    "tags": ["Life", "Reflection"]
+  },
+  {
+    "id": 5,
+    "number": 5,
+    "title": "2024年1月19日",
+    "body": "今天读了一篇关于 AI 伦理的文章，很有启发。\n\n文章提到了几个关键问题：\n- AI 决策的透明度\n- 算法偏见的识别和纠正\n- 人工智能对就业的影响\n- 数据隐私和安全\n\n作为 AI 产品经理，这些都是我需要深入思考的问题。技术的发展不应该脱离人文关怀。\n\n推荐阅读：[AI Ethics: A Guide for Developers](https://example.com)",
+    "url": "https://github.com/foreveryh/git-thoughts/issues/5",
+    "created_at": "2024-01-19T16:30:00Z",
+    "updated_at": "2024-01-19T16:30:00Z",
+    "tags": ["AI", "Ethics", "Work"]
+  }
+]

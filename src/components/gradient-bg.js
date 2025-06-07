@@ -15,3 +15,7 @@ export const GradientBg3 = () => (
 export const GradientBg4 = () => (
   <div className="absolute top-0 z-0 h-screen w-screen bg-white bg-[radial-gradient(100%_50%_at_50%_0%,rgba(120,119,198,0.3)_0,rgba(0,163,255,0)_50%,rgba(0,163,255,0)_100%)]" />
 )
+
+export const GradientBg5 = () => (
+  <div className="absolute top-0 z-0 h-screen w-screen bg-white bg-[radial-gradient(100%_50%_at_50%_0%,rgba(255,165,0,0.1)_0,rgba(255,192,203,0.08)_30%,rgba(255,255,255,0)_70%)]" />
+)

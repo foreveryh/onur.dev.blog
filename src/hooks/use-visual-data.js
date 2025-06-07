@@ -116,20 +116,20 @@ function getMediaTypeDescription(mediaType, sourceType) {
 // 辅助函数：生成标签
 function generateTags(sourceType, mediaType) {
   const tags = []
-  
+
   if (sourceType === 'photography') {
     tags.push('Photography')
   } else {
     tags.push('AI Generated')
   }
-  
+
   if (mediaType === 'image') {
     tags.push('Image')
   } else {
     tags.push('Video')
   }
-  
+
   tags.push('Personal Collection', 'Cloudinary')
-  
+
   return tags
 }

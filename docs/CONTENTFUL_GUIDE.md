@@ -1,6 +1,7 @@
 # Contentful Usage Guide
 
-This comprehensive guide explains how to set up and use Contentful CMS for this blog project, including content modeling, writing workflow, webhook automation, and caching mechanisms.
+This comprehensive guide explains how to set up and use Contentful CMS for this blog project, including content
+modeling, writing workflow, webhook automation, and caching mechanisms.
 
 ## Table of Contents
 
@@ -42,27 +43,28 @@ NEXT_REVALIDATE_SECRET=your_revalidation_secret
 
 **Content Type ID**: `seo`
 
-| Field Name | Field ID | Type | Validation |
-|------------|----------|------|------------|
-| Title | `title` | Short text | Required, max 60 chars |
-| Description | `description` | Long text | Required, max 160 chars |
-| OG Image Title | `ogImageTitle` | Short text | Optional, max 70 chars |
-| OG Image Subtitle | `ogImageSubtitle` | Short text | Optional, max 100 chars |
-| Keywords | `keywords` | Short text, List | Optional |
+| Field Name        | Field ID          | Type             | Validation              |
+| ----------------- | ----------------- | ---------------- | ----------------------- |
+| Title             | `title`           | Short text       | Required, max 60 chars  |
+| Description       | `description`     | Long text        | Required, max 160 chars |
+| OG Image Title    | `ogImageTitle`    | Short text       | Optional, max 70 chars  |
+| OG Image Subtitle | `ogImageSubtitle` | Short text       | Optional, max 100 chars |
+| Keywords          | `keywords`        | Short text, List | Optional                |
 
 ### 2. Post Content Model
 
 **Content Type ID**: `post`
 
-| Field Name | Field ID | Type | Validation | Description |
-|------------|----------|------|------------|-------------|
-| Title | `title` | Short text | Required | Blog post title |
-| Slug | `slug` | Short text | Required, Unique | URL slug (e.g., "my-blog-post") |
-| Date | `date` | Date & time | Required | Publication date |
-| Content | `content` | Rich text | Required | Main blog content |
-| SEO | `seo` | Reference | Optional | Link to SEO content model |
+| Field Name | Field ID  | Type        | Validation       | Description                     |
+| ---------- | --------- | ----------- | ---------------- | ------------------------------- |
+| Title      | `title`   | Short text  | Required         | Blog post title                 |
+| Slug       | `slug`    | Short text  | Required, Unique | URL slug (e.g., "my-blog-post") |
+| Date       | `date`    | Date & time | Required         | Publication date                |
+| Content    | `content` | Rich text   | Required         | Main blog content               |
+| SEO        | `seo`     | Reference   | Optional         | Link to SEO content model       |
 
 **Rich Text Configuration**:
+
 - Enable: Headings (H2-H6), Bold, Italic, Unordered List, Ordered List
 - Enable: Hyperlinks, Entry Links, Asset Links
 - Enable: Embedded Entries (for code blocks, embeds)
@@ -71,23 +73,23 @@ NEXT_REVALIDATE_SECRET=your_revalidation_secret
 
 **Content Type ID**: `page`
 
-| Field Name | Field ID | Type | Validation | Description |
-|------------|----------|------|------------|-------------|
-| Title | `title` | Short text | Required | Page title |
-| Slug | `slug` | Short text | Required, Unique | URL slug |
-| Content | `content` | Rich text | Required | Page content |
-| SEO | `seo` | Reference | Optional | Link to SEO content model |
+| Field Name | Field ID  | Type       | Validation       | Description               |
+| ---------- | --------- | ---------- | ---------------- | ------------------------- |
+| Title      | `title`   | Short text | Required         | Page title                |
+| Slug       | `slug`    | Short text | Required, Unique | URL slug                  |
+| Content    | `content` | Rich text  | Required         | Page content              |
+| SEO        | `seo`     | Reference  | Optional         | Link to SEO content model |
 
 ### 4. Logbook Content Model
 
 **Content Type ID**: `logbook`
 
-| Field Name | Field ID | Type | Validation | Description |
-|------------|----------|------|------------|-------------|
-| Title | `title` | Short text | Required | Entry title |
-| Date | `date` | Date & time | Required | Entry date |
-| Content | `content` | Rich text | Required | Journey content |
-| Location | `location` | Short text | Optional | Location info |
+| Field Name | Field ID   | Type        | Validation | Description     |
+| ---------- | ---------- | ----------- | ---------- | --------------- |
+| Title      | `title`    | Short text  | Required   | Entry title     |
+| Date       | `date`     | Date & time | Required   | Entry date      |
+| Content    | `content`  | Rich text   | Required   | Journey content |
+| Location   | `location` | Short text  | Optional   | Location info   |
 
 ### 5. Embedded Content Models
 
@@ -95,20 +97,20 @@ NEXT_REVALIDATE_SECRET=your_revalidation_secret
 
 **Content Type ID**: `codeBlock`
 
-| Field Name | Field ID | Type | Description |
-|------------|----------|------|-------------|
-| Language | `language` | Short text | Programming language |
-| Code | `code` | Long text | Code content |
-| Filename | `filename` | Short text | Optional filename |
+| Field Name | Field ID   | Type       | Description          |
+| ---------- | ---------- | ---------- | -------------------- |
+| Language   | `language` | Short text | Programming language |
+| Code       | `code`     | Long text  | Code content         |
+| Filename   | `filename` | Short text | Optional filename    |
 
 #### Tweet Embed Content Model
 
 **Content Type ID**: `tweet`
 
-| Field Name | Field ID | Type | Description |
-|------------|----------|------|-------------|
-| Tweet URL | `url` | Short text | Full Twitter URL |
-| Tweet ID | `id` | Short text | Twitter status ID |
+| Field Name | Field ID | Type       | Description       |
+| ---------- | -------- | ---------- | ----------------- |
+| Tweet URL  | `url`    | Short text | Full Twitter URL  |
+| Tweet ID   | `id`     | Short text | Twitter status ID |
 
 ## Content Creation Workflow
 
@@ -117,12 +119,14 @@ NEXT_REVALIDATE_SECRET=your_revalidation_secret
 1. **Navigate to Content** in Contentful
 2. **Click "Add entry"** and select "Post"
 3. **Fill required fields**:
+
    - **Title**: Your blog post title
    - **Slug**: URL-friendly version (e.g., "my-first-blog-post")
    - **Date**: Publication date
    - **Content**: Rich text content
 
 4. **Add SEO** (recommended):
+
    - Click "Add entry" in SEO field
    - Fill in title, description, and OG image texts
    - Save the SEO entry first
@@ -138,6 +142,7 @@ NEXT_REVALIDATE_SECRET=your_revalidation_secret
 #### Embedding Code Blocks
 
 1. Create a CodeBlock entry:
+
    - **Language**: `javascript`, `python`, `bash`, etc.
    - **Code**: Your code snippet
    - **Filename**: Optional file reference
@@ -168,6 +173,7 @@ NEXT_REVALIDATE_SECRET=your_revalidation_secret
 1. **Go to Settings > Webhooks** in Contentful
 2. **Click "Add webhook"**
 3. **Configure webhook**:
+
    - **Name**: "Auto Revalidate Website"
    - **URL**: `https://your-domain.com/api/revalidate`
    - **Method**: POST
@@ -178,6 +184,7 @@ NEXT_REVALIDATE_SECRET=your_revalidation_secret
      ```
 
 4. **Set Triggers**:
+
    - ✅ Publish
    - ✅ Unpublish
    - ✅ Entry (Content Events)
@@ -208,14 +215,16 @@ When you publish/unpublish content:
 This project implements a sophisticated caching strategy:
 
 #### Layer 1: Contentful API Cache
+
 ```javascript
 // In lib/contentful.js
 const response = await fetch(url, {
-  cache: 'force-cache'  // Aggressive caching
+  cache: 'force-cache' // Aggressive caching
 })
 ```
 
 #### Layer 2: React Cache
+
 ```javascript
 // Function-level caching
 export const getAllPosts = cache(async () => {
@@ -224,6 +233,7 @@ export const getAllPosts = cache(async () => {
 ```
 
 #### Layer 3: Next.js Static Generation
+
 ```javascript
 // Page-level static generation
 export async function generateStaticParams() {
@@ -232,12 +242,14 @@ export async function generateStaticParams() {
 ```
 
 #### Layer 4: Vercel Edge Cache
+
 - Automatic edge caching for static pages
 - CDN distribution globally
 
 ### 2. Cache Invalidation Strategy
 
 #### Manual Revalidation
+
 ```bash
 # Revalidate specific post
 curl -X POST 'https://your-site.com/api/revalidate' \
@@ -247,17 +259,18 @@ curl -X POST 'https://your-site.com/api/revalidate' \
 ```
 
 #### Automatic via Webhooks
+
 - **Publish content** → Webhook triggers → Automatic revalidation
 - **No manual intervention required**
 
 ### 3. Cache Behavior by Content Type
 
-| Content Type | Cache Duration | Revalidation Trigger |
-|--------------|----------------|---------------------|
-| Posts | Build time + manual | Publish/Unpublish |
-| Pages | Build time + manual | Publish/Unpublish |
-| Journey | Build time + manual | Any logbook change |
-| SEO data | Build time + manual | Related content change |
+| Content Type | Cache Duration      | Revalidation Trigger   |
+| ------------ | ------------------- | ---------------------- |
+| Posts        | Build time + manual | Publish/Unpublish      |
+| Pages        | Build time + manual | Publish/Unpublish      |
+| Journey      | Build time + manual | Any logbook change     |
+| SEO data     | Build time + manual | Related content change |
 
 ## SEO Optimization
 
@@ -279,6 +292,7 @@ Every post and page should have an SEO entry:
 ### 2. Automatic OG Image Generation
 
 The project automatically generates Open Graph images using:
+
 - SEO title and subtitle
 - Consistent branding
 - Optimized dimensions (1200x630)
@@ -286,16 +300,19 @@ The project automatically generates Open Graph images using:
 ### 3. SEO Best Practices
 
 #### Title Optimization
+
 - Keep under 60 characters
 - Include primary keyword
 - Make it compelling for clicks
 
 #### Description Optimization
+
 - Keep under 160 characters
 - Include call-to-action
 - Summarize main value
 
 #### Slug Best Practices
+
 - Use hyphens, not underscores
 - Keep concise but descriptive
 - Include primary keyword
@@ -306,22 +323,25 @@ The project automatically generates Open Graph images using:
 ### 1. Common Issues
 
 #### "Entry not found" Errors
-**Problem**: Blog post returns 404
-**Solution**: 
+
+**Problem**: Blog post returns 404 **Solution**:
+
 - Verify slug matches exactly
 - Check if post is published
 - Confirm content model fields are correct
 
 #### Webhook Not Triggering
-**Problem**: Content updates don't reflect on site
-**Solution**:
+
+**Problem**: Content updates don't reflect on site **Solution**:
+
 - Check webhook activity log in Contentful
 - Verify secret header is correct
 - Test webhook manually with curl
 
 #### Images Not Loading
-**Problem**: Images from Contentful don't display
-**Solution**:
+
+**Problem**: Images from Contentful don't display **Solution**:
+
 - Verify asset is published
 - Check image URL in browser
 - Ensure proper alt text is set
@@ -329,6 +349,7 @@ The project automatically generates Open Graph images using:
 ### 2. Development Debugging
 
 #### Enable Verbose Logging
+
 ```javascript
 // In lib/contentful.js
 console.log('Fetching posts:', { spaceId, limit, skip })
@@ -336,6 +357,7 @@ console.log('API response:', response.status)
 ```
 
 #### Test Content API
+
 ```bash
 # Test Contentful API directly
 curl "https://cdn.contentful.com/spaces/YOUR_SPACE_ID/entries?content_type=post" \
@@ -343,6 +365,7 @@ curl "https://cdn.contentful.com/spaces/YOUR_SPACE_ID/entries?content_type=post"
 ```
 
 #### Verify Environment Variables
+
 ```javascript
 // Add to your API route
 console.log({
@@ -354,11 +377,13 @@ console.log({
 ### 3. Performance Optimization
 
 #### Content Delivery
+
 - Use `cdn.contentful.com` for production
 - Use `preview.contentful.com` for draft content
 - Implement proper error boundaries
 
 #### Image Optimization
+
 ```javascript
 // In rich text renderer
 const optimizeImageUrl = (url) => {
@@ -367,6 +392,7 @@ const optimizeImageUrl = (url) => {
 ```
 
 #### Bundle Size
+
 - Only import needed rich text node types
 - Use dynamic imports for heavy components
 - Monitor bundle analyzer reports
@@ -416,4 +442,5 @@ Link related posts:
 
 ---
 
-This guide provides a complete overview of using Contentful with this blog project. For additional support, refer to the [Contentful documentation](https://www.contentful.com/developers/docs/) or check the project's issue tracker. 
+This guide provides a complete overview of using Contentful with this blog project. For additional support, refer to the
+[Contentful documentation](https://www.contentful.com/developers/docs/) or check the project's issue tracker.

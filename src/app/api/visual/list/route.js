@@ -40,11 +40,11 @@ export async function GET() {
       // 从元数据或context中获取分类信息
       const categoryData = r.metadata?.category || r.context?.category || ['photograph']
       const category = Array.isArray(categoryData) ? categoryData[0] : categoryData
-      
+
       // 根据用户的分类系统映射到前端分类
       let sourceType = 'photography'
       let mediaType = 'image'
-      
+
       if (category === 'ai_photo') {
         sourceType = 'aigc'
         mediaType = 'image'
@@ -113,11 +113,11 @@ export async function GET() {
       // 从元数据或context中获取分类信息
       const categoryData = r.metadata?.category || r.context?.category || ['video']
       const category = Array.isArray(categoryData) ? categoryData[0] : categoryData
-      
+
       // 根据用户的分类系统映射到前端分类
       let sourceType = 'photography'
       let mediaType = 'video'
-      
+
       if (category === 'ai_video') {
         sourceType = 'aigc'
         mediaType = 'video'
