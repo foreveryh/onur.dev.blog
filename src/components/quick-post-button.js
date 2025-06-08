@@ -1,15 +1,50 @@
 'use client'
 
-import { useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { Plus, Send, X } from 'lucide-react'
 import { toast } from 'sonner'
 
+// 创建全局对话框状态 Context
+const DialogStateContext = createContext()
+
+export function DialogStateProvider({ children }) {
+  const [isQuickPostOpen, setIsQuickPostOpen] = useState(false)
+  
+  return (
+    <DialogStateContext.Provider value={{ isQuickPostOpen, setIsQuickPostOpen }}>
+      {children}
+    </DialogStateContext.Provider>
+  )
+}
+
+export function useDialogState() {
+  const context = useContext(DialogStateContext)
+  if (!context) {
+    return { isQuickPostOpen: false, setIsQuickPostOpen: () => {} }
+  }
+  return context
+}
+
 export function QuickPostButton() {
-  const [isOpen, setIsOpen] = useState(false)
+  const { isQuickPostOpen: isOpen, setIsQuickPostOpen: setIsOpen } = useDialogState()
   const [content, setContent] = useState('')
   const [visibility, setVisibility] = useState('Public') // 单选：Public/Private
   const [categoryTags, setCategoryTags] = useState(['Daily']) // 复选：分类标签
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // 监听对话框状态，在打开时禁用数字快捷键
+  useEffect(() => {
+    if (isOpen) {
+      // 禁用数字快捷键
+      const disableKeyPress = (e) => {
+        if (e.key >= '1' && e.key <= '8') {
+          e.preventDefault()
+        }
+      }
+      window.addEventListener('keydown', disableKeyPress)
+      return () => window.removeEventListener('keydown', disableKeyPress)
+    }
+  }, [isOpen])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -35,8 +70,42 @@ export function QuickPostButton() {
         setVisibility('Public')
         setCategoryTags(['Daily'])
         setIsOpen(false)
-        // 触发页面重新验证
-        window.location.reload()
+        
+        // 先触发 git-thoughts 仓库的 GitHub Action 来更新 issues.json
+        try {
+          const githubToken = process.env.GITHUB_PAT || 'dummy' // 在客户端我们不能直接访问，需要通过 API
+          
+          toast.info('Updating content...', { duration: 2000 })
+          
+          // 等待几秒让 GitHub Action 完成
+          setTimeout(async () => {
+            try {
+              const revalidateResponse = await fetch('/api/revalidate?path=/musings', {
+                method: 'POST'
+              })
+              
+              if (revalidateResponse.ok) {
+                console.info('Page cache revalidated successfully')
+                toast.success('Content updated! Refreshing page...')
+                // 延迟 1 秒后刷新页面
+                setTimeout(() => {
+                  window.location.reload()
+                }, 1000)
+              } else {
+                console.error('Failed to revalidate cache, falling back to normal reload')
+                window.location.reload()
+              }
+            } catch (revalidateError) {
+              console.error('Revalidate request failed:', revalidateError)
+              window.location.reload()
+            }
+          }, 10000) // 等待 10 秒让 GitHub Action 完成
+          
+        } catch (error) {
+          console.error('GitHub workflow trigger failed:', error)
+          // 如果触发失败，直接刷新页面
+          window.location.reload()
+        }
       } else {
         console.log('Response status:', response.status) // 调试信息
         
@@ -47,8 +116,6 @@ export function QuickPostButton() {
             description: 'Tip: Add the verification code to your content',
             duration: 5000
           })
-        } else if (response.status === 400) {
-          toast.error('Content cannot be empty. Please enter your thoughts to share.')
         } else if (response.status >= 500) {
           toast.error('Server error, please try again later')
         } else {

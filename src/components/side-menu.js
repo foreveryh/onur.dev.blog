@@ -6,6 +6,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useMemo } from 'react'
 
 import { LoadingSpinner } from '@/components/loading-spinner'
+import { useDialogState } from '@/components/quick-post-button'
 import { ScrollArea } from '@/components/scroll-area'
 import { Button } from '@/components/ui/button'
 
@@ -34,7 +35,9 @@ const keyCodePathnameMapping = {
 export const SideMenu = ({ children, title, bookmarks = [], isInner }) => {
   const router = useRouter()
   const pathname = usePathname()
-  useKeyPress(onKeyPress, Object.keys(keyCodePathnameMapping))
+  const { isQuickPostOpen } = useDialogState()
+  
+  useKeyPress(onKeyPress, Object.keys(keyCodePathnameMapping), isQuickPostOpen)
 
   function onKeyPress(event) {
     const key = event.code

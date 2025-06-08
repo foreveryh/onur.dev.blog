@@ -9,6 +9,7 @@ import Script from 'next/script'
 
 import { sharedMetadata } from '@/app/shared-metadata'
 import { MenuContent } from '@/components/menu-content'
+import { DialogStateProvider } from '@/components/quick-post-button'
 import { SideMenu } from '@/components/side-menu'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { Toaster } from '@/components/ui/sonner'
@@ -28,26 +29,34 @@ export default async function RootLayout({ children }) {
       className={`${GeistSans.variable} ${GeistMono.variable}`}
       suppressHydrationWarning
     >
+      <head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body suppressHydrationWarning>
-        {/* eslint-disable-next-line react/no-unknown-property */}
-        <main vaul-drawer-wrapper="" className="min-h-screen bg-white">
-          {isEnabled && (
-            <div className="absolute inset-x-0 bottom-0 z-50 flex h-12 w-full items-center justify-center bg-green-500 text-center text-sm font-medium text-white">
-              <div className="flex items-center gap-2">
-                <EyeIcon size={16} />
-                <span>Draft mode is enabled</span>
+        <DialogStateProvider>
+          {/* eslint-disable-next-line react/no-unknown-property */}
+          <main vaul-drawer-wrapper="" className="min-h-screen bg-white">
+            {isEnabled && (
+              <div className="absolute inset-x-0 bottom-0 z-50 flex h-12 w-full items-center justify-center bg-green-500 text-center text-sm font-medium text-white">
+                <div className="flex items-center gap-2">
+                  <EyeIcon size={16} />
+                  <span>Draft mode is enabled</span>
+                </div>
               </div>
+            )}
+            <div className="lg:flex">
+              <SideMenu className="relative hidden lg:flex">
+                <MenuContent />
+              </SideMenu>
+              <div className="flex flex-1">{children}</div>
             </div>
-          )}
-          <div className="lg:flex">
-            <SideMenu className="relative hidden lg:flex">
-              <MenuContent />
-            </SideMenu>
-            <div className="flex flex-1">{children}</div>
-          </div>
-        </main>
-        <Toaster />
-        <TailwindIndicator />
+          </main>
+          <Toaster />
+          <TailwindIndicator />
+        </DialogStateProvider>
         <SpeedInsights />
         <Script
           src="https://unpkg.com/@tinybirdco/flock.js"

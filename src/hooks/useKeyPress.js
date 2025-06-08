@@ -1,8 +1,9 @@
 import { useEffect } from 'react'
 
-export function useKeyPress(callback, keyCodes) {
+export function useKeyPress(callback, keyCodes, disabled = false) {
   useEffect(() => {
     const handler = (event) => {
+      if (disabled) return
       if (keyCodes.includes(event.code) && !event.shiftKey && !event.ctrlKey && !event.metaKey && !event.altKey) {
         callback(event)
       }
@@ -12,5 +13,5 @@ export function useKeyPress(callback, keyCodes) {
     return () => {
       window.removeEventListener('keydown', handler)
     }
-  }, [callback, keyCodes])
+  }, [callback, keyCodes, disabled])
 }

@@ -109,4 +109,4 @@ export const metadata = {
 }
 
 // 确保页面使用 ISR
-export const revalidate = 86400 // 24小时
+export const revalidate = 3600 // 1小时 (3600秒)

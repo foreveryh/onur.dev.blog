@@ -64,6 +64,13 @@
     @apply font-sans text-base text-gray-900;
   }
 
+  /* 为中文文本添加思源宋体 */
+  :lang(zh),
+  [lang="zh"],
+  .chinese-text {
+    font-family: "Noto Serif SC", "Source Han Serif SC", "思源宋体", serif;
+  }
+
   #__next {
     @apply min-h-dvh;
   }
