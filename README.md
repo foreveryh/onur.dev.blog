@@ -1,5 +1,7 @@
 # My Fork of onur.dev
 
+**English** | [**简体中文**](./README_ZH.md)
+
 This project is a fork of [onur.dev](https://github.com/onurschu/onur.dev), adapted for personal use and deployment on
 Vercel.
 
@@ -174,6 +176,31 @@ GITHUB_PAT=ghp_your_github_personal_access_token
 - GitHub repository updates at 2 AM France time daily
 - Website data updates at 3 AM France time daily via ISR
 - Manual revalidation available through posting new musings
+
+## Musings ISR Cache Issue Resolution
+
+If you've published new GitHub Issues but the blog doesn't show the latest content, this is due to the Next.js ISR caching mechanism.
+
+### Solutions:
+
+1. **Use the revalidation script** (recommended):
+   ```bash
+   # Revalidate production environment
+   ./scripts/revalidate-musings.sh
+   
+   # Revalidate local development environment
+   ./scripts/revalidate-musings.sh "http://localhost:3000"
+   ```
+
+2. **Manual API call**:
+   ```bash
+   # POST request to revalidation endpoint
+   curl -X POST "https://me.deeptoai.com/api/revalidate?path=/musings"
+   ```
+
+3. **Wait for automatic update**:
+   - ISR cache will automatically expire after 24 hours
+   - The first visitor will trigger page regeneration
 
 ## Raindrop.io Setup (Bookmarks Feature)
 
