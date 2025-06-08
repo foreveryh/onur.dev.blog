@@ -382,16 +382,46 @@ const processedBody = content.replace(/\n/g, '  \n').trim()
 - Preserves formatting from GitHub Issues
 - Handles code blocks, links, emphasis
 
-## Troubleshooting
+## 故障排除与优化 {#troubleshooting}
 
-### Common Issues
+### 常见问题
 
-**1. Issues not appearing:**
-- Check GitHub Actions workflow status
-- Verify `issues.json` file exists and is up-to-date
-- Confirm ISR cache expiration (24h default)
+#### 1. GitHub Issues 更新但博客不显示新内容
 
-**2. Publishing failures:**
+**现象**：你在 GitHub Issues 中发布了新的碎碎念，但博客页面没有显示最新内容。
+
+**原因**：Next.js ISR (Incremental Static Regeneration) 缓存机制。碎碎念页面设置了 24 小时的重新验证时间。
+
+**解决方案**：
+
+1. **使用重新验证脚本**（推荐）：
+   ```bash
+   # 重新验证生产环境
+   ./scripts/revalidate-musings.sh
+   
+   # 重新验证本地开发环境
+   ./scripts/revalidate-musings.sh "http://localhost:3000"
+   
+   # 使用密钥重新验证（如果配置了 REVALIDATE_SECRET）
+   ./scripts/revalidate-musings.sh "https://me.deeptoai.com" "your-secret"
+   ```
+
+2. **手动API调用**：
+   ```bash
+   # POST 请求到重新验证端点
+   curl -X POST "https://me.deeptoai.com/api/revalidate?path=/musings"
+   
+   # 或者在浏览器中访问
+   # https://me.deeptoai.com/api/revalidate （查看使用说明）
+   ```
+
+3. **等待自动更新**：
+   - ISR 缓存会在 24 小时后自动过期
+   - 第一个访问者会触发页面重新生成
+
+#### 2. 发布失败或权限错误
+
+**检查 GitHub 权限**：
 - Verify `GITHUB_PAT` has correct permissions
 - Check `MUSING_CODE` environment variable
 - Ensure verification code is included in content
