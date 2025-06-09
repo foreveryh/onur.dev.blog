@@ -13,7 +13,18 @@ async function fetchData() {
 
   const mappedLogbook = []
   allLogbook.map((log) => {
-    const year = new Date(log.date).getFullYear()
+    // 验证日期有效性，避免出现1970年
+    if (!log.date) {
+      console.info('⚠️ Logbook entry missing date:', log.title)
+      return // 跳过没有日期的条目
+    }
+
+    const dateObj = new Date(log.date)
+    if (isNaN(dateObj.getTime())) {
+      console.info('⚠️ Invalid date in logbook entry:', log.date, log.title)
+      return // 跳过无效日期的条目
+    }
+    const year = dateObj.getFullYear()
     const existingYear = mappedLogbook.find((item) => item?.year === year)
     if (!existingYear) mappedLogbook.push({ year, logs: [log] })
     else existingYear.logs.push(log)

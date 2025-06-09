@@ -4,19 +4,13 @@ import { memo } from 'react'
 const MarkdownRenderer = dynamic(() => import('@/components/markdown-renderer').then((mod) => mod.MarkdownRenderer))
 
 export const JourneyCard = memo(({ title, description, image, index }) => {
+  // Convert backslash line breaks to markdown line breaks
+  const processedDescription = description?.replace(/\\\s*/g, '  \n')
+
   return (
     <div className="word-break-word flex flex-col">
       <span className="mb-px font-semibold tracking-tight">{title}</span>
-      {description && (
-        <MarkdownRenderer
-          className="text-sm"
-          options={{
-            forceInline: true
-          }}
-        >
-          {description}
-        </MarkdownRenderer>
-      )}
+      {processedDescription && <MarkdownRenderer className="text-sm">{processedDescription}</MarkdownRenderer>}
       {image?.url && (
         <div className="mt-2.5 overflow-hidden rounded-xl bg-white">
           <img
