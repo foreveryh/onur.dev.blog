@@ -4,6 +4,13 @@
 
 这个项目是 [onur.dev](https://github.com/onurschu/onur.dev) 的分支，已适配个人使用并部署在 Vercel 上。
 
+## 🚀 最新更新
+
+### 2025年6月
+- ✅ **添加 Vercel Analytics 集成**：内置网站分析，零配置即用
+- 🔧 **修复环境变量配置**：解决碎碎念生产部署问题
+- 📊 **改进数据同步**：增强 ISR 缓存管理
+
 ## 📖 文档
 
 ### 🚨 [**Contentful 完整使用指南**](./docs/CONTENTFUL_GUIDE.md) 🚨
@@ -79,12 +86,20 @@ MUSING_CODE=your_secret_validation_code
 GITHUB_PAT=ghp_your_github_personal_access_token
 
 # 可选集成
-NEXT_PUBLIC_RAINDROP_ACCESS_TOKEN=your_raindrop_io_access_token # 如果使用书签功能
+
+# 分析与监控
+NEXT_PUBLIC_TINYBIRD_TOKEN=your_tinybird_analytics_token # 可选：额外分析功能
+
+# 书签集成
+NEXT_PUBLIC_RAINDROP_ACCESS_TOKEN=your_raindrop_io_access_token # Raindrop.io 书签功能
+
+# 重新验证与缓存管理
 NEXT_REVALIDATE_SECRET=your_nextjs_revalidation_secret
-NEXT_PUBLIC_TINYBIRD_TOKEN=your_tinybird_analytics_token # 如果使用
-AIRTABLE_PERSONAL_ACCESS_TOKEN=your_airtable_personal_access_token # 如果使用 Airtable 集成
-AIRTABLE_BASE_ID=your_airtable_base_id # 如果使用 Airtable 集成
-AIRTABLE_BOOKMARKS_TABLE_ID=your_airtable_bookmarks_table_id # 如果使用 Airtable 集成
+
+# Airtable 集成（如果使用 Airtable 数据存储）
+AIRTABLE_PERSONAL_ACCESS_TOKEN=your_airtable_personal_access_token
+AIRTABLE_BASE_ID=your_airtable_base_id
+AIRTABLE_BOOKMARKS_TABLE_ID=your_airtable_bookmarks_table_id
 ```
 
 请将 `your_...` 占位符替换为你的实际凭据和 ID。
@@ -216,4 +231,12 @@ GITHUB_PAT=ghp_your_github_personal_access_token
    - 在左侧边栏中，找到并点击 "Integrations"
    - 点击 "For developers"
 
-此中文版本包含了与英文版本相同的所有信息，但使用中文表达，特别注意了碎碎念系统的详细说明和新增的 ISR 缓存问题解决方案。 
+## 分析与监控
+
+### Vercel Analytics
+
+内置网站分析，零配置即用。部署后在 Vercel Dashboard → Analytics 标签查看数据统计。
+
+## 原始 README
+
+有关原始项目的更多信息，请参考原始的 [onur.dev 仓库](https://github.com/onurschu/onur.dev)。 

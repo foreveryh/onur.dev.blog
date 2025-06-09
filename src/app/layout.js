@@ -1,5 +1,6 @@
 import '@/globals.css'
 
+import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { GeistMono } from 'geist/font/mono'
 import { GeistSans } from 'geist/font/sans'
@@ -57,6 +58,7 @@ export default async function RootLayout({ children }) {
           <Toaster />
           <TailwindIndicator />
         </DialogStateProvider>
+        <Analytics />
         <SpeedInsights />
         <Script
           src="https://unpkg.com/@tinybirdco/flock.js"

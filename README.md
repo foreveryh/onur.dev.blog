@@ -5,6 +5,13 @@
 This project is a fork of [onur.dev](https://github.com/onurschu/onur.dev), adapted for personal use and deployment on
 Vercel.
 
+## 🚀 Recent Updates
+
+### June 2025
+- ✅ **Added Vercel Analytics Integration**: Built-in website analytics with zero configuration
+- 🔧 **Fixed Environment Variable Configuration**: Resolved Musings production deployment issues
+- 📊 **Improved Data Synchronization**: Enhanced ISR cache management
+
 ## 📖 Documentation
 
 ### 🚨 [**Contentful Complete Usage Guide**](./docs/CONTENTFUL_GUIDE.md) 🚨
@@ -84,11 +91,19 @@ MUSING_CODE=your_secret_validation_code GITHUB_PAT=ghp_your_github_personal_acce
 
 # Optional Integrations
 
-NEXT_PUBLIC_RAINDROP_ACCESS_TOKEN=your_raindrop_io_access_token (if using bookmarks feature)
-NEXT_REVALIDATE_SECRET=your_nextjs_revalidation_secret NEXT_PUBLIC_TINYBIRD_TOKEN=your_tinybird_analytics_token (if
-using) AIRTABLE_PERSONAL_ACCESS_TOKEN=your_airtable_personal_access_token (if using Airtable integration)
-AIRTABLE_BASE_ID=your_airtable_base_id (if using Airtable integration)
-AIRTABLE_BOOKMARKS_TABLE_ID=your_airtable_bookmarks_table_id (if using Airtable integration)
+# Analytics & Monitoring
+NEXT_PUBLIC_TINYBIRD_TOKEN=your_tinybird_analytics_token # Optional: additional analytics
+
+# Bookmarks Integration
+NEXT_PUBLIC_RAINDROP_ACCESS_TOKEN=your_raindrop_io_access_token # For Raindrop.io bookmarks feature
+
+# Revalidation & Cache Management
+NEXT_REVALIDATE_SECRET=your_nextjs_revalidation_secret
+
+# Airtable Integration (if using Airtable for data storage)
+AIRTABLE_PERSONAL_ACCESS_TOKEN=your_airtable_personal_access_token
+AIRTABLE_BASE_ID=your_airtable_base_id
+AIRTABLE_BOOKMARKS_TABLE_ID=your_airtable_bookmarks_table_id
 
 Replace `your_...` placeholders with your actual credentials and IDs.
 
@@ -297,6 +312,12 @@ Raindrop.io has API rate limits. The current implementation includes:
 - Automatic error handling for failed requests
 
 For more information about Raindrop.io API, visit: [https://developer.raindrop.io](https://developer.raindrop.io)
+
+## Analytics & Monitoring
+
+### Vercel Analytics
+
+Built-in website analytics with zero configuration. Access your metrics in the Vercel Dashboard → Analytics tab after deployment.
 
 ## Original README
 
