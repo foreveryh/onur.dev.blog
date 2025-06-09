@@ -14,8 +14,12 @@ import { isDevelopment } from '@/lib/utils'
 export async function generateStaticParams() {
   const allPages = await getAllPageSlugs()
 
+  // 排除已有静态页面的路径，防止路由冲突
+  const excludedPaths = ['stack', 'workspace', 'journey', 'writing', 'bookmarks', 'visual', 'musings']
+
   return allPages
     .filter((page) => !page.hasCustomPage) // filter out pages that have custom pages, e.g. /journey
+    .filter((page) => !excludedPaths.includes(page.slug)) // 排除静态路径，防止冲突
     .map((page) => ({
       slug: page.slug
     }))
