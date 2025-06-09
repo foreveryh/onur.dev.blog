@@ -1,5 +1,3 @@
-import { next } from '@million/lint'
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   logging: {
@@ -114,4 +112,4 @@ const nextConfig = {
   transpilePackages: ['geist']
 }
 
-export default next({ rsc: true })(nextConfig)
+export default nextConfig

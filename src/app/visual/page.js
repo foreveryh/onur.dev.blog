@@ -48,9 +48,8 @@ export async function generateMetadata() {
     return defaultMeta
   }
 
-  const {
-    seo: { title, description }
-  } = seoData
+  const seo = seoData.seo || {}
+  const { title, description } = seo
 
   return {
     title: title || defaultMeta.title,

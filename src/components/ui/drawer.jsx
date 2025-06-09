@@ -1,20 +1,17 @@
 'use client'
 
-import { memo, useMemo } from 'react'
+import { memo } from 'react'
 import { Drawer as DrawerPrimitive } from 'vaul'
 
 import { cn } from '@/lib/utils'
 
 const Drawer = memo(({ shouldScaleBackground = true, ...props }) => {
-  return useMemo(
-    () => (
-      <DrawerPrimitive.Root
-        shouldScaleBackground={shouldScaleBackground}
-        autoFocus={true} // https://github.com/emilkowalski/vaul/issues/517#issuecomment-2571619213
-        {...props}
-      />
-    ),
-    [shouldScaleBackground, props]
+  return (
+    <DrawerPrimitive.Root
+      shouldScaleBackground={shouldScaleBackground}
+      autoFocus={true} // https://github.com/emilkowalski/vaul/issues/517#issuecomment-2571619213
+      {...props}
+    />
   )
 })
 Drawer.displayName = 'Drawer'
@@ -31,23 +28,20 @@ const DrawerOverlay = memo(({ className, ...props }) => {
 DrawerOverlay.displayName = 'DrawerOverlay'
 
 const DrawerContent = memo(({ className, children, ...props }) => {
-  return useMemo(
-    () => (
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerPrimitive.Content
-          className={cn(
-            'fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-[10px] border border-gray-200 bg-white',
-            className
-          )}
-          {...props}
-        >
-          <div className="mx-auto mt-4 h-2 w-[100px] shrink-0 rounded-full bg-gray-100" />
-          {children}
-        </DrawerPrimitive.Content>
-      </DrawerPortal>
-    ),
-    [className, children, props]
+  return (
+    <DrawerPortal>
+      <DrawerOverlay />
+      <DrawerPrimitive.Content
+        className={cn(
+          'fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-[10px] border border-gray-200 bg-white',
+          className
+        )}
+        {...props}
+      >
+        <div className="mx-auto mt-4 h-2 w-[100px] shrink-0 rounded-full bg-gray-100" />
+        {children}
+      </DrawerPrimitive.Content>
+    </DrawerPortal>
   )
 })
 DrawerContent.displayName = 'DrawerContent'

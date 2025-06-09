@@ -1,10 +1,10 @@
 'use client'
 
 import { useMemo } from 'react'
-import Link from 'next/link'
-import { Clock, ExternalLink, Tag } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 import remarkBreaks from 'remark-breaks'
+import Link from 'next/link'
+import { Clock, ExternalLink, Tag } from 'lucide-react'
 
 import { TagFilter } from './tag-filter'
 
@@ -20,6 +20,7 @@ function MusingCard({ musing }) {
 
   // 处理换行符，将单个\n转换为markdown的强制换行
   const processedBody = useMemo(() => {
+    if (!musing.body) return ''
     return musing.body
       .replace(/\n/g, '  \n') // 在每个\n前添加两个空格，创建markdown强制换行
       .trim()
@@ -29,7 +30,7 @@ function MusingCard({ musing }) {
     <article className="group relative mb-6 overflow-hidden rounded-xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-300 hover:border-gray-200 hover:shadow-md hover:shadow-orange-50">
       {/* Subtle gradient overlay on hover */}
       <div className="absolute inset-0 bg-gradient-to-br from-orange-50/30 via-pink-50/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-      
+
       {/* Content container */}
       <div className="relative z-10">
         {/* Header with date and source link */}

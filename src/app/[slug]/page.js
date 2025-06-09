@@ -57,9 +57,8 @@ export async function generateMetadata(props) {
   const seoData = await getPageSeo(slug)
   if (!seoData) return null
 
-  const {
-    seo: { title, description, keywords }
-  } = seoData
+  const seo = seoData.seo || {}
+  const { title, description, keywords } = seo
   const siteUrl = `/${slug}`
 
   return {

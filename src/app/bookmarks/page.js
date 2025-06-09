@@ -42,9 +42,8 @@ export async function generateMetadata() {
   const seoData = await getPageSeo('bookmarks')
   if (!seoData) return null
 
-  const {
-    seo: { title, description }
-  } = seoData
+  const seo = seoData.seo || {}
+  const { title, description } = seo
   const siteUrl = '/bookmarks'
 
   return {

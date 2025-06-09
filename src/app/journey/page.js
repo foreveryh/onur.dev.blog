@@ -68,9 +68,8 @@ export async function generateMetadata() {
   const seoData = await getPageSeo('journey')
   if (!seoData) return null
 
-  const {
-    seo: { title, description }
-  } = seoData
+  const seo = seoData.seo || {}
+  const { title, description } = seo
   const siteUrl = '/journey'
 
   return {

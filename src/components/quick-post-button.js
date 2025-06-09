@@ -4,25 +4,28 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import { Plus, Send, X } from 'lucide-react'
 import { toast } from 'sonner'
 
+import { ClientOnly } from '@/components/client-only'
+
 // 创建全局对话框状态 Context
-const DialogStateContext = createContext()
+const DialogStateContext = createContext({
+  isQuickPostOpen: false,
+  setIsQuickPostOpen: () => {}
+})
 
 export function DialogStateProvider({ children }) {
   const [isQuickPostOpen, setIsQuickPostOpen] = useState(false)
   
   return (
-    <DialogStateContext.Provider value={{ isQuickPostOpen, setIsQuickPostOpen }}>
-      {children}
-    </DialogStateContext.Provider>
+    <ClientOnly>
+      <DialogStateContext.Provider value={{ isQuickPostOpen, setIsQuickPostOpen }}>
+        {children}
+      </DialogStateContext.Provider>
+    </ClientOnly>
   )
 }
 
 export function useDialogState() {
-  const context = useContext(DialogStateContext)
-  if (!context) {
-    return { isQuickPostOpen: false, setIsQuickPostOpen: () => {} }
-  }
-  return context
+  return useContext(DialogStateContext)
 }
 
 export function QuickPostButton() {
@@ -73,8 +76,6 @@ export function QuickPostButton() {
         
         // 先触发 git-thoughts 仓库的 GitHub Action 来更新 issues.json
         try {
-          const githubToken = process.env.GITHUB_PAT || 'dummy' // 在客户端我们不能直接访问，需要通过 API
-          
           toast.info('Updating content...', { duration: 2000 })
           
           // 等待几秒让 GitHub Action 完成
@@ -101,30 +102,20 @@ export function QuickPostButton() {
             }
           }, 10000) // 等待 10 秒让 GitHub Action 完成
           
-        } catch (error) {
-          console.error('GitHub workflow trigger failed:', error)
-          // 如果触发失败，直接刷新页面
-          window.location.reload()
+        } catch (err) {
+          console.error('Error in post-publish process:', err)
+          // 即使出错也刷新页面
+          setTimeout(() => {
+            window.location.reload()
+          }, 2000)
         }
       } else {
-        console.log('Response status:', response.status) // 调试信息
-        
-        // 针对不同错误提供友好的提示
-        if (response.status === 401) {
-          console.log('401 error detected, showing auth error toast') // 调试信息
-          toast.error('Authentication failed: Please include the correct verification code', {
-            description: 'Tip: Add the verification code to your content',
-            duration: 5000
-          })
-        } else if (response.status >= 500) {
-          toast.error('Server error, please try again later')
-        } else {
-          const error = await response.text()
-          toast.error(`发布失败: ${error}`)
-        }
+        const errorText = await response.text()
+        toast.error(`Failed to publish: ${errorText}`)
       }
     } catch (error) {
-      toast.error('发布失败，请检查网络连接')
+      console.error('Submit error:', error)
+      toast.error('Failed to publish musing')
     } finally {
       setIsSubmitting(false)
     }

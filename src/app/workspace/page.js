@@ -112,9 +112,9 @@ export async function generateMetadata() {
     return defaultMeta
   }
 
-  const {
-    seo: { title, description }
-  } = seoData
+  // 安全解构，避免 seo 为 undefined 或 null 时出错
+  const seo = seoData.seo || {}
+  const { title, description } = seo
 
   return {
     title: title || defaultMeta.title,
