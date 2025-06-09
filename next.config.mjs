@@ -112,4 +112,5 @@ const nextConfig = {
   transpilePackages: ['geist']
 }
 
+// Force cache invalidation - 2025-01-07 14:20
 export default nextConfig
