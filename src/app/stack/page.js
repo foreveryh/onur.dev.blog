@@ -69,3 +69,5 @@ export async function generateMetadata() {
     }
   }
 }
+
+// Force cache refresh - 2025-01-07
