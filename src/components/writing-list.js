@@ -8,12 +8,13 @@ import { useViewData } from '@/hooks/useViewData'
 import { cn, dateWithDayAndMonthFormatter, dateWithMonthAndYearFormatter, viewCountFormatter } from '@/lib/utils'
 
 export const WritingList = ({ items }) => {
-  const viewData = useViewData()
+  const { viewData, error } = useViewData()
 
   // Preprocess viewData into a map for efficient lookups
   const viewDataMap = useMemo(() => {
+    if (!viewData) return new Map()
     const map = new Map()
-    viewData?.forEach((item) => {
+    viewData.forEach((item) => {
       map.set(item.slug, item.view_count)
     })
     return map
@@ -101,6 +102,11 @@ export const WritingList = ({ items }) => {
     () => (
       <LazyMotion features={domAnimation}>
         <div className="text-sm">
+          {error && (
+            <div className="mb-4 rounded-md bg-red-50 p-4 text-red-500">
+              <p>Error loading view counts: {error}</p>
+            </div>
+          )}
           <div className="grid grid-cols-6 py-2 font-medium text-gray-500">
             <span className="col-span-1 hidden text-left md:grid">Year</span>
             <span className="col-span-6 md:col-span-5">
@@ -116,6 +122,6 @@ export const WritingList = ({ items }) => {
         </div>
       </LazyMotion>
     ),
-    [renderedItems]
+    [renderedItems, error]
   )
 }

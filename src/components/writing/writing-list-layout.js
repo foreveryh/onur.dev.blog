@@ -8,7 +8,7 @@ import { useViewData } from '@/hooks/useViewData'
 import { cn } from '@/lib/utils'
 
 export const WritingListLayout = ({ list, isMobile }) => {
-  const viewData = useViewData()
+  const { viewData, error } = useViewData()
   const pathname = usePathname()
 
   const memoizedList = useMemo(() => {
@@ -20,5 +20,14 @@ export const WritingListLayout = ({ list, isMobile }) => {
     })
   }, [list, viewData, pathname, isMobile])
 
-  return <div className={cn(!isMobile && 'flex flex-col gap-1 text-sm')}>{memoizedList}</div>
+  return (
+    <div className={cn(!isMobile && 'flex flex-col gap-1 text-sm')}>
+      {error && (
+        <div className="mb-4 rounded-md bg-red-50 p-4 text-red-500">
+          <p>Error loading view counts: {error}</p>
+        </div>
+      )}
+      {memoizedList}
+    </div>
+  )
 }

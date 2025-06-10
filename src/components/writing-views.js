@@ -7,7 +7,7 @@ import { useViewData } from '@/hooks/useViewData'
 import { viewCountFormatter } from '@/lib/utils'
 
 export const WritingViews = ({ slug }) => {
-  const viewData = useViewData(slug)
+  const { viewData, error } = useViewData(slug)
   const { view_count } = viewData?.[0] ?? {}
 
   const formattedViewCount = viewCountFormatter.format(view_count)
@@ -15,7 +15,9 @@ export const WritingViews = ({ slug }) => {
   return useMemo(
     () => (
       <LazyMotion features={domAnimation}>
-        {!view_count ? (
+        {error ? (
+          <m.span key={`${slug}-views-error`} className="text-red-500" title={error} />
+        ) : !view_count ? (
           <m.span key={`${slug}-views-loading`} />
         ) : (
           <m.div
@@ -50,6 +52,6 @@ export const WritingViews = ({ slug }) => {
         )}
       </LazyMotion>
     ),
-    [slug, formattedViewCount, view_count]
+    [slug, formattedViewCount, view_count, error]
   )
 }
