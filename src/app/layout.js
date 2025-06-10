@@ -2,6 +2,7 @@ import '@/globals.css'
 
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import classix from 'classix'
 import { GeistMono } from 'geist/font/mono'
 import { GeistSans } from 'geist/font/sans'
 import { EyeIcon } from 'lucide-react'
@@ -13,6 +14,7 @@ import { MenuContent } from '@/components/menu-content'
 import { DialogStateProvider } from '@/components/quick-post-button'
 import { SideMenu } from '@/components/side-menu'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
+import { ErrorBoundary } from '@/components/ui/error-boundary'
 import { Toaster } from '@/components/ui/sonner'
 import { PROFILES } from '@/lib/constants'
 import { preloadGetAllPosts } from '@/lib/contentful'
@@ -27,7 +29,7 @@ export default async function RootLayout({ children }) {
     <html
       lang="en"
       data-theme="light"
-      className={`${GeistSans.variable} ${GeistMono.variable}`}
+      className={classix(GeistSans.variable, GeistMono.variable)}
       suppressHydrationWarning
     >
       <head>
@@ -37,27 +39,29 @@ export default async function RootLayout({ children }) {
         />
       </head>
       <body suppressHydrationWarning>
-        <DialogStateProvider>
-          {/* eslint-disable-next-line react/no-unknown-property */}
-          <main vaul-drawer-wrapper="" className="min-h-screen bg-white">
-            {isEnabled && (
-              <div className="absolute inset-x-0 bottom-0 z-50 flex h-12 w-full items-center justify-center bg-green-500 text-center text-sm font-medium text-white">
-                <div className="flex items-center gap-2">
-                  <EyeIcon size={16} />
-                  <span>Draft mode is enabled</span>
+        <ErrorBoundary>
+          <DialogStateProvider>
+            {/* eslint-disable-next-line react/no-unknown-property */}
+            <main vaul-drawer-wrapper="" className="min-h-screen bg-white">
+              {isEnabled && (
+                <div className="absolute inset-x-0 bottom-0 z-50 flex h-12 w-full items-center justify-center bg-green-500 text-center text-sm font-medium text-white">
+                  <div className="flex items-center gap-2">
+                    <EyeIcon size={16} />
+                    <span>Draft mode is enabled</span>
+                  </div>
                 </div>
+              )}
+              <div className="lg:flex">
+                <SideMenu className="relative hidden lg:flex">
+                  <MenuContent />
+                </SideMenu>
+                <div className="flex flex-1">{children}</div>
               </div>
-            )}
-            <div className="lg:flex">
-              <SideMenu className="relative hidden lg:flex">
-                <MenuContent />
-              </SideMenu>
-              <div className="flex flex-1">{children}</div>
-            </div>
-          </main>
-          <Toaster />
-          <TailwindIndicator />
-        </DialogStateProvider>
+            </main>
+            <Toaster />
+            <TailwindIndicator />
+          </DialogStateProvider>
+        </ErrorBoundary>
         <Analytics />
         <SpeedInsights />
         <Script
