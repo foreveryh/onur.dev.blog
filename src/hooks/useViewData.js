@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { SUPABASE_TABLE_NAME } from '@/lib/constants'
 import supabase from '@/lib/supabase/public'
@@ -9,25 +9,30 @@ let globalChannel = null
 export const useViewData = (slug) => {
   const [viewData, setViewData] = useState(null)
   const [error, setError] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   // 获取初始数据
-  useEffect(() => {
-    async function getViewData() {
-      try {
-        const supabaseQuery = supabase.from(SUPABASE_TABLE_NAME).select('slug, view_count')
-        if (slug) supabaseQuery.eq('slug', slug)
-        const { data: supabaseData, error: queryError } = await supabaseQuery
-        
-        if (queryError) throw queryError
-        if (supabaseData) setViewData(supabaseData)
-      } catch (error) {
-        console.error('Error fetching view data from Supabase:', error)
-        setError(error.message)
-      }
+  const fetchViewData = useCallback(async () => {
+    try {
+      setIsLoading(true)
+      setError(null)
+      const supabaseQuery = supabase.from(SUPABASE_TABLE_NAME).select('slug, view_count')
+      if (slug) supabaseQuery.eq('slug', slug)
+      const { data: supabaseData, error: queryError } = await supabaseQuery
+      
+      if (queryError) throw queryError
+      if (supabaseData) setViewData(supabaseData)
+    } catch (error) {
+      console.error('Error fetching view data from Supabase:', error)
+      setError(error.message)
+    } finally {
+      setIsLoading(false)
     }
-
-    getViewData()
   }, [slug])
+
+  useEffect(() => {
+    fetchViewData()
+  }, [fetchViewData])
 
   // 设置实时订阅
   useEffect(() => {
@@ -70,6 +75,9 @@ export const useViewData = (slug) => {
         .subscribe((status) => {
           if (status === 'SUBSCRIBED') {
             console.info('Successfully subscribed to realtime updates')
+          } else if (status === 'CHANNEL_ERROR') {
+            console.error('Failed to subscribe to realtime updates')
+            setError('Failed to subscribe to realtime updates')
           }
         })
     } catch (error) {
@@ -86,5 +94,5 @@ export const useViewData = (slug) => {
     }
   }, []) // 只在组件挂载时执行一次
 
-  return { viewData, error }
+  return { viewData, error, isLoading, refetch: fetchViewData }
 }

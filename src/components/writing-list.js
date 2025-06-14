@@ -8,7 +8,7 @@ import { useViewData } from '@/hooks/useViewData'
 import { cn, dateWithDayAndMonthFormatter, dateWithMonthAndYearFormatter, viewCountFormatter } from '@/lib/utils'
 
 export const WritingList = ({ items }) => {
-  const { viewData, error } = useViewData()
+  const { viewData, error, isLoading } = useViewData()
 
   // Preprocess viewData into a map for efficient lookups
   const viewDataMap = useMemo(() => {
@@ -76,7 +76,16 @@ export const WritingList = ({ items }) => {
                       </time>
                     </span>
                     <span className="col-span-2 line-clamp-4 md:col-span-6">{title}</span>
-                    {formattedViewCount && (
+                    {isLoading ? (
+                      <span className="col-span-1">
+                        <m.span
+                          key={`${slug}-views-loading`}
+                          className="flex justify-end tabular-nums animate-pulse text-gray-400"
+                        >
+                          ...
+                        </m.span>
+                      </span>
+                    ) : formattedViewCount ? (
                       <span className="col-span-1">
                         <m.span
                           key={`${slug}-views`}
@@ -87,7 +96,7 @@ export const WritingList = ({ items }) => {
                           {formattedViewCount}
                         </m.span>
                       </span>
-                    )}
+                    ) : null}
                   </span>
                 </Link>
               </li>
@@ -96,7 +105,7 @@ export const WritingList = ({ items }) => {
         </ul>
       )
     })
-  }, [animationProps, items, viewDataMap])
+  }, [animationProps, items, viewDataMap, isLoading])
 
   return useMemo(
     () => (

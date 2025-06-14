@@ -8,7 +8,7 @@ import { useViewData } from '@/hooks/useViewData'
 import { cn } from '@/lib/utils'
 
 export const WritingListLayout = ({ list, isMobile }) => {
-  const { viewData, error } = useViewData()
+  const { viewData, error, isLoading } = useViewData()
   const pathname = usePathname()
 
   const memoizedList = useMemo(() => {
@@ -16,9 +16,18 @@ export const WritingListLayout = ({ list, isMobile }) => {
       const viewCount = viewData?.find((item) => item.slug === post.slug)?.view_count
       const isActive = pathname === `/writing/${post.slug}`
 
-      return <WritingLink key={post.slug} post={post} viewCount={viewCount} isMobile={isMobile} isActive={isActive} />
+      return (
+        <WritingLink
+          key={post.slug}
+          post={post}
+          viewCount={viewCount}
+          isMobile={isMobile}
+          isActive={isActive}
+          isLoading={isLoading}
+        />
+      )
     })
-  }, [list, viewData, pathname, isMobile])
+  }, [list, viewData, pathname, isMobile, isLoading])
 
   return (
     <div className={cn(!isMobile && 'flex flex-col gap-1 text-sm')}>

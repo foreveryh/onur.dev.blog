@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 import { cn, getDateTimeFormat, viewCountFormatter } from '@/lib/utils'
 
-export const WritingLink = ({ post, viewCount, isMobile, isActive }) => {
+export const WritingLink = ({ post, viewCount, isMobile, isActive, isLoading }) => {
   const date = post.date || post.sys.firstPublishedAt
   const formattedDate = getDateTimeFormat(date)
   const formattedViewCount = viewCount ? viewCountFormatter.format(viewCount) : null
@@ -23,7 +23,18 @@ export const WritingLink = ({ post, viewCount, isMobile, isActive }) => {
         <span className={cn('transition-colors duration-300', isActive ? 'text-slate-400' : 'text-slate-500')}>
           <time dateTime={date}>{formattedDate}</time>{' '}
           <span>
-            {formattedViewCount ? (
+            {isLoading ? (
+              <m.span
+                key={`${post.slug}-views-loading`}
+                className="animate-pulse text-gray-400"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                ...
+              </m.span>
+            ) : formattedViewCount ? (
               <m.span
                 key={`${post.slug}-views-loaded`}
                 initial={{ opacity: 0 }}
@@ -35,7 +46,7 @@ export const WritingLink = ({ post, viewCount, isMobile, isActive }) => {
                 &middot; {formattedViewCount} {formattedViewCount === 1 ? 'view' : 'views'}
               </m.span>
             ) : (
-              <m.span key={`${post.slug}-views-loading`} />
+              <m.span key={`${post.slug}-views-empty`} />
             )}
           </span>
         </span>
