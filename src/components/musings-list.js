@@ -27,14 +27,11 @@ function MusingCard({ musing }) {
   }, [musing.body])
 
   return (
-    <article className="group relative mb-6 overflow-hidden rounded-xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-300 hover:border-gray-200 hover:shadow-md hover:shadow-orange-50">
-      {/* Subtle gradient overlay on hover */}
-      <div className="absolute inset-0 bg-gradient-to-br from-orange-50/30 via-pink-50/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-
+    <article className="group relative border-b border-gray-100 py-4 transition-colors hover:bg-gray-50/50">
       {/* Content container */}
-      <div className="relative z-10">
+      <div className="relative">
         {/* Header with date and source link */}
-        <div className="mb-4 flex items-center justify-between text-sm text-gray-500">
+        <div className="mb-2 flex items-center justify-between text-sm text-gray-500">
           <div className="flex items-center gap-2">
             <Clock size={14} className="text-gray-400" />
             <time dateTime={musing.created_at} className="font-medium">
@@ -45,7 +42,7 @@ function MusingCard({ musing }) {
             href={musing.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 rounded-full bg-gray-50 px-3 py-1.5 text-xs font-medium text-gray-600 transition-all hover:bg-orange-100 hover:text-orange-700"
+            className="flex items-center gap-1.5 rounded-full bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 transition-all hover:bg-gray-100 hover:text-gray-900"
           >
             <ExternalLink size={12} />
             <span>Source</span>
@@ -59,13 +56,13 @@ function MusingCard({ musing }) {
 
         {/* Tags */}
         {musing.tags && musing.tags.length > 0 && (
-          <div className="mt-5 flex flex-wrap gap-2">
+          <div className="mt-3 flex flex-wrap gap-1.5">
             {musing.tags.map((tag) => (
               <span
                 key={tag}
-                className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-gray-100 to-gray-50 px-3 py-1.5 text-xs font-medium text-gray-700 transition-all hover:from-orange-100 hover:to-pink-100 hover:text-gray-800"
+                className="inline-flex items-center gap-1 rounded-full bg-gray-50 px-2 py-0.5 text-xs font-medium text-gray-600 transition-all hover:bg-gray-100 hover:text-gray-900"
               >
-                <Tag size={10} className="text-gray-500" />
+                <Tag size={10} className="text-gray-400" />
                 {tag}
               </span>
             ))}
@@ -98,13 +95,13 @@ export function MusingsList({ musings, selectedTag }) {
     <div>
       <TagFilter tags={allTags} selectedTag={selectedTag} />
 
-      <div className="mt-6">
+      <div className="mt-4">
         {filteredMusings.length === 0 ? (
           <div className="py-12 text-center text-gray-500">
             <p>No musings found matching the selected criteria</p>
           </div>
         ) : (
-          <div className="space-y-0">
+          <div className="divide-y divide-gray-100">
             {filteredMusings.map((musing) => (
               <MusingCard key={musing.id} musing={musing} />
             ))}
