@@ -18,7 +18,9 @@ export const WritingViews = ({ slug }) => {
         {error ? (
           <m.span key={`${slug}-views-error`} className="text-red-500" title={error} />
         ) : isLoading ? (
-          <m.span key={`${slug}-views-loading`} className="animate-pulse text-gray-400">...</m.span>
+          <m.span key={`${slug}-views-loading`} className="animate-pulse text-gray-400">
+            ...
+          </m.span>
         ) : !view_count ? (
           <m.span key={`${slug}-views-empty`} />
         ) : (

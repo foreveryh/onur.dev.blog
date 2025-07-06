@@ -12,18 +12,18 @@ export async function POST(request) {
     const { searchParams } = new URL(request.url)
     const manualSecret = searchParams.get('secret')
     const path = searchParams.get('path')
-    
+
     // 如果是手动重新验证特定路径（如 /musings）
     if (manualSecret || path) {
       // 验证密钥（可选，增加安全性）
       if (process.env.REVALIDATE_SECRET && manualSecret !== process.env.REVALIDATE_SECRET) {
         return NextResponse.json({ message: 'Invalid secret' }, { status: 401 })
       }
-      
+
       const pathToRevalidate = path || '/musings'
       revalidatePath(pathToRevalidate)
-      
-      return NextResponse.json({ 
+
+      return NextResponse.json({
         message: `Path ${pathToRevalidate} revalidated successfully`,
         timestamp: new Date().toISOString()
       })
@@ -33,7 +33,7 @@ export async function POST(request) {
     const payload = await request.json()
     const requestHeaders = new Headers(request.headers)
     const revalidateSecret = requestHeaders.get('x-revalidate-secret')
-    
+
     if (revalidateSecret !== secret) {
       return Response.json(
         {
@@ -113,22 +113,15 @@ export async function POST(request) {
     }
 
     return Response.json({ revalidated: true, now: Date.now() })
-
   } catch (error) {
     console.error('Revalidation error:', error)
-    return NextResponse.json(
-      { message: 'Error revalidating', error: error.message },
-      { status: 500 }
-    )
+    return NextResponse.json({ message: 'Error revalidating', error: error.message }, { status: 500 })
   }
 }
 
 export async function GET() {
-  return NextResponse.json({ 
+  return NextResponse.json({
     message: 'Use POST method to revalidate',
-    examples: [
-      'POST /api/revalidate?path=/musings',
-      'POST /api/revalidate (with Contentful webhook payload)'
-    ]
+    examples: ['POST /api/revalidate?path=/musings', 'POST /api/revalidate (with Contentful webhook payload)']
   })
 }

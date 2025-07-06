@@ -36,7 +36,7 @@ export const SideMenu = ({ children, title, bookmarks = [], isInner }) => {
   const router = useRouter()
   const pathname = usePathname()
   const { isQuickPostOpen } = useDialogState()
-  
+
   useKeyPress(onKeyPress, Object.keys(keyCodePathnameMapping), isQuickPostOpen)
 
   function onKeyPress(event) {

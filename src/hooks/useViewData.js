@@ -19,7 +19,7 @@ export const useViewData = (slug) => {
       const supabaseQuery = supabase.from(SUPABASE_TABLE_NAME).select('slug, view_count')
       if (slug) supabaseQuery.eq('slug', slug)
       const { data: supabaseData, error: queryError } = await supabaseQuery
-      
+
       if (queryError) throw queryError
       if (supabaseData) setViewData(supabaseData)
     } catch (error) {

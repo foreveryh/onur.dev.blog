@@ -80,7 +80,7 @@ export const WritingList = ({ items }) => {
                       <span className="col-span-1">
                         <m.span
                           key={`${slug}-views-loading`}
-                          className="flex justify-end tabular-nums animate-pulse text-gray-400"
+                          className="flex animate-pulse justify-end text-gray-400 tabular-nums"
                         >
                           ...
                         </m.span>

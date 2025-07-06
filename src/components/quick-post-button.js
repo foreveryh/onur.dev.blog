@@ -1,7 +1,7 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState } from 'react'
 import { Plus, Send, X } from 'lucide-react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
 import { ClientOnly } from '@/components/client-only'
@@ -14,7 +14,7 @@ const DialogStateContext = createContext({
 
 export function DialogStateProvider({ children }) {
   const [isQuickPostOpen, setIsQuickPostOpen] = useState(false)
-  
+
   return (
     <ClientOnly>
       <DialogStateContext.Provider value={{ isQuickPostOpen, setIsQuickPostOpen }}>
@@ -73,18 +73,18 @@ export function QuickPostButton() {
         setVisibility('Public')
         setCategoryTags(['Daily'])
         setIsOpen(false)
-        
+
         // 先触发 git-thoughts 仓库的 GitHub Action 来更新 issues.json
         try {
           toast.info('Updating content...', { duration: 2000 })
-          
+
           // 等待几秒让 GitHub Action 完成
           setTimeout(async () => {
             try {
               const revalidateResponse = await fetch('/api/revalidate?path=/musings', {
                 method: 'POST'
               })
-              
+
               if (revalidateResponse.ok) {
                 console.info('Page cache revalidated successfully')
                 toast.success('Content updated! Refreshing page...')
@@ -101,7 +101,6 @@ export function QuickPostButton() {
               window.location.reload()
             }
           }, 10000) // 等待 10 秒让 GitHub Action 完成
-          
         } catch (err) {
           console.error('Error in post-publish process:', err)
           // 即使出错也刷新页面
@@ -178,17 +177,18 @@ export function QuickPostButton() {
               rows={6}
               required
             />
-            <div className="rounded-md bg-amber-50 border border-amber-200 p-3">
+            <div className="rounded-md border border-amber-200 bg-amber-50 p-3">
               <div className="flex items-start">
                 <div className="text-xs text-amber-600">
-                  <strong>📝 Publishing Note:</strong>{' '}
-                  This system uses GitHub Issues as a backend. Please include the verification code at the end of your content. The code will be automatically removed and won't appear in the final published content.
+                  <strong>📝 Publishing Note:</strong> This system uses GitHub Issues as a backend. Please include the
+                  verification code at the end of your content. The code will be automatically removed and won't appear
+                  in the final published content.
                 </div>
               </div>
             </div>
           </div>
 
-                      <div className="mt-4">
+          <div className="mt-4">
             {/* Visibility selection */}
             <div className="mb-4">
               <label className="text-sm font-medium text-gray-700">Visibility</label>

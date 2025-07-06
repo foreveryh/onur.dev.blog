@@ -34,7 +34,7 @@ async function getMusings() {
         console.error('Failed to load test data:', testError)
       }
     }
-    
+
     return null
   }
 }
@@ -55,15 +55,25 @@ export default async function MusingsPage({ searchParams }) {
             <div className="mb-6 flex items-center justify-between">
               <div>
                 <p className="text-gray-600">Thoughts and reflections powered by GitHub Issues</p>
-                <p className="text-xs text-gray-500 mt-1">
-                  Learn more about this implementation: <a href="https://github.com/foreveryh/git-thoughts" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">git-thoughts</a>
+                <p className="mt-1 text-xs text-gray-500">
+                  Learn more about this implementation:{' '}
+                  <a
+                    href="https://github.com/foreveryh/git-thoughts"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 underline hover:text-blue-800"
+                  >
+                    git-thoughts
+                  </a>
                 </p>
               </div>
               <QuickPostButton />
             </div>
             <div className="rounded-lg border border-red-200 bg-red-50 p-4">
               <h2 className="font-semibold text-red-800">Unable to Load Content</h2>
-              <p className="mt-1 text-sm text-red-700">Sorry, unable to fetch the latest musings. Please try again later.</p>
+              <p className="mt-1 text-sm text-red-700">
+                Sorry, unable to fetch the latest musings. Please try again later.
+              </p>
             </div>
           </div>
         </div>

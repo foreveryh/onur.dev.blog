@@ -1,11 +1,11 @@
 'use client'
 
+import { Clock, ExternalLink, Tag } from 'lucide-react'
 import Link from 'next/link'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkBreaks from 'remark-breaks'
 import remarkGfm from 'remark-gfm'
-import { useMemo, useState, useEffect, useRef } from 'react'
-import { Clock, ExternalLink, Tag } from 'lucide-react'
 
 import { TagFilter } from './tag-filter'
 

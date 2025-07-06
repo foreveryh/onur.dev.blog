@@ -66,7 +66,7 @@ export default async function CollectionPage(props) {
         <div className="content @container">
           <PageTitle title={currentBookmark.title} />
           <Suspense fallback={<ScreenLoadingSpinner />}>
-            <BookmarkList id={currentBookmark._id} initialData={bookmarkItems} />
+            <BookmarkList id={currentBookmark._id} initialData={bookmarkItems} collectionSlug={slug} />
           </Suspense>
         </div>
       </div>
