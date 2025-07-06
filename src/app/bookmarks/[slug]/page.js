@@ -20,12 +20,32 @@ async function fetchData(slug) {
   if (!currentBookmark) notFound()
 
   const sortedBookmarks = sortByProperty(bookmarks, 'title')
-  const bookmarkItems = await getBookmarkItems(currentBookmark._id)
 
-  return {
-    bookmarks: sortedBookmarks,
-    currentBookmark,
-    bookmarkItems
+  try {
+    const bookmarkItems = await getBookmarkItems(currentBookmark._id)
+
+    // 验证返回的数据
+    if (!bookmarkItems || !bookmarkItems.result) {
+      console.error(`Failed to fetch items for collection ${currentBookmark._id}`)
+      return {
+        bookmarks: sortedBookmarks,
+        currentBookmark,
+        bookmarkItems: { result: false, items: [], count: 0 }
+      }
+    }
+
+    return {
+      bookmarks: sortedBookmarks,
+      currentBookmark,
+      bookmarkItems
+    }
+  } catch (error) {
+    console.error(`Error fetching bookmark items: ${error.message}`)
+    return {
+      bookmarks: sortedBookmarks,
+      currentBookmark,
+      bookmarkItems: { result: false, items: [], count: 0 }
+    }
   }
 }
 

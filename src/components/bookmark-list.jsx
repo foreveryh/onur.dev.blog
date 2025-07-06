@@ -6,7 +6,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { getBookmarkItemsByPageIndex } from '@/app/actions'
 import { BookmarkCard } from '@/components/bookmark-card'
 import { Button } from '@/components/ui/button'
-import { TWEETS_COLLECTION_ID } from '@/lib/constants'
+import { TWEETS_COLLECTION_IDS } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
 export const BookmarkList = ({ initialData, id }) => {
@@ -44,7 +44,7 @@ export const BookmarkList = ({ initialData, id }) => {
 
   const chunks = useMemo(() => getChunks(), [getChunks])
   const isReachingEnd = data.length >= (initialData?.count ?? 0)
-  const isTweetCollection = id === TWEETS_COLLECTION_ID
+  const isTweetCollection = TWEETS_COLLECTION_IDS.includes(id)
 
   const memoizedBookmarks = useMemo(() => {
     return data.map((bookmark, bookmarkIndex) => (

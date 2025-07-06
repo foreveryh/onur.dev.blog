@@ -77,9 +77,19 @@ export const PROFILES = {
   } */
 }
 
-export const TWEETS_COLLECTION_ID = 56292239
+// 支持多个 Twitter 收藏夹
+export const TWEETS_COLLECTION_IDS = [56292239, 57413563, 57414510] // 添加你的第二个 Twitter 收藏夹 ID
 
-export const COLLECTION_IDS = [55349123, TWEETS_COLLECTION_ID, 55351618, 55351620, 55858229, 55858636, 55858640, 56212510]
+export const COLLECTION_IDS = [
+  55349123,
+  ...TWEETS_COLLECTION_IDS, // 展开所有 Twitter 收藏夹 ID
+  55351618,
+  55351620,
+  55858229,
+  55858636,
+  55858640,
+  56212510
+]
 
 export const LINKS = [
   {

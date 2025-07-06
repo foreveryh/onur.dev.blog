@@ -12,7 +12,7 @@ const options = {
   next: {
     revalidate: 60 * 60 * 24 * 2 // 2 days
   },
-  signal: AbortSignal.timeout(10000) // 10 second timeout to prevent hanging requests
+  signal: AbortSignal.timeout(30000) // 30 second timeout to prevent hanging requests
 }
 
 const RAINDROP_API_URL = 'https://api.raindrop.io/rest/v1'
@@ -37,9 +37,10 @@ export const getBookmarkItems = async (id, pageIndex = 0) => {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
 
-    return await response.json()
+    const data = await response.json()
+    return data
   } catch (error) {
-    console.error(`Failed to fetch bookmark items: ${error.message}`)
+    console.error(`Failed to fetch bookmark items for collection ${id}: ${error.message}`)
     return null
   }
 }
