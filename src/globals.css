@@ -254,3 +254,23 @@
     scale: 1;
   }
 }
+
+/* --- Markdown 表格美化: 默认带边框，hover 高亮 --- */
+.prose table {
+  @apply w-full border border-gray-200 rounded-lg overflow-hidden transition-shadow;
+}
+.prose thead th {
+  @apply border-b border-gray-200 bg-gray-50 px-3 py-2 text-left font-semibold text-gray-700;
+}
+.prose tbody td {
+  @apply border-b border-gray-100 px-3 py-2;
+}
+.prose tr:last-child td {
+  @apply border-b-0;
+}
+.prose tbody tr {
+  @apply transition-colors;
+}
+.prose tbody tr:hover {
+  @apply border-l-4 border-blue-400 bg-blue-50/40 shadow-md;
+}

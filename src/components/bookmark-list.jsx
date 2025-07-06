@@ -51,8 +51,9 @@ export const BookmarkList = ({ initialData, id }) => {
       <div
         key={`bookmark_${bookmarkIndex}`}
         className={cn('grid gap-4', isTweetCollection ? 'h-fit' : 'place-content-start')}
+        data-oid="_ac5zr9"
       >
-        <BookmarkCard key={bookmark._id} bookmark={bookmark} order={bookmarkIndex} />
+        <BookmarkCard key={bookmark._id} bookmark={bookmark} order={bookmarkIndex} data-oid="a_dbf0w" />
       </div>
     ))
   }, [data, isTweetCollection])
@@ -62,20 +63,25 @@ export const BookmarkList = ({ initialData, id }) => {
       <div
         key={`chunk_${chunkIndex}`}
         className={cn('grid gap-4', isTweetCollection ? 'h-fit' : 'place-content-start')}
+        data-oid=".ziw:pz"
       >
         {chunk.map((bookmark, bookmarkIndex) => (
-          <BookmarkCard key={bookmark._id} bookmark={bookmark} order={bookmarkIndex} />
+          <BookmarkCard key={bookmark._id} bookmark={bookmark} order={bookmarkIndex} data-oid="id5qgbd" />
         ))}
       </div>
     ))
   }, [chunks, isTweetCollection])
 
   return (
-    <div>
-      <div className="flex flex-col gap-4 @lg:hidden">{memoizedBookmarks}</div>
-      <div className="hidden @lg:grid @lg:grid-cols-2 @lg:gap-4">{memoizedChunks}</div>
+    <div data-oid="by35:gv">
+      <div className="flex flex-col gap-4 @lg:hidden" data-oid="_8hk2vb">
+        {memoizedBookmarks}
+      </div>
+      <div className="hidden @lg:grid @lg:grid-cols-2 @lg:gap-4" data-oid="x-gszvo">
+        {memoizedChunks}
+      </div>
       {data.length > 0 ? (
-        <div className="mt-8 flex min-h-16 items-center justify-center text-sm lg:mt-12">
+        <div className="mt-8 flex min-h-16 items-center justify-center text-sm lg:mt-12" data-oid="9aeljtt">
           {!isReachingEnd ? (
             <>
               {isLoading ? (
@@ -83,8 +89,11 @@ export const BookmarkList = ({ initialData, id }) => {
                   className="inline-block size-4 animate-spin rounded-full border-2 border-current border-t-transparent text-black"
                   role="status"
                   aria-label="loading"
+                  data-oid="xdu1x5t"
                 >
-                  <span className="sr-only">Loading...</span>
+                  <span className="sr-only" data-oid="ym1.98w">
+                    Loading...
+                  </span>
                 </div>
               ) : (
                 <Button
@@ -92,19 +101,20 @@ export const BookmarkList = ({ initialData, id }) => {
                   onClick={loadMore}
                   disabled={isLoading}
                   className="w-full justify-center bg-white"
+                  data-oid="6:4ugol"
                 >
                   Load more
-                  <ArrowDownIcon size={16} />
+                  <ArrowDownIcon size={16} data-oid="8a661-e" />
                 </Button>
               )}
             </>
           ) : (
-            <span>That's all for now. Come back later for more.</span>
+            <span data-oid="u5.o:zp">That's all for now. Come back later for more.</span>
           )}
         </div>
       ) : (
-        <div className="mt-8 flex min-h-16 flex-col items-center justify-center lg:mt-12">
-          <span>No bookmarks found.</span>
+        <div className="mt-8 flex min-h-16 flex-col items-center justify-center lg:mt-12" data-oid="2-uromr">
+          <span data-oid="h_8_v5a">No bookmarks found.</span>
         </div>
       )}
     </div>

@@ -101,13 +101,14 @@ const Carousel = memo(({ orientation = 'horizontal', opts, setApi, plugins, clas
   )
 
   return (
-    <CarouselContext.Provider value={memoizedContextValue}>
+    <CarouselContext.Provider value={memoizedContextValue} data-oid="6p80djg">
       <div
         onKeyDownCapture={handleKeyDown}
         className={cn('relative', className)}
         role="region"
         aria-roledescription="carousel"
         {...props}
+        data-oid="b82ruat"
       >
         {children}
       </div>
@@ -120,8 +121,12 @@ const CarouselContent = memo(({ className, ...props }) => {
   const { carouselRef, orientation } = useCarousel()
 
   return (
-    <div ref={carouselRef} className="overflow-hidden">
-      <div className={cn('flex', orientation === 'horizontal' ? '-ml-4' : '-mt-4 flex-col', className)} {...props} />
+    <div ref={carouselRef} className="overflow-hidden" data-oid="dv7bgi8">
+      <div
+        className={cn('flex', orientation === 'horizontal' ? '-ml-4' : '-mt-4 flex-col', className)}
+        {...props}
+        data-oid="mim0bds"
+      />
     </div>
   )
 })
@@ -136,6 +141,7 @@ const CarouselItem = memo(({ className, ...props }) => {
       aria-roledescription="slide"
       className={cn('min-w-0 shrink-0 grow-0 basis-full', orientation === 'horizontal' ? 'pl-4' : 'pt-4', className)}
       {...props}
+      data-oid="cm5m8-a"
     />
   )
 })
@@ -158,9 +164,12 @@ const CarouselPrevious = memo(({ className, variant = 'outline', size = 'icon', 
       disabled={!canScrollPrev}
       onClick={scrollPrev}
       {...props}
+      data-oid="9l1ym01"
     >
-      <ArrowLeftIcon className="size-4" />
-      <span className="sr-only">Previous slide</span>
+      <ArrowLeftIcon className="size-4" data-oid="mvx40ks" />
+      <span className="sr-only" data-oid="nq2wpf9">
+        Previous slide
+      </span>
     </Button>
   )
 })
@@ -183,9 +192,12 @@ const CarouselNext = memo(({ className, variant = 'outline', size = 'icon', ...p
       disabled={!canScrollNext}
       onClick={scrollNext}
       {...props}
+      data-oid="_nc_awv"
     >
-      <ArrowRightIcon size={16} className="shrink-0" />
-      <span className="sr-only">Next slide</span>
+      <ArrowRightIcon size={16} className="shrink-0" data-oid="d6hzv_r" />
+      <span className="sr-only" data-oid="y43t1ym">
+        Next slide
+      </span>
     </Button>
   )
 })
