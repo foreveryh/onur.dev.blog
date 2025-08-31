@@ -17,9 +17,19 @@ function getTokenManager() {
 const RAINDROP_API_URL = 'https://api.raindrop.io/rest/v1'
 
 export async function GET(request) {
+  console.info('=== OAuth Callback Started ===')
+  console.info('Request URL:', request.url)
+  
   const { searchParams } = new URL(request.url)
   const code = searchParams.get('code')
   const error = searchParams.get('error')
+  
+  console.info('URL Parameters:', {
+    hasCode: !!code,
+    hasError: !!error,
+    codeLength: code?.length || 0,
+    error: error || 'none'
+  })
 
   if (error) {
     console.error('OAuth error:', error)
@@ -27,6 +37,7 @@ export async function GET(request) {
   }
 
   if (!code) {
+    console.error('No authorization code found in callback')
     return NextResponse.json({ error: 'Authorization code not found' }, { status: 400 })
   }
 
