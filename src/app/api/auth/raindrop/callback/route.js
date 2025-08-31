@@ -40,18 +40,27 @@ export async function GET(request) {
     }
 
     // 交换授权码获取访问令牌
+    const tokenRequest = {
+      client_id: clientId,
+      client_secret: clientSecret,
+      grant_type: 'authorization_code',
+      code: code,
+      redirect_uri: `${baseUrl}/api/auth/raindrop/callback`
+    }
+    
+    console.info('Token exchange request:', {
+      url: 'https://raindrop.io/oauth/access_token',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: { ...tokenRequest, client_secret: '***' } // 隐藏敏感信息
+    })
+    
     const tokenResponse = await fetch('https://raindrop.io/oauth/access_token', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        client_id: clientId,
-        client_secret: clientSecret,
-        grant_type: 'authorization_code',
-        code: code,
-        redirect_uri: `${baseUrl}/api/auth/raindrop/callback`
-      })
+      body: JSON.stringify(tokenRequest)
     })
 
     if (!tokenResponse.ok) {
@@ -68,13 +77,31 @@ export async function GET(request) {
     const tokenData = await tokenResponse.json()
     console.info('Token response from Raindrop:', JSON.stringify(tokenData, null, 2))
 
-    if (!tokenData.access_token || !tokenData.refresh_token) {
-      console.error('Missing tokens in response:', {
+    // Check if response contains an error
+    if (tokenData.error) {
+      console.error('OAuth error in token response:', tokenData)
+      throw new Error(`OAuth error: ${tokenData.error} - ${tokenData.error_description || 'Unknown error'}`)
+    }
+
+    // Validate required tokens
+    if (!tokenData.access_token) {
+      console.error('Missing access_token in response:', {
         hasAccessToken: !!tokenData.access_token,
         hasRefreshToken: !!tokenData.refresh_token,
-        responseKeys: Object.keys(tokenData)
+        responseKeys: Object.keys(tokenData),
+        fullResponse: tokenData
       })
-      throw new Error('Invalid token response')
+      throw new Error('Missing access_token in response')
+    }
+
+    if (!tokenData.refresh_token) {
+      console.error('Missing refresh_token in response:', {
+        hasAccessToken: !!tokenData.access_token,
+        hasRefreshToken: !!tokenData.refresh_token,
+        responseKeys: Object.keys(tokenData),
+        fullResponse: tokenData
+      })
+      throw new Error('Missing refresh_token in response')
     }
 
     // 存储令牌
