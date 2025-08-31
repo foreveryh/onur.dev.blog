@@ -130,7 +130,7 @@ export const dateWithDayAndMonthFormatter = Intl.DateTimeFormat('tr-TR', {
  * @example
  * const count = 1000000;
  * const formattedCount = viewCountFormatter.format(count);
- * console.log(formattedCount); // Output: "1.000.000"
+ * console.info(formattedCount); // Output: "1.000.000"
  */
 export const viewCountFormatter = new Intl.NumberFormat('nl-NL')
 

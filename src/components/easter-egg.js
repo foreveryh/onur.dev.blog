@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { KonamiListener } from '@/lib/konami'
 
@@ -16,12 +16,12 @@ export const EasterEgg = ({ tools = [] }) => {
 
     listener.start()
     return () => listener.stop()
-  }, [tools])
+  }, [tools, startTerminalAnimation])
 
-  const startTerminalAnimation = () => {
+  const startTerminalAnimation = useCallback(() => {
     setIsActive(true)
     setIsAnimating(true)
-    setDisplayText('~/stack $ ls -la\n\n')
+    setDisplayText('~/stack $ ls-la\n\n')
 
     // Collect all tools
     const allTools = tools.flatMap((category) => category.tools || [])
@@ -30,7 +30,7 @@ export const EasterEgg = ({ tools = [] }) => {
     setTimeout(() => {
       animateTools(allTools)
     }, 500)
-  }
+  }, [tools])
 
   const animateTools = (allTools) => {
     if (!allTools || allTools.length === 0) {

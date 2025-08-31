@@ -50,10 +50,10 @@ const contentfulPayload = {
 
 // 测试函数
 async function testWebhook(baseUrl) {
-  console.log(`🧪 Testing Contentful Webhook simulation`)
-  console.log(`📤 URL: ${baseUrl}/api/revalidate`)
-  console.log(`📋 Payload (Contentful format):`)
-  console.log(JSON.stringify(contentfulPayload, null, 2))
+  console.info(`🧪 Testing Contentful Webhook simulation`)
+  console.info(`📤 URL: ${baseUrl}/api/revalidate`)
+  console.info(`📋 Payload (Contentful format):`)
+  console.info(JSON.stringify(contentfulPayload, null, 2))
 
   try {
     const response = await fetch(`${baseUrl}/api/revalidate`, {
@@ -67,16 +67,16 @@ async function testWebhook(baseUrl) {
 
     const result = await response.json()
 
-    console.log(`\n📥 Response Status: ${response.status}`)
-    console.log(`📥 Response Body: ${JSON.stringify(result, null, 2)}`)
+    console.info(`\n📥 Response Status: ${response.status}`)
+    console.info(`📥 Response Body: ${JSON.stringify(result, null, 2)}`)
 
     if (response.status === 200) {
-      console.log(`✅ Webhook test PASSED - API correctly handled Contentful payload!`)
+      console.info(`✅ Webhook test PASSED - API correctly handled Contentful payload!`)
     } else {
-      console.log(`❌ Webhook test FAILED`)
+      console.info(`❌ Webhook test FAILED`)
     }
   } catch (error) {
-    console.log(`❌ Test FAILED with error: ${error.message}`)
+    console.info(`❌ Test FAILED with error: ${error.message}`)
   }
 }
 

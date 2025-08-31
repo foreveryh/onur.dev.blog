@@ -4,9 +4,9 @@ const SECRET = 'R5SIkzrbOocVTaBngWP8tRN3ESUljZAUvf/fhk0/rMI='
 
 // 测试函数
 async function testRevalidateAPI(baseUrl, testCase) {
-  console.log(`\n🧪 Testing: ${testCase.name}`)
-  console.log(`📤 Request: ${testCase.method} ${baseUrl}/api/revalidate`)
-  console.log(`📋 Payload: ${JSON.stringify(testCase.payload, null, 2)}`)
+  console.info(`\n🧪 Testing: ${testCase.name}`)
+  console.info(`📤 Request: ${testCase.method} ${baseUrl}/api/revalidate`)
+  console.info(`📋 Payload: ${JSON.stringify(testCase.payload, null, 2)}`)
 
   try {
     const response = await fetch(`${baseUrl}/api/revalidate`, {
@@ -20,18 +20,18 @@ async function testRevalidateAPI(baseUrl, testCase) {
 
     const result = await response.json()
 
-    console.log(`📥 Response Status: ${response.status}`)
-    console.log(`📥 Response Body: ${JSON.stringify(result, null, 2)}`)
+    console.info(`📥 Response Status: ${response.status}`)
+    console.info(`📥 Response Body: ${JSON.stringify(result, null, 2)}`)
 
     if (response.status === testCase.expectedStatus) {
-      console.log(`✅ Test PASSED`)
+      console.info(`✅ Test PASSED`)
     } else {
-      console.log(`❌ Test FAILED (expected status ${testCase.expectedStatus}, got ${response.status})`)
+      console.info(`❌ Test FAILED (expected status ${testCase.expectedStatus}, got ${response.status})`)
     }
 
     return { success: response.status === testCase.expectedStatus, result }
   } catch (error) {
-    console.log(`❌ Test FAILED with error: ${error.message}`)
+    console.info(`❌ Test FAILED with error: ${error.message}`)
     return { success: false, error: error.message }
   }
 }
@@ -80,8 +80,8 @@ const testCases = [
 async function runTests() {
   const baseUrl = process.argv[2] || 'http://localhost:3000'
 
-  console.log(`🚀 Testing Revalidate API at: ${baseUrl}`)
-  console.log(`🔑 Using secret: ${SECRET.substring(0, 10)}...`)
+  console.info(`🚀 Testing Revalidate API at: ${baseUrl}`)
+  console.info(`🔑 Using secret: ${SECRET.substring(0, 10)}...`)
 
   let passed = 0
   let total = testCases.length
@@ -94,12 +94,12 @@ async function runTests() {
     await new Promise((resolve) => setTimeout(resolve, 500))
   }
 
-  console.log(`\n📊 Test Results: ${passed}/${total} tests passed`)
+  console.info(`\n📊 Test Results: ${passed}/${total} tests passed`)
 
   if (passed === total) {
-    console.log(`🎉 All tests passed! Your revalidate API is working correctly.`)
+    console.info(`🎉 All tests passed! Your revalidate API is working correctly.`)
   } else {
-    console.log(`⚠️  Some tests failed. Please check the API implementation.`)
+    console.info(`⚠️  Some tests failed. Please check the API implementation.`)
   }
 }
 

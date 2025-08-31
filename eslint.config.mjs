@@ -75,6 +75,7 @@ const patchedConfig = [
       'import/newline-after-import': 'error',
       'import/no-duplicates': 'error',
       '@next/next/no-img-element': 0,
+      '@next/next/no-page-custom-font': 0,
       'import/no-named-as-default': 0
     }
   },
@@ -86,6 +87,6 @@ const patchedConfig = [
   }
 ]
 
-const config = [...patchedConfig, { ignores: ['.next/*'] }]
+const config = [...patchedConfig, { ignores: ['.next/*', 'test-*.js'] }]
 
 export default config

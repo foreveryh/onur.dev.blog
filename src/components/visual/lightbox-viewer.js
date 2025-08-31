@@ -3,9 +3,23 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { ChevronLeftIcon, ChevronRightIcon, XIcon } from 'lucide-react'
 import { CldImage, getCldVideoUrl } from 'next-cloudinary'
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 
 export function LightboxViewer({ isOpen, media, allMedia, onClose, onNavigate }) {
+  const navigatePrevious = useCallback(() => {
+    if (!media || !allMedia) return
+    const currentIndex = allMedia.findIndex((item) => item.id === media.id)
+    const previousIndex = currentIndex > 0 ? currentIndex - 1 : allMedia.length - 1
+    onNavigate({ ...allMedia[previousIndex], index: previousIndex })
+  }, [media, allMedia, onNavigate])
+
+  const navigateNext = useCallback(() => {
+    if (!media || !allMedia) return
+    const currentIndex = allMedia.findIndex((item) => item.id === media.id)
+    const nextIndex = currentIndex < allMedia.length - 1 ? currentIndex + 1 : 0
+    onNavigate({ ...allMedia[nextIndex], index: nextIndex })
+  }, [media, allMedia, onNavigate])
+
   useEffect(() => {
     const handleKeyPress = (e) => {
       if (!isOpen) return
@@ -21,21 +35,7 @@ export function LightboxViewer({ isOpen, media, allMedia, onClose, onNavigate })
 
     document.addEventListener('keydown', handleKeyPress)
     return () => document.removeEventListener('keydown', handleKeyPress)
-  }, [isOpen, onClose])
-
-  const navigatePrevious = () => {
-    if (!media || !allMedia) return
-    const currentIndex = allMedia.findIndex((item) => item.id === media.id)
-    const previousIndex = currentIndex > 0 ? currentIndex - 1 : allMedia.length - 1
-    onNavigate({ ...allMedia[previousIndex], index: previousIndex })
-  }
-
-  const navigateNext = () => {
-    if (!media || !allMedia) return
-    const currentIndex = allMedia.findIndex((item) => item.id === media.id)
-    const nextIndex = currentIndex < allMedia.length - 1 ? currentIndex + 1 : 0
-    onNavigate({ ...allMedia[nextIndex], index: nextIndex })
-  }
+  }, [isOpen, onClose, navigatePrevious, navigateNext])
 
   if (!isOpen || !media) return null
 
