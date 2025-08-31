@@ -95,8 +95,11 @@ MUSING_CODE=your_secret_validation_code GITHUB_PAT=ghp_your_github_personal_acce
 # Analytics & Monitoring
 NEXT_PUBLIC_TINYBIRD_TOKEN=your_tinybird_analytics_token # Optional: additional analytics
 
-# Bookmarks Integration
-NEXT_PUBLIC_RAINDROP_ACCESS_TOKEN=your_raindrop_io_access_token # For Raindrop.io bookmarks feature
+# Raindrop.io OAuth Integration (for Bookmarks)
+RAINDROP_CLIENT_ID=your_raindrop_oauth_client_id
+RAINDROP_CLIENT_SECRET=your_raindrop_oauth_client_secret
+RAINDROP_ENCRYPTION_KEY=your_32_character_encryption_key
+RAINDROP_ENCRYPTED_REFRESH_TOKEN=generated_after_oauth_completion
 
 # Revalidation & Cache Management
 NEXT_REVALIDATE_SECRET=your_nextjs_revalidation_secret
@@ -218,25 +221,22 @@ If you've published new GitHub Issues but the blog doesn't show the latest conte
    - ISR cache will automatically expire after 24 hours
    - The first visitor will trigger page regeneration
 
-## Raindrop.io Setup (Bookmarks Feature)
+## Raindrop.io OAuth Setup (Bookmarks Feature)
 
-This project includes a bookmarks feature that integrates with [Raindrop.io](https://raindrop.io) to display your saved
-bookmarks. Follow these steps to set up the integration properly:
+This project includes a bookmarks feature that integrates with [Raindrop.io](https://raindrop.io) using OAuth 2.0 authentication to securely access your saved bookmarks. The system supports multiple token storage strategies and automatic token refresh.
 
 ### Prerequisites
 
 - A Raindrop.io account (free account works)
 - Some bookmark collections created in your Raindrop.io account
 
-### Step 1: Create a Raindrop.io Application
+### Step 1: Create a Raindrop.io OAuth Application
 
 1. **Login to Raindrop.io**:
-
    - Go to [https://raindrop.io](https://raindrop.io)
    - Sign in to your account
 
 2. **Access Developer Settings**:
-
    - Click on your profile avatar in the top-right corner
    - Select "Settings"
    - In the left sidebar, find and click "Integrations"
@@ -245,26 +245,33 @@ bookmarks. Follow these steps to set up the integration properly:
 3. **Create New Application**:
    - Click "Create new app"
    - Fill in the application details:
-     - **Name**: `Personal Website` (or any name you prefer)
-     - **Description**: `For personal website bookmarks display`
+     - **Name**: `Personal Website OAuth` (or any name you prefer)
+     - **Description**: `OAuth integration for personal website bookmarks`
      - **Site**: Your website URL (e.g., `https://yourdomain.com`)
-     - **Redirect URI**: Your website URL (same as above)
+     - **Redirect URI**: `https://yourdomain.com/api/auth/raindrop/callback` ⚠️ **Critical: Must be exact**
 
-### Step 2: Generate Access Token
+### Step 2: Configure Environment Variables
 
-1. **Get Test Token**:
-   - After creating the application, you'll see the app details page
-   - In the "Credentials" section, find the "Test token" row
-   - Click "Create test token" button
-   - Copy the generated token (this is your access token)
+Add the following variables to your Vercel project settings or `.env` file:
 
-> **Important**: Use the "Test token", NOT the "Client secret". The Client secret is used for OAuth flows, while the
-> Test token is for direct API access.
+```bash
+# Raindrop.io OAuth Credentials
+RAINDROP_CLIENT_ID=your_client_id_from_raindrop_app
+RAINDROP_CLIENT_SECRET=your_client_secret_from_raindrop_app
+
+# Encryption Key for Token Storage (32 characters)
+RAINDROP_ENCRYPTION_KEY=generate_a_32_character_random_string
+
+# Base URL for OAuth Callbacks
+NEXT_PUBLIC_BASE_URL=https://yourdomain.com
+
+# Encrypted Tokens (Set after OAuth completion - see Step 4)
+RAINDROP_ENCRYPTED_REFRESH_TOKEN=will_be_generated_during_oauth_setup
+```
 
 ### Step 3: Configure Collection IDs
 
 1. **Find Your Collection IDs**:
-
    - In Raindrop.io, go to your collections
    - The collection ID can be found in the URL when viewing a collection
    - For example, in `https://app.raindrop.io/my/12345678`, the ID is `12345678`
@@ -275,44 +282,68 @@ bookmarks. Follow these steps to set up the integration properly:
    ```javascript
    export const COLLECTION_IDS = [
      12345678, // Replace with your actual collection IDs
-     87654321
-     // Add more collection IDs as needed
+     87654321  // Add more collection IDs as needed
    ]
    ```
 
-### Step 4: Set Environment Variable
+### Step 4: Complete OAuth Setup
 
-Add the access token to your `.env` file:
+1. **Access OAuth Setup Page**:
+   - Navigate to `/admin/raindrop-setup` on your website
+   - You should see the OAuth setup interface
 
-```
-NEXT_PUBLIC_RAINDROP_ACCESS_TOKEN=your_actual_test_token_here
-```
+2. **Start OAuth Flow**:
+   - Click "开始 OAuth 认证" (Start OAuth Authentication)
+   - You'll be redirected to Raindrop.io for authorization
+   - Click "Agree" to authorize your application
 
-### Step 5: Restart Development Server
+3. **Copy Encrypted Token**:
+   - After successful authorization, check your Vercel function logs
+   - Look for a message like:
+   ```
+   🔐 Encrypted token (add this to RAINDROP_ENCRYPTED_REFRESH_TOKEN env var):
+   [long encrypted string]
+   ```
+   - Copy this encrypted string
 
-After updating the environment variables, restart your Next.js development server:
+4. **Set Final Environment Variable**:
+   - In Vercel project settings, add/update:
+   - `RAINDROP_ENCRYPTED_REFRESH_TOKEN=[paste the encrypted string here]`
+   - Redeploy or wait for automatic deployment
 
-```bash
-npm run dev
-# or
-bun dev
-```
+5. **Verify Setup**:
+   - Return to `/admin/raindrop-setup`
+   - Status should now show "已认证" (Authenticated)
+   - Visit `/bookmarks` to see your bookmark collections
+
+### Token Storage Strategies
+
+The system automatically selects the best available storage method:
+
+1. **Vercel KV** (if `KV_REST_API_URL` and `KV_REST_API_TOKEN` are set)
+2. **Supabase** (if `NEXT_PUBLIC_SUPABASE_URL` and `SUPABASE_ANON_KEY` are set)  
+3. **Environment Variables** (fallback - requires manual encrypted token setup)
+
+### Features
+
+- **Automatic Token Refresh**: Access tokens are automatically refreshed when needed
+- **Secure Storage**: All tokens are encrypted before storage
+- **Build-time Safe**: Gracefully handles missing authentication during static generation
+- **Multiple Storage Options**: Supports different deployment environments
+- **Admin Interface**: Web-based setup and status monitoring
 
 ### Troubleshooting
 
-- **401 Unauthorized Error**: Ensure you're using the Test token, not the Client secret
-- **Empty Bookmarks**: Verify that your collection IDs in `constants.js` match your actual Raindrop.io collections
-- **Network Errors**: Check if your Raindrop.io account has the collections you're trying to access
+- **"未认证" Status**: Complete the OAuth flow and set the encrypted token environment variable
+- **Build Failures**: Ensure all environment variables are set correctly
+- **Empty Bookmarks**: Verify collection IDs in `constants.js` match your Raindrop.io collections
+- **OAuth Errors**: Check that redirect URI exactly matches your application settings
 
-### API Rate Limits
+### API Information
 
-Raindrop.io has API rate limits. The current implementation includes:
-
-- Cache duration: 2 days for bookmark data
-- Request timeout: 10 seconds
-- Automatic error handling for failed requests
-
-For more information about Raindrop.io API, visit: [https://developer.raindrop.io](https://developer.raindrop.io)
+- **Token Lifetime**: Access tokens expire after 2 weeks, automatically refreshed
+- **Cache Duration**: Bookmark data is cached for 2 days
+- **Rate Limits**: Automatic handling with appropriate timeouts
 
 ## Analytics & Monitoring
 
