@@ -1,6 +1,18 @@
 import { NextResponse } from 'next/server'
 
-import { tokenManager } from '@/lib/auth/token-manager'
+// 动态选择 token manager
+function getTokenManager() {
+  if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+    const { tokenManager } = require('@/lib/auth/token-manager')
+    return tokenManager
+  }
+  if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_ANON_KEY) {
+    const { getTokenManager } = require('@/lib/auth/supabase-token-manager')
+    return getTokenManager()
+  }
+  const { getTokenManager } = require('@/lib/auth/env-token-manager')
+  return getTokenManager()
+}
 
 const RAINDROP_API_URL = 'https://api.raindrop.io/rest/v1'
 
@@ -49,12 +61,19 @@ export async function GET(request) {
     }
 
     const tokenData = await tokenResponse.json()
+    console.info('Token response from Raindrop:', JSON.stringify(tokenData, null, 2))
 
     if (!tokenData.access_token || !tokenData.refresh_token) {
+      console.error('Missing tokens in response:', {
+        hasAccessToken: !!tokenData.access_token,
+        hasRefreshToken: !!tokenData.refresh_token,
+        responseKeys: Object.keys(tokenData)
+      })
       throw new Error('Invalid token response')
     }
 
-    // 存储令牌到 KV
+    // 存储令牌
+    const tokenManager = getTokenManager()
     await tokenManager.storeInitialTokens(
       tokenData.access_token,
       tokenData.refresh_token,
