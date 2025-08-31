@@ -8,8 +8,8 @@ export async function GET() {
     return NextResponse.json({ error: 'Missing RAINDROP_CLIENT_ID' }, { status: 500 })
   }
 
-  // 构建 OAuth2 授权 URL
-  const authUrl = new URL('https://raindrop.io/oauth/authorize')
+  // 构建 OAuth2 授权 URL - 使用 v2 API
+  const authUrl = new URL('https://api.raindrop.io/v2/oauth/authorize')
   authUrl.searchParams.set('client_id', clientId)
   authUrl.searchParams.set('redirect_uri', `${baseUrl}/api/auth/raindrop/callback`)
   authUrl.searchParams.set('response_type', 'code')
