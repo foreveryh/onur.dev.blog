@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+
 import { tokenManager } from '@/lib/auth/token-manager'
 
 const RAINDROP_API_URL = 'https://api.raindrop.io/rest/v1'
@@ -30,7 +31,7 @@ export async function GET(request) {
     const tokenResponse = await fetch(`${RAINDROP_API_URL}/oauth/access_token`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         client_id: clientId,
@@ -48,7 +49,7 @@ export async function GET(request) {
     }
 
     const tokenData = await tokenResponse.json()
-    
+
     if (!tokenData.access_token || !tokenData.refresh_token) {
       throw new Error('Invalid token response')
     }
@@ -63,7 +64,7 @@ export async function GET(request) {
     // 验证令牌是否工作
     const testResponse = await fetch(`${RAINDROP_API_URL}/user`, {
       headers: {
-        'Authorization': `Bearer ${tokenData.access_token}`
+        Authorization: `Bearer ${tokenData.access_token}`
       }
     })
 
@@ -76,12 +77,8 @@ export async function GET(request) {
 
     // 重定向到成功页面
     return NextResponse.redirect(`${baseUrl}/admin/raindrop-setup?success=true`)
-
   } catch (error) {
     console.error('OAuth callback error:', error)
-    return NextResponse.json(
-      { error: 'Failed to complete OAuth setup', details: error.message }, 
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Failed to complete OAuth setup', details: error.message }, { status: 500 })
   }
 }
