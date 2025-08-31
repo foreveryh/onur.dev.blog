@@ -5,7 +5,7 @@ import { getSortedPosts } from '@/lib/utils'
 export default async function sitemap() {
   try {
     const [allPosts, bookmarks, allPages] = await Promise.all([
-      getAllPosts(), 
+      getAllPosts(),
       getBookmarks().catch((error) => {
         console.log('Sitemap: Bookmarks unavailable during build:', error.message)
         return []
@@ -32,25 +32,25 @@ export default async function sitemap() {
       }
     })
 
-  const pages = allPages.map((page) => {
-    let changeFrequency = 'yearly'
-    if (['writing', 'journey'].includes(page.slug)) changeFrequency = 'monthly'
-    if (['bookmarks'].includes(page.slug)) changeFrequency = 'daily'
+    const pages = allPages.map((page) => {
+      let changeFrequency = 'yearly'
+      if (['writing', 'journey'].includes(page.slug)) changeFrequency = 'monthly'
+      if (['bookmarks'].includes(page.slug)) changeFrequency = 'daily'
 
-    let lastModified = page.sys.publishedAt
-    if (['writing', 'journey', 'bookmarks'].includes(page.slug)) lastModified = new Date()
+      let lastModified = page.sys.publishedAt
+      if (['writing', 'journey', 'bookmarks'].includes(page.slug)) lastModified = new Date()
 
-    let priority = 0.5
-    if (['writing', 'journey'].includes(page.slug)) priority = 0.8
-    if (['bookmarks'].includes(page.slug)) priority = 1
+      let priority = 0.5
+      if (['writing', 'journey'].includes(page.slug)) priority = 0.8
+      if (['bookmarks'].includes(page.slug)) priority = 1
 
-    return {
-      url: `https://me.deeptoai.com/${page.slug}`,
-      lastModified,
-      changeFrequency,
-      priority
-    }
-  })
+      return {
+        url: `https://me.deeptoai.com/${page.slug}`,
+        lastModified,
+        changeFrequency,
+        priority
+      }
+    })
 
     return [
       {
