@@ -14,7 +14,7 @@
     "unused": "next-unused",
     "lint": "eslint .",
     "lint:fix": "eslint --fix",
-    "outdated": "bun outdated",
+    "outdated": "bun outdated"
   },
   "engines": {
     "node": "20.x"
