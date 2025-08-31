@@ -6,14 +6,14 @@ import { useEffect, useRef, useState } from 'react'
 export function EasterEgg({ trigger = 'work hard' }) {
   const [isActive, setIsActive] = useState(false)
   const timeoutRef = useRef(null)
-  const keySequence = useRef('')
+  const keySequenceRef = useRef('')
 
   useEffect(() => {
     const handleKeyPress = (event) => {
       const key = event.key.toLowerCase()
-      keySequence.current = (keySequence.current + key).slice(-trigger.length)
+      keySequenceRef.current = (keySequenceRef.current + key).slice(-trigger.length)
 
-      if (keySequence.current === trigger) {
+      if (keySequenceRef.current === trigger) {
         setIsActive(true)
         // Auto-hide after 5 seconds
         setTimeout(() => setIsActive(false), 5000)
@@ -24,7 +24,7 @@ export function EasterEgg({ trigger = 'work hard' }) {
         clearTimeout(timeoutRef.current)
       }
       timeoutRef.current = setTimeout(() => {
-        keySequence.current = ''
+        keySequenceRef.current = ''
       }, 3000)
     }
 
