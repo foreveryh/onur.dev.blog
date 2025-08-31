@@ -50,55 +50,58 @@ export default function RaindropSetupContent() {
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-bold">Raindrop.io 设置</h1>
-        <p className="text-gray-600 mt-2">
-          配置 Raindrop.io OAuth 认证以启用自动同步书签功能
-        </p>
+        <p className="mt-2 text-gray-600">配置 Raindrop.io OAuth 认证以启用自动同步书签功能</p>
       </div>
 
       {success && (
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+        <div className="rounded-lg border border-green-200 bg-green-50 p-4">
           <div className="flex">
             <div className="flex-shrink-0">
               <svg className="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clipRule="evenodd"
+                />
               </svg>
             </div>
             <div className="ml-3">
-              <h3 className="text-sm font-medium text-green-800">
-                OAuth 设置成功！
-              </h3>
-              <p className="mt-1 text-sm text-green-700">
-                Raindrop.io 认证已完成，书签同步功能现已启用。
-              </p>
+              <h3 className="text-sm font-medium text-green-800">OAuth 设置成功！</h3>
+              <p className="mt-1 text-sm text-green-700">Raindrop.io 认证已完成，书签同步功能现已启用。</p>
             </div>
           </div>
         </div>
       )}
 
-      <div className="bg-white shadow rounded-lg p-6">
-        <h2 className="text-lg font-medium mb-4">认证状态</h2>
-        
+      <div className="rounded-lg bg-white p-6 shadow">
+        <h2 className="mb-4 text-lg font-medium">认证状态</h2>
+
         {tokenInfo?.hasTokens ? (
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-              <span className="text-green-700 font-medium">已认证</span>
+              <div className="h-3 w-3 rounded-full bg-green-500"></div>
+              <span className="font-medium text-green-700">已认证</span>
             </div>
-            
-            <div className="text-sm text-gray-600 space-y-1">
-              <p><strong>Token 过期时间:</strong> {new Date(tokenInfo.expiresAt).toLocaleString()}</p>
-              <p><strong>上次刷新:</strong> {new Date(tokenInfo.lastRefreshed).toLocaleString()}</p>
-              <p><strong>状态:</strong> 
+
+            <div className="space-y-1 text-sm text-gray-600">
+              <p>
+                <strong>Token 过期时间:</strong> {new Date(tokenInfo.expiresAt).toLocaleString()}
+              </p>
+              <p>
+                <strong>上次刷新:</strong> {new Date(tokenInfo.lastRefreshed).toLocaleString()}
+              </p>
+              <p>
+                <strong>状态:</strong>
                 <span className={`ml-1 ${tokenInfo.isExpired ? 'text-red-600' : 'text-green-600'}`}>
                   {tokenInfo.isExpired ? '已过期 (将自动刷新)' : '有效'}
                 </span>
               </p>
             </div>
 
-            <div className="pt-4 border-t">
+            <div className="border-t pt-4">
               <button
                 onClick={handleClearTokens}
-                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                className="rounded-md bg-red-600 px-4 py-2 text-white transition-colors hover:bg-red-700"
               >
                 清除认证信息
               </button>
@@ -107,17 +110,15 @@ export default function RaindropSetupContent() {
         ) : (
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-              <span className="text-red-700 font-medium">未认证</span>
+              <div className="h-3 w-3 rounded-full bg-red-500"></div>
+              <span className="font-medium text-red-700">未认证</span>
             </div>
-            
-            <p className="text-gray-600">
-              需要完成 Raindrop.io OAuth 认证才能启用书签自动同步功能。
-            </p>
-            
+
+            <p className="text-gray-600">需要完成 Raindrop.io OAuth 认证才能启用书签自动同步功能。</p>
+
             <a
               href="/api/auth/raindrop"
-              className="inline-block px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+              className="inline-block rounded-md bg-blue-600 px-6 py-3 text-white transition-colors hover:bg-blue-700"
             >
               开始 OAuth 认证
             </a>
@@ -125,9 +126,9 @@ export default function RaindropSetupContent() {
         )}
       </div>
 
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <h3 className="text-sm font-medium text-blue-800 mb-2">设置说明</h3>
-        <ul className="text-sm text-blue-700 space-y-1">
+      <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
+        <h3 className="mb-2 text-sm font-medium text-blue-800">设置说明</h3>
+        <ul className="space-y-1 text-sm text-blue-700">
           <li>• 首次设置需要到 Raindrop.io 完成 OAuth 授权</li>
           <li>• Token 将自动刷新，无需手动维护</li>
           <li>• 所有认证信息都经过加密存储</li>
