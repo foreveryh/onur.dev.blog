@@ -87,6 +87,6 @@ const patchedConfig = [
   }
 ]
 
-const config = [...patchedConfig, { ignores: ['.next/*'] }]
+const config = [...patchedConfig, { ignores: ['.next/*', 'test-*.js'] }]
 
 export default config
