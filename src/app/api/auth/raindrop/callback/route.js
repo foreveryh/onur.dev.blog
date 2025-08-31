@@ -42,9 +42,20 @@ export async function GET(request) {
   }
 
   try {
+    console.info('=== Starting token exchange process ===')
+    
     const clientId = process.env.RAINDROP_CLIENT_ID
     const clientSecret = process.env.RAINDROP_CLIENT_SECRET
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+
+    console.info('Raw environment variables:', {
+      NODE_ENV: process.env.NODE_ENV,
+      hasVercelEnv: !!process.env.VERCEL,
+      allEnvKeys: Object.keys(process.env).filter(key => key.includes('RAINDROP')),
+      clientIdValue: clientId || 'MISSING',
+      clientSecretValue: clientSecret ? `${clientSecret.substring(0, 4)}...` : 'MISSING',
+      baseUrlValue: baseUrl
+    })
 
     // Debug environment variables
     console.info('Environment variables check:', {
@@ -57,6 +68,10 @@ export async function GET(request) {
     })
 
     if (!clientId || !clientSecret) {
+      console.error('MISSING CREDENTIALS:', {
+        clientId: clientId || 'UNDEFINED',
+        clientSecret: clientSecret || 'UNDEFINED'
+      })
       throw new Error('Missing RAINDROP_CLIENT_ID or RAINDROP_CLIENT_SECRET')
     }
 
