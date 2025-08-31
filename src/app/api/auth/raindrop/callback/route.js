@@ -35,6 +35,16 @@ export async function GET(request) {
     const clientSecret = process.env.RAINDROP_CLIENT_SECRET
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
 
+    // Debug environment variables
+    console.info('Environment variables check:', {
+      hasClientId: !!clientId,
+      clientIdLength: clientId?.length || 0,
+      hasClientSecret: !!clientSecret,
+      clientSecretLength: clientSecret?.length || 0,
+      clientIdFirst4: clientId?.substring(0, 4) || 'missing',
+      clientSecretFirst4: clientSecret?.substring(0, 4) || 'missing'
+    })
+
     if (!clientId || !clientSecret) {
       throw new Error('Missing RAINDROP_CLIENT_ID or RAINDROP_CLIENT_SECRET')
     }
@@ -77,10 +87,16 @@ export async function GET(request) {
     const tokenData = await tokenResponse.json()
     console.info('Token response from Raindrop:', JSON.stringify(tokenData, null, 2))
 
-    // Check if response contains an error
+    // Check if response contains an error (handle both OAuth standard and Raindrop.io format)
     if (tokenData.error) {
       console.error('OAuth error in token response:', tokenData)
       throw new Error(`OAuth error: ${tokenData.error} - ${tokenData.error_description || 'Unknown error'}`)
+    }
+    
+    // Check for Raindrop.io specific error format
+    if (tokenData.result === false) {
+      console.error('Raindrop.io API error:', tokenData)
+      throw new Error(`Raindrop.io API error: ${tokenData.errorMessage || 'Unknown error'} (status: ${tokenData.status})`)
     }
 
     // Validate required tokens
