@@ -73,7 +73,7 @@ export async function GET(request) {
     }
 
     const userInfo = await testResponse.json()
-    console.log('OAuth setup completed for user:', userInfo.user?.fullName)
+    console.info('OAuth setup completed for user:', userInfo.user?.fullName)
 
     // 重定向到成功页面
     return NextResponse.redirect(`${baseUrl}/admin/raindrop-setup?success=true`)

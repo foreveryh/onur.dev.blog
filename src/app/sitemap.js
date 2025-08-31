@@ -7,7 +7,7 @@ export default async function sitemap() {
     const [allPosts, bookmarks, allPages] = await Promise.all([
       getAllPosts(),
       getBookmarks().catch((error) => {
-        console.log('Sitemap: Bookmarks unavailable during build:', error.message)
+        console.info('Sitemap: Bookmarks unavailable during build:', error.message)
         return []
       }),
       getAllPageSlugs()

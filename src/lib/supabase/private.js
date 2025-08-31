@@ -11,7 +11,7 @@ function createPrivateClient() {
 // 延迟初始化
 let privateClient = null
 
-export default {
+const supabaseClient = {
   get client() {
     if (!privateClient) {
       privateClient = createPrivateClient()
@@ -30,3 +30,5 @@ export default {
     }
   }
 }
+
+export default supabaseClient

@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
@@ -116,12 +117,12 @@ export default function RaindropSetupContent() {
 
             <p className="text-gray-600">需要完成 Raindrop.io OAuth 认证才能启用书签自动同步功能。</p>
 
-            <a
+            <Link
               href="/api/auth/raindrop"
               className="inline-block rounded-md bg-blue-600 px-6 py-3 text-white transition-colors hover:bg-blue-700"
             >
               开始 OAuth 认证
-            </a>
+            </Link>
           </div>
         )}
       </div>

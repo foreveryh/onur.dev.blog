@@ -46,7 +46,7 @@ export class SupabaseTokenManager {
         .single()
 
       if (error || !data) {
-        console.log('No stored token found:', error?.message || 'No data')
+        console.info('No stored token found:', error?.message || 'No data')
         return null
       }
 
@@ -74,7 +74,7 @@ export class SupabaseTokenManager {
         return false
       }
 
-      console.log('Token stored successfully in Supabase')
+      console.info('Token stored successfully in Supabase')
       return true
     } catch (error) {
       console.error('Failed to store token:', error)
@@ -96,7 +96,7 @@ export class SupabaseTokenManager {
       }
 
       // 需要刷新access token
-      console.log('Access token expired or expiring soon, refreshing...')
+      console.info('Access token expired or expiring soon, refreshing...')
       const newTokenInfo = await this.refreshAccessToken(tokenInfo.refreshToken)
 
       if (!newTokenInfo) {

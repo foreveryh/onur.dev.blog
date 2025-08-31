@@ -44,7 +44,7 @@ export async function GET(request) {
     if (storage) {
       const cachedData = await storage.get(CACHE_KEY)
       if (cachedData && cachedData.cached_at + CACHE_TTL > Date.now()) {
-        console.log('Returning cached bookmarks')
+        console.info('Returning cached bookmarks')
         return NextResponse.json(cachedData.data)
       }
     }
@@ -63,7 +63,7 @@ export async function GET(request) {
       })
     }
 
-    console.log(`Fetched ${allBookmarks.length} bookmarks`)
+    console.info(`Fetched ${allBookmarks.length} bookmarks`)
     return NextResponse.json(allBookmarks)
   } catch (error) {
     console.error('Bookmarks API error:', error)
@@ -73,7 +73,7 @@ export async function GET(request) {
     if (storage) {
       const cachedData = await storage.get(CACHE_KEY)
       if (cachedData) {
-        console.log('Returning stale cached data due to error')
+        console.info('Returning stale cached data due to error')
         return NextResponse.json(cachedData.data)
       }
     }
@@ -162,7 +162,6 @@ async function fetchAllBookmarks(accessToken) {
           if (response.status === 401) {
             throw new Error('Unauthorized - token may be expired')
           }
-          console.warn(`Failed to fetch collection ${collectionId}:`, response.status)
           break
         }
 

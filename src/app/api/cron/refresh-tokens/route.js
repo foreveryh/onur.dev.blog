@@ -28,13 +28,13 @@ export async function GET() {
   }
 
   try {
-    console.log('Starting daily scheduled token refresh check...')
+    console.info('Starting daily scheduled token refresh check...')
 
     const tokenManager = getTokenManager()
     const tokenInfo = await tokenManager.getStoredTokenInfo()
 
     if (!tokenInfo) {
-      console.log('No tokens found, skipping refresh')
+      console.info('No tokens found, skipping refresh')
       return NextResponse.json({
         success: true,
         message: 'No tokens to refresh'
@@ -45,7 +45,7 @@ export async function GET() {
     const shouldRefresh = tokenInfo.accessExpiresAt < Date.now() + 12 * 60 * 60 * 1000
 
     if (shouldRefresh) {
-      console.log('Token expires soon, refreshing...')
+      console.info('Token expires soon, refreshing...')
       await tokenManager.refreshAccessToken(tokenInfo.refreshToken)
 
       return NextResponse.json({
@@ -54,7 +54,7 @@ export async function GET() {
         refreshed: true
       })
     } else {
-      console.log('Token still valid, no refresh needed')
+      console.info('Token still valid, no refresh needed')
       return NextResponse.json({
         success: true,
         message: 'Token still valid',

@@ -37,7 +37,7 @@ export class TokenManager {
     const shouldRefresh = expiresAt < Date.now() + 5 * 60 * 1000
 
     if (shouldRefresh) {
-      console.log('Token expires soon, attempting refresh...')
+      console.info('Token expires soon, attempting refresh...')
       return await this.refreshAccessToken()
     }
 
@@ -54,7 +54,7 @@ export class TokenManager {
 
     if (!hasLock) {
       // 等待其他刷新完成
-      console.log('Another refresh in progress, waiting...')
+      console.info('Another refresh in progress, waiting...')
       await this.waitForRefresh()
       return await this.getValidAccessToken()
     }
@@ -97,7 +97,7 @@ export class TokenManager {
       }
 
       await kv.set(KV_KEYS.AUTH, encryptedData)
-      console.log('Token refreshed successfully')
+      console.info('Token refreshed successfully')
 
       return newTokens.access_token
     } catch (error) {
@@ -130,13 +130,13 @@ export class TokenManager {
     }
 
     await kv.set(KV_KEYS.AUTH, encryptedData)
-    console.log('Initial tokens stored successfully')
+    console.info('Initial tokens stored successfully')
   }
 
   async clearTokens() {
     await kv.del(KV_KEYS.AUTH)
     await kv.del(KV_KEYS.REFRESH_LOCK)
-    console.log('Tokens cleared')
+    console.info('Tokens cleared')
   }
 
   async getTokenInfo() {

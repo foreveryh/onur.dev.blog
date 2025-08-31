@@ -8,7 +8,7 @@ export async function POST() {
     // 清除缓存
     await kv.del(CACHE_KEY)
 
-    console.log('Bookmarks cache cleared')
+    console.info('Bookmarks cache cleared')
 
     return NextResponse.json({
       success: true,
