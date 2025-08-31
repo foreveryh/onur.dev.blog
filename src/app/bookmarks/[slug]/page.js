@@ -6,7 +6,7 @@ import { FloatingHeader } from '@/components/floating-header'
 import { PageTitle } from '@/components/page-title'
 import { ScreenLoadingSpinner } from '@/components/screen-loading-spinner'
 import { ScrollArea } from '@/components/scroll-area'
-import { getBookmarkItems, getBookmarks } from '@/lib/raindrop'
+import { getBookmarkItems, getBookmarks } from '@/lib/raindrop-with-auth'
 import { sortByProperty } from '@/lib/utils'
 
 // 禁用静态生成，使用动态渲染

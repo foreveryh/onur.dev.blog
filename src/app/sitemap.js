@@ -1,12 +1,15 @@
 import { getAllPageSlugs, getAllPosts } from '@/lib/contentful'
-import { getBookmarks } from '@/lib/raindrop'
+import { getBookmarks } from '@/lib/raindrop-with-auth'
 import { getSortedPosts } from '@/lib/utils'
 
 export default async function sitemap() {
   try {
     const [allPosts, bookmarks, allPages] = await Promise.all([
       getAllPosts(), 
-      getBookmarks().catch(() => []), // 如果书签获取失败，返回空数组
+      getBookmarks().catch((error) => {
+        console.log('Sitemap: Bookmarks unavailable during build:', error.message)
+        return []
+      }),
       getAllPageSlugs()
     ])
 

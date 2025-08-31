@@ -1,6 +1,6 @@
 import { Feed } from 'feed'
 
-import { getBookmarkItems, getBookmarks } from '@/lib/raindrop'
+import { getBookmarkItems, getBookmarks } from '@/lib/raindrop-with-auth'
 
 export const dynamic = 'force-dynamic'
 

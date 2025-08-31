@@ -4,7 +4,7 @@ import { ListItem } from '@/components/list-item'
 import { ScreenLoadingSpinner } from '@/components/screen-loading-spinner'
 import { SideMenu } from '@/components/side-menu'
 import { Toaster } from '@/components/ui/sonner'
-import { getBookmarks } from '@/lib/raindrop'
+import { getBookmarks } from '@/lib/raindrop-with-auth'
 import { sortByProperty } from '@/lib/utils'
 
 // 禁用静态生成，使用动态渲染
