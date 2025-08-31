@@ -2,10 +2,16 @@ import { Feed } from 'feed'
 
 import { getBookmarkItems, getBookmarks } from '@/lib/raindrop'
 
-export const dynamic = 'force-static'
+export const dynamic = 'force-dynamic'
 
 export async function GET() {
-  const bookmarks = await getBookmarks()
+  try {
+    const bookmarks = await getBookmarks()
+    if (!bookmarks || bookmarks.length === 0) {
+      return new Response('<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>Bookmarks unavailable</title></channel></rss>', {
+        headers: { 'Content-Type': 'application/rss+xml; charset=utf-8' }
+      })
+    }
   const date = new Date()
   const siteURL = 'https://me.deeptoai.com'
   const author = {
@@ -60,4 +66,11 @@ export async function GET() {
       'Content-Type': 'application/rss+xml; charset=utf-8'
     }
   })
+  } catch (error) {
+    console.error('Bookmarks RSS generation failed:', error)
+    return new Response('<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>Bookmarks RSS Error</title></channel></rss>', {
+      status: 500,
+      headers: { 'Content-Type': 'application/rss+xml; charset=utf-8' }
+    })
+  }
 }

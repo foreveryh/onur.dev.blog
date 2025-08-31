@@ -8,6 +8,9 @@ import { getPageSeo } from '@/lib/contentful'
 import { getBookmarks } from '@/lib/raindrop'
 import { sortByProperty } from '@/lib/utils'
 
+// 禁用静态生成，使用动态渲染
+export const dynamic = 'force-dynamic'
+
 async function fetchData() {
   const bookmarks = await getBookmarks()
   const sortedBookmarks = sortByProperty(bookmarks, 'title')

@@ -10,12 +10,18 @@ const RAINDROP_API_URL = 'https://api.raindrop.io/rest/v1'
 
 export class TokenManager {
   constructor() {
-    this.clientId = process.env.RAINDROP_CLIENT_ID
-    this.clientSecret = process.env.RAINDROP_CLIENT_SECRET
+    // 延迟验证环境变量，避免构建时错误
+  }
+
+  getCredentials() {
+    const clientId = process.env.RAINDROP_CLIENT_ID
+    const clientSecret = process.env.RAINDROP_CLIENT_SECRET
     
-    if (!this.clientId || !this.clientSecret) {
+    if (!clientId || !clientSecret) {
       throw new Error('Missing RAINDROP_CLIENT_ID or RAINDROP_CLIENT_SECRET')
     }
+    
+    return { clientId, clientSecret }
   }
 
   async getValidAccessToken() {
@@ -59,14 +65,16 @@ export class TokenManager {
       }
 
       const refreshToken = decrypt(tokenData.refresh_token)
+      const { clientId, clientSecret } = this.getCredentials()
+      
       const response = await fetch(`${RAINDROP_API_URL}/oauth/access_token`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          client_id: this.clientId,
-          client_secret: this.clientSecret,
+          client_id: clientId,
+          client_secret: clientSecret,
           grant_type: 'refresh_token',
           refresh_token: refreshToken
         })
@@ -144,5 +152,39 @@ export class TokenManager {
   }
 }
 
-// 单例实例
-export const tokenManager = new TokenManager()
+// 延迟初始化的单例实例
+let _tokenManager = null
+
+export function getTokenManager() {
+  if (!_tokenManager) {
+    _tokenManager = new TokenManager()
+  }
+  return _tokenManager
+}
+
+// 为了向后兼容，保持原有导出
+export const tokenManager = {
+  get instance() {
+    return getTokenManager()
+  },
+  
+  async getValidAccessToken() {
+    return getTokenManager().getValidAccessToken()
+  },
+  
+  async refreshAccessToken() {
+    return getTokenManager().refreshAccessToken()
+  },
+  
+  async storeInitialTokens(accessToken, refreshToken, expiresIn) {
+    return getTokenManager().storeInitialTokens(accessToken, refreshToken, expiresIn)
+  },
+  
+  async clearTokens() {
+    return getTokenManager().clearTokens()
+  },
+  
+  async getTokenInfo() {
+    return getTokenManager().getTokenInfo()
+  }
+}

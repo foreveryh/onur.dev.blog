@@ -9,10 +9,19 @@ import { ScrollArea } from '@/components/scroll-area'
 import { getBookmarkItems, getBookmarks } from '@/lib/raindrop'
 import { sortByProperty } from '@/lib/utils'
 
-export async function generateStaticParams() {
-  const bookmarks = await getBookmarks()
-  return bookmarks.map((bookmark) => ({ slug: bookmark.slug }))
-}
+// 禁用静态生成，使用动态渲染
+export const dynamic = 'force-dynamic'
+
+// 注释掉静态生成，因为需要 OAuth2 认证
+// export async function generateStaticParams() {
+//   try {
+//     const bookmarks = await getBookmarks()
+//     return bookmarks?.map((bookmark) => ({ slug: bookmark.slug })) || []
+//   } catch (error) {
+//     console.warn('Unable to generate static params for bookmarks during build:', error.message)
+//     return []
+//   }
+// }
 
 async function fetchData(slug) {
   const bookmarks = await getBookmarks()
