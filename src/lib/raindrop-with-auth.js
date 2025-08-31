@@ -26,7 +26,15 @@ const RAINDROP_API_URL = 'https://api.raindrop.io/rest/v1'
 async function makeAuthenticatedRequest(url, options = {}) {
   try {
     const tokenManager = getTokenManager()
-    const accessToken = await tokenManager.getValidAccessToken()
+    
+    let accessToken
+    try {
+      accessToken = await tokenManager.getValidAccessToken()
+    } catch (authError) {
+      // 在构建时或没有token时，返回null而不是抛出错误
+      console.warn('Authentication not available:', authError.message)
+      throw new Error('Authentication required but not configured')
+    }
 
     const authOptions = {
       ...options,
@@ -41,23 +49,28 @@ async function makeAuthenticatedRequest(url, options = {}) {
 
     // 如果token无效，尝试刷新token并重试一次
     if (response.status === 401) {
-      // 获取新的access token (这会触发refresh)
-      const newAccessToken = await tokenManager.getValidAccessToken()
+      try {
+        // 获取新的access token (这会触发refresh)
+        const newAccessToken = await tokenManager.getValidAccessToken()
 
-      const retryOptions = {
-        ...authOptions,
-        headers: {
-          ...authOptions.headers,
-          Authorization: `Bearer ${newAccessToken}`
+        const retryOptions = {
+          ...authOptions,
+          headers: {
+            ...authOptions.headers,
+            Authorization: `Bearer ${newAccessToken}`
+          }
         }
-      }
 
-      const retryResponse = await fetch(url, retryOptions)
-      if (!retryResponse.ok) {
-        throw new Error(`HTTP error after token refresh! status: ${retryResponse.status}`)
-      }
+        const retryResponse = await fetch(url, retryOptions)
+        if (!retryResponse.ok) {
+          throw new Error(`HTTP error after token refresh! status: ${retryResponse.status}`)
+        }
 
-      return retryResponse
+        return retryResponse
+      } catch (refreshError) {
+        console.error('Token refresh failed:', refreshError)
+        throw new Error('Authentication expired and refresh failed')
+      }
     }
 
     if (!response.ok) {
@@ -95,6 +108,11 @@ export const getBookmarkItems = async (id, pageIndex = 0) => {
     const data = await response.json()
     return data
   } catch (error) {
+    // 在构建时或认证未配置时，返回空结果而不是null
+    if (error.message.includes('Authentication required but not configured')) {
+      console.warn(`Bookmark items not available during build for collection ${id} - authentication not configured`)
+      return { items: [] }
+    }
     console.error(`Failed to fetch bookmark items for collection ${id}: ${error.message}`)
     return null
   }
@@ -114,6 +132,11 @@ export const getBookmarks = async () => {
     const bookmarks = await response.json()
     return bookmarks.items.filter((bookmark) => COLLECTION_IDS.includes(bookmark._id))
   } catch (error) {
+    // 在构建时或认证未配置时，返回空数组而不是null
+    if (error.message.includes('Authentication required but not configured')) {
+      console.warn('Bookmarks not available during build - authentication not configured')
+      return []
+    }
     console.error(`Failed to fetch bookmarks: ${error.message}`)
     return null
   }
@@ -124,7 +147,12 @@ export const getBookmark = async (id) => {
     const response = await makeAuthenticatedRequest(`${RAINDROP_API_URL}/collection/${id}`)
     return await response.json()
   } catch (error) {
-    console.info(error)
+    // 在构建时或认证未配置时，返回空结果
+    if (error.message.includes('Authentication required but not configured')) {
+      console.warn(`Bookmark not available during build for id ${id} - authentication not configured`)
+      return { collection: {} }
+    }
+    console.error(`Failed to fetch bookmark ${id}:`, error)
     return null
   }
 }
