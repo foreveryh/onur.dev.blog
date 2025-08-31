@@ -10,7 +10,7 @@ export async function GET() {
   }
 
   try {
-    console.log('Starting scheduled token refresh check...')
+    console.log('Starting daily scheduled token refresh check...')
     
     const tokenInfo = await tokenManager.getTokenInfo()
     
@@ -22,8 +22,8 @@ export async function GET() {
       })
     }
 
-    // 检查是否需要刷新 (提前1小时刷新)
-    const shouldRefresh = tokenInfo.expiresAt < Date.now() + (60 * 60 * 1000)
+    // 检查是否需要刷新 (提前12小时刷新，因为只有每日检查)
+    const shouldRefresh = tokenInfo.expiresAt < Date.now() + (12 * 60 * 60 * 1000)
     
     if (shouldRefresh) {
       console.log('Token expires soon, refreshing...')
