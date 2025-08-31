@@ -17,9 +17,19 @@ function getTokenManager() {
 const RAINDROP_API_URL = 'https://api.raindrop.io/rest/v1'
 
 export async function GET(request) {
+  console.info('=== OAuth Callback Started ===')
+  console.info('Request URL:', request.url)
+  
   const { searchParams } = new URL(request.url)
   const code = searchParams.get('code')
   const error = searchParams.get('error')
+  
+  console.info('URL Parameters:', {
+    hasCode: !!code,
+    hasError: !!error,
+    codeLength: code?.length || 0,
+    error: error || 'none'
+  })
 
   if (error) {
     console.error('OAuth error:', error)
@@ -27,31 +37,66 @@ export async function GET(request) {
   }
 
   if (!code) {
+    console.error('No authorization code found in callback')
     return NextResponse.json({ error: 'Authorization code not found' }, { status: 400 })
   }
 
   try {
+    console.info('=== Starting token exchange process ===')
+    
     const clientId = process.env.RAINDROP_CLIENT_ID
     const clientSecret = process.env.RAINDROP_CLIENT_SECRET
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
 
+    console.info('Raw environment variables:', {
+      NODE_ENV: process.env.NODE_ENV,
+      hasVercelEnv: !!process.env.VERCEL,
+      allEnvKeys: Object.keys(process.env).filter(key => key.includes('RAINDROP')),
+      clientIdValue: clientId || 'MISSING',
+      clientSecretValue: clientSecret ? `${clientSecret.substring(0, 4)}...` : 'MISSING',
+      baseUrlValue: baseUrl
+    })
+
+    // Debug environment variables
+    console.info('Environment variables check:', {
+      hasClientId: !!clientId,
+      clientIdLength: clientId?.length || 0,
+      hasClientSecret: !!clientSecret,
+      clientSecretLength: clientSecret?.length || 0,
+      clientIdFirst4: clientId?.substring(0, 4) || 'missing',
+      clientSecretFirst4: clientSecret?.substring(0, 4) || 'missing'
+    })
+
     if (!clientId || !clientSecret) {
+      console.error('MISSING CREDENTIALS:', {
+        clientId: clientId || 'UNDEFINED',
+        clientSecret: clientSecret || 'UNDEFINED'
+      })
       throw new Error('Missing RAINDROP_CLIENT_ID or RAINDROP_CLIENT_SECRET')
     }
 
     // 交换授权码获取访问令牌
+    const tokenRequest = {
+      client_id: clientId,
+      client_secret: clientSecret,
+      grant_type: 'authorization_code',
+      code: code,
+      redirect_uri: `${baseUrl}/api/auth/raindrop/callback`
+    }
+    
+    console.info('Token exchange request:', {
+      url: 'https://raindrop.io/oauth/access_token',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: { ...tokenRequest, client_secret: '***' } // 隐藏敏感信息
+    })
+    
     const tokenResponse = await fetch('https://raindrop.io/oauth/access_token', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        client_id: clientId,
-        client_secret: clientSecret,
-        grant_type: 'authorization_code',
-        code: code,
-        redirect_uri: `${baseUrl}/api/auth/raindrop/callback`
-      })
+      body: JSON.stringify(tokenRequest)
     })
 
     if (!tokenResponse.ok) {
@@ -68,13 +113,37 @@ export async function GET(request) {
     const tokenData = await tokenResponse.json()
     console.info('Token response from Raindrop:', JSON.stringify(tokenData, null, 2))
 
-    if (!tokenData.access_token || !tokenData.refresh_token) {
-      console.error('Missing tokens in response:', {
+    // Check if response contains an error (handle both OAuth standard and Raindrop.io format)
+    if (tokenData.error) {
+      console.error('OAuth error in token response:', tokenData)
+      throw new Error(`OAuth error: ${tokenData.error} - ${tokenData.error_description || 'Unknown error'}`)
+    }
+    
+    // Check for Raindrop.io specific error format
+    if (tokenData.result === false) {
+      console.error('Raindrop.io API error:', tokenData)
+      throw new Error(`Raindrop.io API error: ${tokenData.errorMessage || 'Unknown error'} (status: ${tokenData.status})`)
+    }
+
+    // Validate required tokens
+    if (!tokenData.access_token) {
+      console.error('Missing access_token in response:', {
         hasAccessToken: !!tokenData.access_token,
         hasRefreshToken: !!tokenData.refresh_token,
-        responseKeys: Object.keys(tokenData)
+        responseKeys: Object.keys(tokenData),
+        fullResponse: tokenData
       })
-      throw new Error('Invalid token response')
+      throw new Error('Missing access_token in response')
+    }
+
+    if (!tokenData.refresh_token) {
+      console.error('Missing refresh_token in response:', {
+        hasAccessToken: !!tokenData.access_token,
+        hasRefreshToken: !!tokenData.refresh_token,
+        responseKeys: Object.keys(tokenData),
+        fullResponse: tokenData
+      })
+      throw new Error('Missing refresh_token in response')
     }
 
     // 存储令牌
