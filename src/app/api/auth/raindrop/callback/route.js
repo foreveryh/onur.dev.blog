@@ -28,7 +28,7 @@ export async function GET(request) {
     }
 
     // 交换授权码获取访问令牌
-    const tokenResponse = await fetch(`${RAINDROP_API_URL}/oauth/access_token`, {
+    const tokenResponse = await fetch('https://raindrop.io/oauth/access_token', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
