@@ -1,5 +1,6 @@
 import { kv } from '@vercel/kv'
-import { encrypt, decrypt } from './crypto'
+
+import { decrypt, encrypt } from './crypto'
 
 const KV_KEYS = {
   AUTH: 'raindrop:auth',
@@ -16,24 +17,24 @@ export class TokenManager {
   getCredentials() {
     const clientId = process.env.RAINDROP_CLIENT_ID
     const clientSecret = process.env.RAINDROP_CLIENT_SECRET
-    
+
     if (!clientId || !clientSecret) {
       throw new Error('Missing RAINDROP_CLIENT_ID or RAINDROP_CLIENT_SECRET')
     }
-    
+
     return { clientId, clientSecret }
   }
 
   async getValidAccessToken() {
     const tokenData = await kv.get(KV_KEYS.AUTH)
-    
+
     if (!tokenData) {
       throw new Error('No authentication data found. Please complete OAuth setup.')
     }
 
     // 检查是否需要刷新 (提前5分钟刷新)
     const expiresAt = tokenData.expires_at
-    const shouldRefresh = expiresAt < Date.now() + (5 * 60 * 1000)
+    const shouldRefresh = expiresAt < Date.now() + 5 * 60 * 1000
 
     if (shouldRefresh) {
       console.log('Token expires soon, attempting refresh...')
@@ -46,7 +47,7 @@ export class TokenManager {
   async refreshAccessToken() {
     // 防止并发刷新
     const lockKey = KV_KEYS.REFRESH_LOCK
-    const hasLock = await kv.set(lockKey, Date.now(), { 
+    const hasLock = await kv.set(lockKey, Date.now(), {
       ex: 30, // 30秒锁定期
       nx: true // only set if not exists
     })
@@ -66,11 +67,11 @@ export class TokenManager {
 
       const refreshToken = decrypt(tokenData.refresh_token)
       const { clientId, clientSecret } = this.getCredentials()
-      
+
       const response = await fetch(`${RAINDROP_API_URL}/oauth/access_token`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           client_id: clientId,
@@ -86,20 +87,19 @@ export class TokenManager {
       }
 
       const newTokens = await response.json()
-      
+
       // 存储新的token
       const encryptedData = {
         access_token: encrypt(newTokens.access_token),
         refresh_token: encrypt(newTokens.refresh_token || refreshToken), // 有些API不返回新的refresh token
-        expires_at: Date.now() + (newTokens.expires_in * 1000),
+        expires_at: Date.now() + newTokens.expires_in * 1000,
         last_refreshed: Date.now()
       }
 
       await kv.set(KV_KEYS.AUTH, encryptedData)
       console.log('Token refreshed successfully')
-      
-      return newTokens.access_token
 
+      return newTokens.access_token
     } catch (error) {
       console.error('Token refresh failed:', error)
       throw error
@@ -111,8 +111,8 @@ export class TokenManager {
 
   async waitForRefresh(maxAttempts = 10) {
     for (let i = 0; i < maxAttempts; i++) {
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+
       const hasLock = await kv.get(KV_KEYS.REFRESH_LOCK)
       if (!hasLock) {
         return // 刷新完成
@@ -125,7 +125,7 @@ export class TokenManager {
     const encryptedData = {
       access_token: encrypt(accessToken),
       refresh_token: encrypt(refreshToken),
-      expires_at: Date.now() + (expiresIn * 1000),
+      expires_at: Date.now() + expiresIn * 1000,
       last_refreshed: Date.now()
     }
 
@@ -167,23 +167,23 @@ export const tokenManager = {
   get instance() {
     return getTokenManager()
   },
-  
+
   async getValidAccessToken() {
     return getTokenManager().getValidAccessToken()
   },
-  
+
   async refreshAccessToken() {
     return getTokenManager().refreshAccessToken()
   },
-  
+
   async storeInitialTokens(accessToken, refreshToken, expiresIn) {
     return getTokenManager().storeInitialTokens(accessToken, refreshToken, expiresIn)
   },
-  
+
   async clearTokens() {
     return getTokenManager().clearTokens()
   },
-  
+
   async getTokenInfo() {
     return getTokenManager().getTokenInfo()
   }

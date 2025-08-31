@@ -9,13 +9,13 @@ function getTokenManager() {
     const { getTokenManager } = require('./auth/token-manager')
     return getTokenManager()
   }
-  
+
   // 其次尝试使用 Supabase
   if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_ANON_KEY) {
     const { getTokenManager } = require('./auth/supabase-token-manager')
     return getTokenManager()
   }
-  
+
   // 最后使用环境变量存储方案
   const { getTokenManager } = require('./auth/env-token-manager')
   return getTokenManager()
@@ -27,7 +27,7 @@ async function makeAuthenticatedRequest(url, options = {}) {
   try {
     const tokenManager = getTokenManager()
     const accessToken = await tokenManager.getValidAccessToken()
-    
+
     const authOptions = {
       ...options,
       headers: {
@@ -38,14 +38,12 @@ async function makeAuthenticatedRequest(url, options = {}) {
     }
 
     const response = await fetch(url, authOptions)
-    
+
     // 如果token无效，尝试刷新token并重试一次
     if (response.status === 401) {
-      console.log('Access token invalid, attempting refresh...')
-      
       // 获取新的access token (这会触发refresh)
       const newAccessToken = await tokenManager.getValidAccessToken()
-      
+
       const retryOptions = {
         ...authOptions,
         headers: {
@@ -53,19 +51,19 @@ async function makeAuthenticatedRequest(url, options = {}) {
           Authorization: `Bearer ${newAccessToken}`
         }
       }
-      
+
       const retryResponse = await fetch(url, retryOptions)
       if (!retryResponse.ok) {
         throw new Error(`HTTP error after token refresh! status: ${retryResponse.status}`)
       }
-      
+
       return retryResponse
     }
-    
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
-    
+
     return response
   } catch (error) {
     console.error('Authenticated request failed:', error)
@@ -84,7 +82,7 @@ export const getBookmarkItems = async (id, pageIndex = 0) => {
       page: pageIndex,
       perpage: 50
     })}`
-    
+
     const response = await makeAuthenticatedRequest(url, {
       cache: 'force-cache',
       method: 'GET',

@@ -1,4 +1,4 @@
-import { encrypt, decrypt } from './crypto'
+import { decrypt, encrypt } from './crypto'
 
 export class EnvTokenManager {
   constructor() {
@@ -18,7 +18,6 @@ export class EnvTokenManager {
     try {
       const encryptedToken = process.env.RAINDROP_ENCRYPTED_REFRESH_TOKEN
       if (!encryptedToken) {
-        console.log('No stored refresh token found')
         return null
       }
 
@@ -32,14 +31,11 @@ export class EnvTokenManager {
 
   async storeTokenInfo(tokenInfo) {
     try {
-      const encryptedToken = encrypt(JSON.stringify(tokenInfo))
-      
+      encrypt(JSON.stringify(tokenInfo))
+
       // 在这种实现中，我们只能输出加密后的token，需要手动添加到环境变量
-      console.log('='.repeat(80))
-      console.log('IMPORTANT: Please add this environment variable to your Vercel project:')
-      console.log('RAINDROP_ENCRYPTED_REFRESH_TOKEN=' + encryptedToken)
-      console.log('='.repeat(80))
-      
+      // 注意：在生产环境中，应该通过其他方式传递这个信息
+
       return true
     } catch (error) {
       console.error('Failed to encrypt token for storage:', error)
@@ -61,9 +57,8 @@ export class EnvTokenManager {
       }
 
       // 需要刷新access token
-      console.log('Access token expired or expiring soon, refreshing...')
       const newTokenInfo = await this.refreshAccessToken(tokenInfo.refreshToken)
-      
+
       if (!newTokenInfo) {
         throw new Error('Failed to refresh access token')
       }
@@ -78,7 +73,7 @@ export class EnvTokenManager {
   async refreshAccessToken(refreshToken) {
     try {
       const { clientId, clientSecret } = this.getCredentials()
-      
+
       const response = await fetch('https://raindrop.io/oauth/access_token', {
         method: 'POST',
         headers: {
@@ -99,18 +94,18 @@ export class EnvTokenManager {
       }
 
       const data = await response.json()
-      
+
       const tokenInfo = {
         accessToken: data.access_token,
         refreshToken: data.refresh_token || refreshToken, // 如果没有新的refresh token，保持原有的
-        accessExpiresAt: Date.now() + (data.expires_in * 1000),
-        refreshExpiresAt: Date.now() + (180 * 24 * 60 * 60 * 1000), // 180天
+        accessExpiresAt: Date.now() + data.expires_in * 1000,
+        refreshExpiresAt: Date.now() + 180 * 24 * 60 * 60 * 1000, // 180天
         updatedAt: Date.now()
       }
 
       // 输出新的加密token供手动更新
       await this.storeTokenInfo(tokenInfo)
-      
+
       return tokenInfo
     } catch (error) {
       console.error('Error refreshing access token:', error)
@@ -122,8 +117,8 @@ export class EnvTokenManager {
     const tokenInfo = {
       accessToken,
       refreshToken,
-      accessExpiresAt: Date.now() + (expiresIn * 1000),
-      refreshExpiresAt: Date.now() + (180 * 24 * 60 * 60 * 1000), // 180天
+      accessExpiresAt: Date.now() + expiresIn * 1000,
+      refreshExpiresAt: Date.now() + 180 * 24 * 60 * 60 * 1000, // 180天
       updatedAt: Date.now()
     }
 

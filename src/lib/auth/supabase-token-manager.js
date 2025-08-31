@@ -1,4 +1,4 @@
-import { encrypt, decrypt } from './crypto'
+import { decrypt, encrypt } from './crypto'
 
 // 延迟创建 Supabase 客户端，避免构建时错误
 let supabase = null
@@ -7,14 +7,14 @@ function getSupabaseClient() {
   if (supabase) return supabase
 
   const { createClient } = require('@supabase/supabase-js')
-  
+
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   const supabaseAnonKey = process.env.SUPABASE_ANON_KEY
-  
+
   if (!supabaseUrl || !supabaseAnonKey) {
     throw new Error('Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_ANON_KEY')
   }
-  
+
   supabase = createClient(supabaseUrl, supabaseAnonKey)
   return supabase
 }
@@ -38,7 +38,7 @@ export class SupabaseTokenManager {
   async getStoredTokenInfo() {
     try {
       const supabase = getSupabaseClient()
-      
+
       const { data, error } = await supabase
         .from(this.tableName)
         .select('encrypted_data')
@@ -62,14 +62,12 @@ export class SupabaseTokenManager {
     try {
       const supabase = getSupabaseClient()
       const encryptedData = encrypt(JSON.stringify(tokenInfo))
-      
-      const { error } = await supabase
-        .from(this.tableName)
-        .upsert({
-          id: this.tokenId,
-          encrypted_data: encryptedData,
-          updated_at: new Date().toISOString()
-        })
+
+      const { error } = await supabase.from(this.tableName).upsert({
+        id: this.tokenId,
+        encrypted_data: encryptedData,
+        updated_at: new Date().toISOString()
+      })
 
       if (error) {
         console.error('Failed to store token:', error)
@@ -100,7 +98,7 @@ export class SupabaseTokenManager {
       // 需要刷新access token
       console.log('Access token expired or expiring soon, refreshing...')
       const newTokenInfo = await this.refreshAccessToken(tokenInfo.refreshToken)
-      
+
       if (!newTokenInfo) {
         throw new Error('Failed to refresh access token')
       }
@@ -116,7 +114,7 @@ export class SupabaseTokenManager {
   async refreshAccessToken(refreshToken) {
     try {
       const { clientId, clientSecret } = this.getCredentials()
-      
+
       const response = await fetch('https://raindrop.io/oauth/access_token', {
         method: 'POST',
         headers: {
@@ -137,12 +135,12 @@ export class SupabaseTokenManager {
       }
 
       const data = await response.json()
-      
+
       const tokenInfo = {
         accessToken: data.access_token,
         refreshToken: data.refresh_token || refreshToken,
-        accessExpiresAt: Date.now() + (data.expires_in * 1000),
-        refreshExpiresAt: Date.now() + (180 * 24 * 60 * 60 * 1000),
+        accessExpiresAt: Date.now() + data.expires_in * 1000,
+        refreshExpiresAt: Date.now() + 180 * 24 * 60 * 60 * 1000,
         updatedAt: Date.now()
       }
 
@@ -157,8 +155,8 @@ export class SupabaseTokenManager {
     const tokenInfo = {
       accessToken,
       refreshToken,
-      accessExpiresAt: Date.now() + (expiresIn * 1000),
-      refreshExpiresAt: Date.now() + (180 * 24 * 60 * 60 * 1000),
+      accessExpiresAt: Date.now() + expiresIn * 1000,
+      refreshExpiresAt: Date.now() + 180 * 24 * 60 * 60 * 1000,
       updatedAt: Date.now()
     }
 
