@@ -56,7 +56,12 @@ export async function GET(request) {
 
     if (!tokenResponse.ok) {
       const errorData = await tokenResponse.text()
-      console.error('Token exchange failed:', errorData)
+      console.error('Token exchange failed:', {
+        status: tokenResponse.status,
+        statusText: tokenResponse.statusText,
+        headers: Object.fromEntries(tokenResponse.headers.entries()),
+        errorData
+      })
       throw new Error(`Token exchange failed: ${tokenResponse.status}`)
     }
 
@@ -74,11 +79,13 @@ export async function GET(request) {
 
     // 存储令牌
     const tokenManager = getTokenManager()
-    await tokenManager.storeInitialTokens(
+    const storeResult = await tokenManager.storeInitialTokens(
       tokenData.access_token,
       tokenData.refresh_token,
       tokenData.expires_in || 1209600 // 默认14天
     )
+    
+    console.info('Token storage result:', storeResult)
 
     // 验证令牌是否工作
     const testResponse = await fetch(`${RAINDROP_API_URL}/user`, {

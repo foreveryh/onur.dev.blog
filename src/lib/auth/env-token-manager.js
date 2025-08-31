@@ -31,12 +31,13 @@ export class EnvTokenManager {
 
   async storeTokenInfo(tokenInfo) {
     try {
-      encrypt(JSON.stringify(tokenInfo))
-
-      // 在这种实现中，我们只能输出加密后的token，需要手动添加到环境变量
-      // 注意：在生产环境中，应该通过其他方式传递这个信息
-
-      return true
+      const encryptedToken = encrypt(JSON.stringify(tokenInfo))
+      
+      console.info('✅ Token encrypted successfully!')
+      console.info('🔐 Encrypted token (add this to RAINDROP_ENCRYPTED_REFRESH_TOKEN env var):')
+      console.info(encryptedToken)
+      
+      return encryptedToken
     } catch (error) {
       console.error('Failed to encrypt token for storage:', error)
       return false
@@ -121,6 +122,12 @@ export class EnvTokenManager {
       refreshExpiresAt: Date.now() + 180 * 24 * 60 * 60 * 1000, // 180天
       updatedAt: Date.now()
     }
+
+    console.info('Storing initial tokens:', { 
+      hasAccessToken: !!accessToken,
+      hasRefreshToken: !!refreshToken,
+      expiresIn 
+    })
 
     return await this.storeTokenInfo(tokenInfo)
   }
