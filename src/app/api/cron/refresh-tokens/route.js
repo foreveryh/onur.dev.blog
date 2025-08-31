@@ -1,6 +1,24 @@
 import { NextResponse } from 'next/server'
 import { headers } from 'next/headers'
-import { tokenManager } from '@/lib/auth/token-manager'
+
+// 动态选择 token manager
+function getTokenManager() {
+  // 优先尝试使用 Vercel KV (如果可用)
+  if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+    const { getTokenManager } = require('@/lib/auth/token-manager')
+    return getTokenManager()
+  }
+  
+  // 其次尝试使用 Supabase
+  if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_ANON_KEY) {
+    const { getTokenManager } = require('@/lib/auth/supabase-token-manager')
+    return getTokenManager()
+  }
+  
+  // 最后使用环境变量存储方案
+  const { getTokenManager } = require('@/lib/auth/env-token-manager')
+  return getTokenManager()
+}
 
 export async function GET() {
   // 验证请求来源 (Vercel Cron 或开发环境)
@@ -12,9 +30,10 @@ export async function GET() {
   try {
     console.log('Starting daily scheduled token refresh check...')
     
-    const tokenInfo = await tokenManager.getTokenInfo()
+    const tokenManager = getTokenManager()
+    const tokenInfo = await tokenManager.getStoredTokenInfo()
     
-    if (!tokenInfo?.hasTokens) {
+    if (!tokenInfo) {
       console.log('No tokens found, skipping refresh')
       return NextResponse.json({ 
         success: true, 
@@ -23,11 +42,11 @@ export async function GET() {
     }
 
     // 检查是否需要刷新 (提前12小时刷新，因为只有每日检查)
-    const shouldRefresh = tokenInfo.expiresAt < Date.now() + (12 * 60 * 60 * 1000)
+    const shouldRefresh = tokenInfo.accessExpiresAt < Date.now() + (12 * 60 * 60 * 1000)
     
     if (shouldRefresh) {
       console.log('Token expires soon, refreshing...')
-      await tokenManager.refreshAccessToken()
+      await tokenManager.refreshAccessToken(tokenInfo.refreshToken)
       
       return NextResponse.json({ 
         success: true, 
@@ -40,7 +59,7 @@ export async function GET() {
         success: true, 
         message: 'Token still valid',
         refreshed: false,
-        expiresAt: tokenInfo.expiresAt
+        expiresAt: tokenInfo.accessExpiresAt
       })
     }
 

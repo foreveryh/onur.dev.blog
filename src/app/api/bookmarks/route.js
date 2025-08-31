@@ -1,7 +1,25 @@
 import { NextResponse } from 'next/server'
-import { kv } from '@vercel/kv'
-import { tokenManager } from '@/lib/auth/token-manager'
 import { COLLECTION_IDS } from '@/lib/constants'
+
+// 动态获取存储方案
+function getStorageAndTokenManager() {
+  // 优先尝试使用 Vercel KV (如果可用)
+  if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+    const { kv } = require('@vercel/kv')
+    const { getTokenManager } = require('@/lib/auth/token-manager')
+    return { storage: kv, tokenManager: getTokenManager() }
+  }
+  
+  // 其次尝试使用 Supabase
+  if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_ANON_KEY) {
+    const { getTokenManager } = require('@/lib/auth/supabase-token-manager')
+    return { storage: null, tokenManager: getTokenManager() }
+  }
+  
+  // 最后使用环境变量存储方案
+  const { getTokenManager } = require('@/lib/auth/env-token-manager')
+  return { storage: null, tokenManager: getTokenManager() }
+}
 
 const RAINDROP_API_URL = 'https://api.raindrop.io/rest/v1'
 const CACHE_KEY = 'raindrop:bookmarks:cache'
@@ -19,10 +37,15 @@ export async function GET(request) {
     }
 
     // 否则返回所有书签 (保持兼容性)
-    const cachedData = await kv.get(CACHE_KEY)
-    if (cachedData && cachedData.cached_at + CACHE_TTL > Date.now()) {
-      console.log('Returning cached bookmarks')
-      return NextResponse.json(cachedData.data)
+    const { storage, tokenManager } = getStorageAndTokenManager()
+    
+    // 如果有存储可用，使用缓存
+    if (storage) {
+      const cachedData = await storage.get(CACHE_KEY)
+      if (cachedData && cachedData.cached_at + CACHE_TTL > Date.now()) {
+        console.log('Returning cached bookmarks')
+        return NextResponse.json(cachedData.data)
+      }
     }
 
     // 获取有效的访问令牌
@@ -31,11 +54,13 @@ export async function GET(request) {
     // 获取所有收藏夹的书签
     const allBookmarks = await fetchAllBookmarks(accessToken)
 
-    // 缓存结果
-    await kv.set(CACHE_KEY, {
-      data: allBookmarks,
-      cached_at: Date.now()
-    })
+    // 如果有存储可用，缓存结果
+    if (storage) {
+      await storage.set(CACHE_KEY, {
+        data: allBookmarks,
+        cached_at: Date.now()
+      })
+    }
 
     console.log(`Fetched ${allBookmarks.length} bookmarks`)
     return NextResponse.json(allBookmarks)
@@ -44,10 +69,13 @@ export async function GET(request) {
     console.error('Bookmarks API error:', error)
     
     // 尝试返回缓存的数据作为降级方案
-    const cachedData = await kv.get(CACHE_KEY)
-    if (cachedData) {
-      console.log('Returning stale cached data due to error')
-      return NextResponse.json(cachedData.data)
+    const { storage } = getStorageAndTokenManager()
+    if (storage) {
+      const cachedData = await storage.get(CACHE_KEY)
+      if (cachedData) {
+        console.log('Returning stale cached data due to error')
+        return NextResponse.json(cachedData.data)
+      }
     }
 
     return NextResponse.json(
@@ -59,12 +87,15 @@ export async function GET(request) {
 
 async function getCollectionBookmarks(collectionId, page = 0) {
   const cacheKey = `raindrop:collection:${collectionId}:page:${page}`
+  const { storage, tokenManager } = getStorageAndTokenManager()
   
   try {
-    // 检查分页缓存
-    const cachedData = await kv.get(cacheKey)
-    if (cachedData && cachedData.cached_at + CACHE_TTL > Date.now()) {
-      return NextResponse.json(cachedData.data)
+    // 如果有存储可用，检查分页缓存
+    if (storage) {
+      const cachedData = await storage.get(cacheKey)
+      if (cachedData && cachedData.cached_at + CACHE_TTL > Date.now()) {
+        return NextResponse.json(cachedData.data)
+      }
     }
 
     const accessToken = await tokenManager.getValidAccessToken()
@@ -88,11 +119,13 @@ async function getCollectionBookmarks(collectionId, page = 0) {
     const data = await response.json()
     const items = data.items || []
 
-    // 缓存分页结果
-    await kv.set(cacheKey, {
-      data: items,
-      cached_at: Date.now()
-    })
+    // 如果有存储可用，缓存分页结果
+    if (storage) {
+      await storage.set(cacheKey, {
+        data: items,
+        cached_at: Date.now()
+      })
+    }
 
     return NextResponse.json(items)
 
@@ -100,9 +133,11 @@ async function getCollectionBookmarks(collectionId, page = 0) {
     console.error(`Error fetching collection ${collectionId} page ${page}:`, error)
     
     // 尝试返回缓存数据
-    const cachedData = await kv.get(cacheKey)
-    if (cachedData) {
-      return NextResponse.json(cachedData.data)
+    if (storage) {
+      const cachedData = await storage.get(cacheKey)
+      if (cachedData) {
+        return NextResponse.json(cachedData.data)
+      }
     }
 
     return NextResponse.json(
